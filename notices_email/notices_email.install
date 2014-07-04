@@ -1,0 +1,91 @@
+<?php
+function notices_email_install() {
+  drupal_install_schema('notices_email');
+  drupal_set_message(t("Notice email module installed."));
+}
+
+
+function notices_email_uninstall() {
+  drupal_set_message(t("Notice email module uninstalled."));
+  drupal_uninstall_schema('notices_email');
+}
+
+function notices_email_schema() {
+  $schema['notices_email_spool'] = array(
+    'description' => 'Mail queue table for notices_email',
+    'fields' => array(
+      'qid' => array(
+        'description' => 'The primary identifier for mail queue',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'mail' => array(
+        'description' => 'The formatted email address of mail message receipient.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'subject' => array(
+        'description' => 'The subject.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'body' => array(
+        'description' => 'The body.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big'
+      ),
+      'noticeid' => array(
+        'description' => 'The time status was set or changed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('qid'),
+  );
+  $schema['notices_email_status'] = array(
+    'description' => 'Table to keep status for email sending.',
+    'fields' => array(
+      'noticeid' => array(
+        'description' => 'Unique notice ID from {notices}.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'timestamp' => array(
+        'description' => 'The time status was set or changed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'status' => array(
+        'description' => 'The sent status of the email (0 = pending, 1 = sent,  2 = error).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ), 
+      'error' => array(
+        'description' => 'Text description for error if happen',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),           
+    ),
+    'indexes' => array(
+      'noticeid' => array('noticeid')
+    ),
+  );  
+  return $schema;
+}
