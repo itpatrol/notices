@@ -40,7 +40,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
             
             $subject = t(variable_get('notices_email_mail_subject','Notification from [site_name]'));
             $data = array(
-              'site_name' => variable_get('site_name'),
+              'site_name' => variable_get('site_name',''),
             ); 
             $subject = token_replace($subject,'notices_email',$data);
             
