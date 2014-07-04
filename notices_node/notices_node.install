@@ -1,0 +1,69 @@
+<?php
+function notices_node_install() {
+  db_query("UPDATE {system} SET weight = 999 WHERE name = 'notices_node' AND type = 'module'");
+  notices_node_install_nodetype();
+  drupal_install_schema('notices_node');
+  drupal_set_message(t("Notice node module have installed."));
+}
+
+
+function notices_node_uninstall() {
+  drupal_set_message(t("Notice node have uninstalled."));
+  drupal_uninstall_schema('notices_node');
+}
+
+/**
+ * Create notices_node node type.
+ */
+function notices_node_install_nodetype() {
+  // Create a newsletter type. If exists, modify it.
+  if ($type = node_get_types('type', 'notices_node')) {
+    $type->module = 'node';
+    $type->locked = FALSE;
+    $type->custom = TRUE;
+    node_type_save($type);
+  }
+  else {
+    $info = array(
+      'type' => 'notices_node',
+      'name' => t('Notice node'),
+      'module' => 'node',
+      'description' => t('Create a notice to send all users.'),
+      'locked' => FALSE,
+      'custom' => TRUE,
+    );
+    $info = _node_type_set_defaults($info);
+    node_type_save((object)$info);
+  }
+}
+
+function notices_node_schema() {
+  $schema['notices_node_newsletters'] = array(
+    'description' => 'The base table for notices nodes',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The primary identifier for a node.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'vid' => array(
+        'description' => 'The current {node_revisions}.vid version identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'The sent status of the email (0 = hold, 1 = sent).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+    ),
+    'unique keys' => array('vid'=> array('vid')),
+    'primary key' => array('nid'),
+  );
+  return $schema;
+}
