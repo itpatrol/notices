@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Install file for msg.module
+ */
+
+
+function notices_schema() {
+  $schema = array();
+  $schema['notices'] = array(
+    'description'       => '{notices} holds the message information',
+    'fields'        => array(
+      'noticeid'    => array(
+        'description'   => 'Primary Key: Unique notice ID.',
+        'type'          => 'serial',
+        'not null'      => TRUE,
+        'unsigned'      => TRUE,
+      ),
+      'uid'     => array(
+        'description'   => 'The {users}.uid of the user who will receive the notice.',
+        'type'          => 'int',
+        'not null'      => TRUE,
+        'unsigned'      => TRUE,
+      ),      
+      'callback'     => array(
+        'description'   => 'Module system name that triggered this notification',
+        'type'          => 'varchar',
+        'length'        => 255,
+        'not null'      => TRUE,
+      ),
+      'method'     => array(
+        'description'   => 'Serialized array of method that use to send this message.',
+        'type'          => 'text',
+        'size'          => 'big',
+        'not null'      => TRUE,
+      ),
+      'message'     => array(
+        'description'   => 'Text of notice.',
+        'type'          => 'text',
+        'not null'      => TRUE,
+        'size'          => 'big',
+      ),
+      'new'        => array(
+        'type'          => 'int',
+        'size'          => 'small',
+        'not null'      => TRUE,
+        'description'   => 'The flag for unread notice.',
+      ),
+      'format'        => array(
+        'type'          => 'int',
+        'size'          => 'small',
+        'not null'      => TRUE,
+        'default'       => FILTER_FORMAT_DEFAULT,
+        'description'   => 'The filter format ID of the message.',
+      ),
+      'timestamp'     => array(
+        'description'   => 'Unix timestamp of when notice created.',
+        'type'          => 'int',
+        'not null'      => TRUE,
+        'unsigned'      => TRUE,
+      ),
+      'send_after'     => array(
+        'description'   => 'Unix timestamp of when notice need to be sent after.',
+        'type'          => 'int',
+        'not null'      => TRUE,
+        'unsigned'      => TRUE,
+      ),
+
+    ),
+    'indexes'         => array(
+      'uid'             => array('uid'),
+      'is_new'          => array('noticeid', 'uid', 'new', ),
+    ),    
+    'primary key'     => array('noticeid'),
+  );
+
+  $schema['notices_settings'] = array(
+    'description' => t('Stores resource usage history.'),
+    'fields' => array(
+      'uid'   => array('type' => 'int','unsigned' => TRUE,'not null' => TRUE,'default' => 0,),  
+      'settings'  => array('type' => 'text'),
+    ),
+    'primary key' => array('uid'),
+  );
+
+
+  return $schema;
+}
+function notices_install() {
+  drupal_install_schema('notices');
+
+}
+
+function notices_uninstall() {
+  drupal_uninstall_schema('notices');
+}
