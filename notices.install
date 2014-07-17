@@ -60,13 +60,6 @@ function notices_schema() {
         'not null'      => TRUE,
         'unsigned'      => TRUE,
       ),
-      'send_after'     => array(
-        'description'   => 'Unix timestamp of when notice need to be sent after.',
-        'type'          => 'int',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
-      ),
-
     ),
     'indexes'         => array(
       'uid'             => array('uid'),
@@ -94,4 +87,10 @@ function notices_install() {
 
 function notices_uninstall() {
   drupal_uninstall_schema('notices');
+}
+
+
+function notices_update_0001() {
+  db_drop_field($ret, 'notices', 'send_after');
+  return $ret; 
 }
