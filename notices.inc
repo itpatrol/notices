@@ -54,8 +54,8 @@ function notices_list($account = null){
 
 
 function notices_view($notice){
-  $output .= '<div id="notices">';
-  $output .= theme('notices_view', $notice);
+  $output = '<div id="notices">';
+  $output .= theme('notices_view', array('notice' => $notice));
   $output .= "</div>";
 
   if($notice->new){
@@ -65,18 +65,16 @@ function notices_view($notice){
   return $output;
 }
 
-function notices_delete_form(&$form_state,$notice){
+function notices_delete_form($form, &$form_state,$notice){
   $form['noticeid'] = array (
     '#type' => 'value',
     '#value' => $notice->noticeid,
   );
   $form['alert'] = array (
-    '#type' => 'markup',
-    '#value' => t('Do you want to delete this message?'),
+    '#markup' => t('Do you want to delete this message?'),
   );
   $form['message'] = array (
-    '#type' => 'markup',
-    '#value' => check_markup($notice->message, $notice->format, FALSE),
+    '#markup' => check_markup($notice->message, $notice->format, FALSE),
   );
   $form['submit'] = array(
     '#type'  => 'submit',

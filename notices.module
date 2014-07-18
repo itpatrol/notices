@@ -383,16 +383,18 @@ function notices_mark_read($notice) {
 function notices_delete($noticeid) {
   $notice=noticeid_load($noticeid);
   $settings = notices_load_settings($notice->uid);
-  $sendOptions = $settings->settings[$notice->provider];
-
-  if(is_array($sendOptions)){
-    foreach ($sendOptions as $name => $status) {
-      $function = $name . '_sendNotice';
-      $op="delete";
-      $function($op,$notice);
-    }//foreach
+  if(isset($settings->settings)){
+    $sendOptions = $settings->settings[$notice->provider];
+  
+    if(is_array($sendOptions)){
+      foreach ($sendOptions as $name => $status) {
+        $function = $name . '_sendNotice';
+        $op="delete";
+        $function($op,$notice);
+      }//foreach
+    }
   }
-  db_query('DELETE FROM {notices} WHERE noticeid=%d',$noticeid);
+  db_query('DELETE FROM {notices} WHERE noticeid=:noticeid',array(':noticeid' => $noticeid));
 }
 
 /**

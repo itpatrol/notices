@@ -21,8 +21,11 @@ function template_preprocess_notices_view(&$vars) {
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
   $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
-  $vars['links'] = theme('links', $links);
-  $vars['teaser'] = l($notice->teaser ,"notices/view/".$notice->noticeid);
+  $variables = array(
+    'links' => $links,
+    'attributes' => array('class' => 'notice-links'),
+  );  
+  $vars['links'] = theme('links', $variables);
   $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
   
   $file = drupal_get_path('module', 'notice').'/icons/'.$notice->provider.'.png';
@@ -60,7 +63,11 @@ function template_preprocess_notices_view_teaser(&$vars) {
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
   
-  $vars['links'] = theme('links', $links);
+  $variables = array(
+    'links' => $links,
+    'attributes' => array('class' => 'notice-links'),
+  );
+  $vars['links'] = theme('links', $variables);
   $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
 
   $file = drupal_get_path('module', 'notice').'/icons/'.$notice->provider.'.png';

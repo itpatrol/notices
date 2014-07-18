@@ -3,9 +3,6 @@
       <?php print $timeago; ?>
     </div>
     <div class="message">
-      <?php if ($notice->new) : ?>
-        <span class="new"><?php $notice->new ? t('new') : '' ?></span>
-      <?php endif ?>
       <?php print $content; ?>
     </div>
     <?php if ( isset($links)) : ?>
