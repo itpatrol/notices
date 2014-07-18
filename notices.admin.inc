@@ -1,11 +1,27 @@
 <?php
 
-function notices_admin_settings(&$form_state) {
+/**
+ * Menu callback to list sub-items.
+ */
+function notices_admin_menu_block_page() {
+  $item = menu_get_item();
+  module_load_include('inc', 'system', 'system.admin');
+  if ($content = system_admin_menu_block($item)) {
+    $output = theme('admin_block_content', array('content' => $content));
+  }
+  else {
+    $output = t('You do not have any administrative items.');
+  }
+  return $output;
+}
+
+
+function notices_admin_settings($form,&$form_state) {
   $form = array();
   return system_settings_form($form);
 }
 
-function notices_settings_add(&$form_state) {
+function notices_settings_add($form, &$form_state) {
   $form = array();
   $form['uid'] = array(
     '#type'               => 'textfield',
@@ -14,27 +30,29 @@ function notices_settings_add(&$form_state) {
     '#maxlength'          => 255,
   );
   
-  $form['callback'] = array(
+  $form['provider'] = array(
     '#type'               => 'textfield',
-    '#title'              => t('callback'),
+    '#title'              => t('provider'),
     '#size'               => 50,
     '#maxlength'          => 255,
   );
 
   $form['message'] = array(
-    '#type'               => 'textarea',
+    '#type'               => 'text_format',
     '#title'              => t('Notice'),
     '#rows'               => 6,
     '#resizable'          => TRUE,
+    '#format' => isset($account->signature_format) ? $account->signature_format : NULL,
   );
-  $format = FILTER_FORMAT_DEFAULT;
-  if (isset($form_state['values']) && array_key_exists('format', $form_state['values'])) {
-    $format = $form_state['values']['format'];
-  }
-  $form['format'] = filter_form($format);
 
-  $form['#submit'][] = 'notices_settings_add_submit';
-  return system_settings_form($form);
+  // Add the buttons.
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update status of payment gateways'),
+  );
+
+  return $form;
 }
 
 function notices_settings_add_submit($form, &$form_state) {

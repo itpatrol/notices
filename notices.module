@@ -167,32 +167,30 @@ function notices_menu() {
     'type'             => MENU_CALLBACK,
     'file'             => 'notices.inc',    
   );
-  $items['admin/settings/notices'] = array(
-    'title'            => 'Notices',
+  $items['admin/config/notices'] = array(
+    'title'            => 'Notices Tools',
     'description'      => 'Configure notice settings.',
-    'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('notices_admin_settings'),
+    'position'         => 'right',
+    'weight'           => 7,    
+    'page callback'    => 'notices_admin_menu_block_page',
     'access arguments' => array('administer notice settings'),
-    'type'             => MENU_NORMAL_ITEM,
     'file'             => 'notices.admin.inc',       
   );
-  $items['admin/settings/notices/default'] = array(
-    'title'            => 'Notices',
+  $items['admin/config/notices/default'] = array(
+    'title'            => 'Notices Settings',
     'description'      => 'Configure private messaging settings.',
     'page callback'    => 'drupal_get_form',
     'page arguments'   => array('notices_admin_settings'),
     'access arguments' => array('administer notice settings'),
-    'type'             => MENU_DEFAULT_LOCAL_TASK,
     'weight'           => -10,
     'file'             => 'notices.admin.inc',       
   );
-  $items['admin/settings/notices/add'] = array(
+  $items['admin/config/notices/add'] = array(
     'title'            => 'Add notice',
     'description'      => 'Create custom notice.',
     'page callback'    => 'drupal_get_form',
     'page arguments'   => array('notices_settings_add'),
     'access arguments' => array('administer notice settings'),
-    'type'             => MENU_DEFAULT_LOCAL_TASK,
     'file'             => 'notices.admin.inc',      
   );  
   $items['user/%user/notices'] = array(
