@@ -304,7 +304,7 @@ function notices_delete_access($notice) {
  * @ingroup api 
  */
 function noticeid_load($noticeid){
-  $notice = db_fetch_object(db_query("SELECT * FROM {notices} WHERE noticeid = %d", $noticeid));
+  $notice = db_query("SELECT * FROM {notices} WHERE noticeid = :noticeid", array(':noticeid' => $noticeid))->fetchObject();
   return $notice;
 }
 
@@ -352,8 +352,9 @@ function notices_unread_count($account = NULL) {
     global $user;
     $account = $user;
   }
-  $res=db_fetch_array(db_query('SELECT count(*) as notices FROM {notices} WHERE uid=%d AND new =%d',$account->uid,NOTICE_UNREAD));
-  return $res['notices'];
+  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new',
+  array (':uid' => $account->uid, ':new' => NOTICE_UNREAD))->fetchObject();
+  return $count->notices;
 }
 
 /*
