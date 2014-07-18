@@ -23,7 +23,7 @@ Drupal.behaviors.notices  = {
     });
     $("div.notice a.noticeremove").bind("click", function() {
       var id = $(this).attr('rel');
-      $("#notice-" + id).toggle("slow");
+      $("#notice-" + id).toggle("fast");
       //submit ajax mark removed
       $.ajax({
         url: '/ajax/notices/notices-remove/' + id + '/' + $("#notices").attr('rel'),
@@ -36,10 +36,10 @@ Drupal.behaviors.notices  = {
       return false;
     });
     $("div.notice").bind("mouseenter", function() {    
-      $( this ).find("ul.notice-links").toggle("slow");
+      $( this ).find("ul.notice-links").toggle("fast");
     });
     $("div.notice").bind("mouseleave", function() {    
-      $( this ).find("ul.notice-links").toggle("slow");
+      $( this ).find("ul.notice-links").toggle("fast");
     });
     $("#notices-mark-as-read").bind("click", function() {
       $('div.notice-new').removeClass('notice-new');
