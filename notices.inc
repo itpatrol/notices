@@ -3,7 +3,7 @@
 
 function notices_list($account = null){
   drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
-  drupal_add_css(drupal_get_path('module', 'notice') .'/notice.css');
+  drupal_add_css(drupal_get_path('module', 'notices') .'/notices.css');
   
   if(!is_object($account)){
     global $user;
@@ -20,14 +20,10 @@ function notices_list($account = null){
   } else {
     $filters['where'] .= " AND uid='".$account->uid."'";
   }
-  $sql='SELECT * FROM {notices} '.$filters['join'].' '.$filters['where'].' ORDER BY new DESC,timestamp DESC';
-  
-  $pagerCountShow = theme('altpager');
-  
+//  $sql='SELECT * FROM {notices} '.$filters['join'].' '.$filters['where'].' ORDER BY new DESC,timestamp DESC';
   
   $notices = db_select('notices', 'n')->extend('AltPager')
     ->fields('n', array('noticeid'))
-    ->orderBy('new', 'DESC')
     ->orderBy('timestamp', 'DESC')
     ->execute()
     ->fetchAll();
@@ -41,6 +37,7 @@ function notices_list($account = null){
   if(empty($output_notices)){
     $output_notices =  t('No notifications.');
   }
+  $pagerCountShow = theme('altpager');
 //  $output .= formfilterapi_getForm('notices_list');
   $output = $pagerCountShow;
   $output .= '<div id="notices" >';
