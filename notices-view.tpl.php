@@ -2,7 +2,11 @@
     <div class="date">
       <?php print $timeago; ?>
     </div>
+    <div class="picture"><img src="/<?php print $picture?>"> </div>
     <div class="message">
+      <?php if ($notice->new) : ?>
+        <span class="new"><?php print t('new');?></span>
+      <?php endif ?>
       <?php print $content; ?>
     </div>
     <?php if ( isset($links)) : ?>

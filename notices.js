@@ -11,17 +11,17 @@
  
 Drupal.behaviors.notices  = {
   attach: function (context, settings) {
-    $("div.notice-new a.noticeread").bind("click", function() {
+    $("div.notice-new a.notice-mark-read").bind("click", function() {
       var id = $(this).attr('rel');
       $("#notice-" + id).removeClass('notice-new');
-      $("#noticeread-" + id).hide();
-      $("#notice-" + id + " div.noticeIcon img.new").hide();
+      $("#notice-" + id).find("span.new").hide();
+      $(this).hide();
       
       //submit ajax mark read
       $.get('/ajax/notices/notices-mark-as-read/' + id);
       return false;
     });
-    $("div.notice a.noticeremove").bind("click", function() {
+    $("div.notice a.notice-remove").bind("click", function() {
       var id = $(this).attr('rel');
       $("#notice-" + id).toggle("fast");
       //submit ajax mark removed
@@ -42,8 +42,10 @@ Drupal.behaviors.notices  = {
       $( this ).find("ul.notice-links").toggle("fast");
     });
     $("#notices-mark-as-read").bind("click", function() {
+      $('div.notice-new').find('span.new').hide();
       $('div.notice-new').removeClass('notice-new');
-      $('a.noticeread').hide();
+      $('a.notice-mark-read').hide();
+      
       //submit ajax mark read
       $.get('/ajax/notices/notices-mark-as-read');
       return false;
