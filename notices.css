@@ -53,3 +53,18 @@ div.notice div.message {
   min-height: 121px;
   margin-left: 67px;
 }
+
+ul.notice-links li a.notice-remove {
+  padding-left: 22px;
+  background: url('icons/cross.png') no-repeat 3px 0px;
+}
+
+ul.notice-links li a.notice-mark-read {
+  padding-left: 22px;
+  background: url('icons/folder-stamp.png') no-repeat 3px 0px;
+}
+
+ul.notice-links li a.notice-read-more {
+  padding-left: 22px;
+  background: url('icons/folder-open-document.png') no-repeat 3px 0px;
+}
