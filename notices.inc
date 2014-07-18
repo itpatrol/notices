@@ -20,7 +20,6 @@ function notices_list($account = null){
   } else {
     $filters['where'] .= " AND uid='".$account->uid."'";
   }
-//  $sql='SELECT * FROM {notices} '.$filters['join'].' '.$filters['where'].' ORDER BY new DESC,timestamp DESC';
   
   $notices = db_select('notices', 'n')->extend('AltPager')
     ->fields('n', array('noticeid'))
@@ -39,7 +38,23 @@ function notices_list($account = null){
   }
   $pagerCountShow = theme('altpager');
 //  $output .= formfilterapi_getForm('notices_list');
-  $output = $pagerCountShow;
+  $links = array (
+    'links' => array (
+      array(
+        'href' => 'notices/mark-as-read',
+        'title' => t('Mark as Read'),
+        'attributes' => array('id' => 'notices-mark-as-read'),
+      ),
+      array(
+        'href' => 'notices/settings',
+        'title' => t('Settings'),
+      ),
+
+    ),
+    'attributes' => array('class' => 'notices-links'),
+  );
+  $output = theme('links',$links);
+  $output .= $pagerCountShow;
   $output .= '<div id="notices" >';
   $output .=  $output_notices;
   $output .= "</div>";
@@ -83,7 +98,7 @@ function notices_delete_form($form, &$form_state,$notice){
 function notices_delete_form_submit($form, &$form_state){
   global $user;
   notices_delete($form_state['values']['noticeid']);
-  drupal_goto('/notices');
+  drupal_goto('notices');
 }
 
 function notices_settings(&$form_state){
@@ -162,4 +177,10 @@ function notices_settings_submit($form, &$form_state){
     drupal_write_record('notices_settings',$settings,'uid');
   }
   drupal_set_message(t('Changes saved'));
+}
+
+function notices_mark_as_read(){
+  global $user;
+  db_query("UPDATE {notices} set new=0 WHERE uid = :uid", array(':uid' => $user->uid));
+  drupal_goto('notices');
 }

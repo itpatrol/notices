@@ -31,9 +31,13 @@ function notices_remove_ajax($noticeid,$count){
   exit();
 }
 
-function notices_mark_read_ajax($noticeid){
+function notices_mark_read_ajax($noticeid = NULL){
   global $user;
-  db_query("UPDATE {notices} set new=0 WHERE noticeid = :noticeid AND uid = :uid", array(':noticeid' => $noticeid, ':uid' => $user->uid));
+  if($noticeid == 'all'){
+    db_query("UPDATE {notices} set new=0 WHERE uid = :uid", array( ':uid' => $user->uid));
+  }else{
+    db_query("UPDATE {notices} set new=0 WHERE noticeid = :noticeid AND uid = :uid", array(':noticeid' => $noticeid, ':uid' => $user->uid));
+  }
   return;
   
 }

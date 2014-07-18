@@ -9,6 +9,11 @@ div.notice-new {
 ul.notice-links {
   display: none;
 }
+
 ul.notice-links li {
   display: inline;
+}
+
+ul.notices-links li{
+  display: inline;  
 }

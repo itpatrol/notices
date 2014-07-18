@@ -150,6 +150,14 @@ function notices_menu() {
     'type'             => MENU_LOCAL_TASK,
     'file'             => 'notices.inc',    
   );  
+  $items['notices/mark-as-read'] = array(
+    'title'            => 'Mark as Read',
+    'description'      => 'Mark all notices as read.',
+    'page callback'    => 'notices_mark_as_read',
+    'access callback'  => 'notices_user_access',
+    'type'             => MENU_CALLBACK,
+    'file'             => 'notices.inc',    
+  );  
   $items['notices/view/%noticeid'] = array(
     'title'            => 'Read message',
     'page callback'    => 'notices_view',
@@ -215,7 +223,16 @@ function notices_menu() {
       'type'             => MENU_CALLBACK,
       'file'             => 'notices.ajax.inc',
   );
-  $items['ajax/notices/notices-mark-read/%'] = array(
+  $items['ajax/notices/notices-mark-as-read'] = array(
+      'title'            => 'Ajax mark notice as read',
+      'page callback'    => 'notices_mark_read_ajax',
+      'page arguments'   => array('all'),       
+      'access callback'  => TRUE,
+      'type'             => MENU_CALLBACK,
+      'file'             => 'notices.ajax.inc',
+  );
+
+  $items['ajax/notices/notices-mark-as-read/%'] = array(
       'title'            => 'Ajax mark notice as read',
       'page callback'    => 'notices_mark_read_ajax',
       'page arguments'   => array(3),      

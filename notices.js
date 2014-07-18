@@ -18,7 +18,7 @@ Drupal.behaviors.notices  = {
       $("#notice-" + id + " div.noticeIcon img.new").hide();
       
       //submit ajax mark read
-      $.get('/ajax/notices/notices-mark-read/' + id);
+      $.get('/ajax/notices/notices-mark-as-read/' + id);
       return false;
     });
     $("div.notice a.noticeremove").bind("click", function() {
@@ -41,6 +41,14 @@ Drupal.behaviors.notices  = {
     $("div.notice").bind("mouseleave", function() {    
       $( this ).find("ul.notice-links").toggle("slow");
     });
+    $("#notices-mark-as-read").bind("click", function() {
+      $('div.notice-new').removeClass('notice-new');
+      $('a.noticeread').hide();
+      //submit ajax mark read
+      $.get('/ajax/notices/notices-mark-as-read');
+      return false;
+    });
+
 
   },
 
