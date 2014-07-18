@@ -1,4 +1,3 @@
-<?php print $anchors; ?>
 <div class="notice <?php if ($notice->new) { print "notice-new";}?>" id="notice-<?php print $notice->noticeid; ?>">
     <div class="date">
       <?php print $timeago; ?>

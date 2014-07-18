@@ -17,12 +17,12 @@ define('NOTICE_UNREAD', 1);
 function notices_theme() {
   return array(
     'notices_view' => array(
-      'arguments' => array('notice' => NULL),
+      'render element' => 'elements',
       'template'  => 'notices-view',
       'file'      => 'notices.theme.inc',      
     ),
     'notices_view_teaser' => array(
-      'arguments' => array('notice' => NULL),
+      'render element' => 'elements',
       'template'  => 'notices-view-teaser',
       'file'      => 'notices.theme.inc',      
 
@@ -72,16 +72,18 @@ function notices_getSendStatus($notice){
   $statuses = array();
   $notice = (object)$notice;
   $settings = notices_load_settings($notice->uid);
-  $sendOptions = $settings->settings[$notice->provider];
-
-  if(is_array($sendOptions)){
-    foreach ($sendOptions as $name => $status) {
-      if($status == 1){
-        $function = $name . '_sendNotice';
-        $op="status";
-        $statuses[$name] = $function($op,$notice);
-      }
-    }//foreach
+  if(!empty($settings->settings)){
+    $sendOptions = $settings->settings[$notice->provider];
+  
+    if(is_array($sendOptions)){
+      foreach ($sendOptions as $name => $status) {
+        if($status == 1){
+          $function = $name . '_sendNotice';
+          $op="status";
+          $statuses[$name] = $function($op,$notice);
+        }
+      }//foreach
+    }
   }
   return $statuses;
 }

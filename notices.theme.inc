@@ -25,7 +25,7 @@ function template_preprocess_notices_view(&$vars) {
   $vars['teaser'] = l($notice->teaser ,"notices/view/".$notice->noticeid);
   $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
   
-  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->callback.'.png';
+  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->provider.'.png';
   if(!file_exists($file)){
     $file = drupal_get_path('module', 'notice').'/icons/default.png';  
   }
@@ -45,10 +45,10 @@ function template_preprocess_notices_view(&$vars) {
 
 function template_preprocess_notices_view_teaser(&$vars) {
   $notice = $vars['notice'];
-  $res=explode("\n", $notice->message);
+//  $res=explode("\n", $notice->message);
   
-  $res=$res[0]."\n".$res[1]."\n".$res[2]."\n".$res[3]."\n".$res[4]."\n";
-  $vars['content'] = check_markup($res, $notice->format, FALSE);
+//  $res=$res[0]."\n".$res[1]."\n".$res[2]."\n".$res[3]."\n".$res[4]."\n";
+  $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
 
   $links[] = array('title' => t('Read more'), 'href' => 'notices/view/' .  $notice->noticeid);
 
@@ -63,7 +63,7 @@ function template_preprocess_notices_view_teaser(&$vars) {
   $vars['links'] = theme('links', $links);
   $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
 
-  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->callback.'.png';
+  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->provider.'.png';
   if(!file_exists($file)){
     $file = drupal_get_path('module', 'notice').'/icons/default.png';  
   }
