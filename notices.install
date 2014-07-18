@@ -15,22 +15,16 @@ function notices_schema() {
         'not null'      => TRUE,
         'unsigned'      => TRUE,
       ),
-      'uid'     => array(
+      'uid'         => array(
         'description'   => 'The {users}.uid of the user who will receive the notice.',
         'type'          => 'int',
         'not null'      => TRUE,
         'unsigned'      => TRUE,
       ),      
-      'callback'     => array(
+      'provider'     => array(
         'description'   => 'Module system name that triggered this notification',
         'type'          => 'varchar',
-        'length'        => 255,
-        'not null'      => TRUE,
-      ),
-      'method'     => array(
-        'description'   => 'Serialized array of method that use to send this message.',
-        'type'          => 'text',
-        'size'          => 'big',
+        'length'        => 32,
         'not null'      => TRUE,
       ),
       'message'     => array(
@@ -39,20 +33,19 @@ function notices_schema() {
         'not null'      => TRUE,
         'size'          => 'big',
       ),
-      'new'        => array(
+      'new'         => array(
         'type'          => 'int',
         'size'          => 'small',
         'not null'      => TRUE,
         'description'   => 'The flag for unread notice.',
       ),
-      'format'        => array(
-        'type'          => 'int',
-        'size'          => 'small',
-        'not null'      => TRUE,
-        'default'       => FILTER_FORMAT_DEFAULT,
-        'description'   => 'The filter format ID of the message.',
+      'format'      => array(
+        'type'          => 'varchar',
+        'length'        => 255,
+        'not null'      => FALSE,
+        'description'   => 'The {filter_format}.format of the signature.',
       ),
-      'timestamp'     => array(
+      'timestamp'   => array(
         'description'   => 'Unix timestamp of when notice created.',
         'type'          => 'int',
         'not null'      => TRUE,
@@ -78,6 +71,65 @@ function notices_schema() {
 
   return $schema;
 }
+
+/**
+ * Update the {notices}.signature_format column.
+ */
+function notices_update_7001() {
+  // Update the database column to allow NULL values.
+  db_change_field('notices', 'format', 'format', array(
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => FALSE,
+    'description' => 'The {filter_format}.format of the signature.',
+  ));
+
+  // Replace the signature format with NULL if the signature is empty and does
+  // not already have a stored text format.
+  //
+  // In Drupal 6, "0" (the former FILTER_FORMAT_DEFAULT constant) could be used
+  // to indicate this situation, but in Drupal 7, only NULL is supported. This
+  // update therefore preserves the ability of user accounts which were never
+  // given a signature (for example, if the site did not have user signatures
+  // enabled, or if the user never edited their account information) to not
+  // have a particular text format assumed for them the first time the
+  // signature is edited.
+  db_update('notices')
+    ->fields(array('format' => NULL))
+    ->condition('format', 0)
+    ->execute();
+
+  // There are a number of situations in which a Drupal 6 site could store
+  // content with a nonexistent text format. This includes text formats that
+  // had later been deleted, or non-empty content stored with a value of "0"
+  // (the former FILTER_FORMAT_DEFAULT constant). Drupal 6 would filter this
+  // content using whatever the site-wide default text format was at the moment
+  // the text was being displayed.
+  //
+  // In Drupal 7, this behavior is no longer supported, and all content must be
+  // stored with an explicit text format (or it will not be displayed when it
+  // is filtered). Therefore, to preserve the behavior of the site after the
+  // upgrade, we must replace all instances described above with the current
+  // value of the (old) site-wide default format at the moment of the upgrade.
+  $existing_formats = db_query("SELECT format FROM {filter_format}")->fetchCol();
+  $default_format = variable_get('filter_default_format', 1);
+  db_update('notices')
+    ->fields(array('format' => $default_format))
+    ->isNotNull('format')
+    ->condition('format', $existing_formats, 'NOT IN')
+    ->execute();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Changes fileds: type => service, method => gateway.
+ */
+function notices_update_7002() {
+  db_change_field('notices', 'callback', 'provider', array('type' => 'varchar', 'length' => 32, 'not null' => TRUE, 'default' => ''));
+  db_drop_field('notices', 'method');
+}
+
 
 /**
  * Implements hook_update_last_removed().

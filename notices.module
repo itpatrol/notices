@@ -39,10 +39,10 @@ function notices_formfilterapi($op,$session_name,&$a1 = NULL){
     $filters = array();
     switch($session_name){
       case 'notices_list';
-            $filters['callback']= array(
+            $filters['provider']= array(
               '#type'  => 'select',
               '#title' => t('From'),
-              '#where' => "callback = '%s'",
+              '#where' => "provider = '%s'",
               '#options' => notices_getProviders(),
             );
             $filters['status'] = array(
@@ -72,7 +72,7 @@ function notices_getSendStatus($notice){
   $statuses = array();
   $notice = (object)$notice;
   $settings = notices_load_settings($notice->uid);
-  $sendOptions = $settings->settings[$notice->callback];
+  $sendOptions = $settings->settings[$notice->provider];
 
   if(is_array($sendOptions)){
     foreach ($sendOptions as $name => $status) {
@@ -305,9 +305,6 @@ function notices_delete_access($notice) {
  */
 function noticeid_load($noticeid){
   $notice = db_fetch_object(db_query("SELECT * FROM {notices} WHERE noticeid = %d", $noticeid));
-  if(!empty($notice)){
-    $notice->notification = unserialize($notice->notification);
-  }
   return $notice;
 }
 
@@ -385,7 +382,7 @@ function notices_mark_read($notice) {
 function notices_delete($noticeid) {
   $notice=noticeid_load($noticeid);
   $settings = notices_load_settings($notice->uid);
-  $sendOptions = $settings->settings[$notice->callback];
+  $sendOptions = $settings->settings[$notice->provider];
 
   if(is_array($sendOptions)){
     foreach ($sendOptions as $name => $status) {
@@ -416,20 +413,13 @@ function notices_save(&$notice){
     }
 
     $notice->new = NOTICE_UNREAD;
-    if(empty($notice->method)){
-      $notice->method='';
-    }
 
     $notice->timestamp = time();  
-
-    if(empty($notice->send_after)){
-      $notice->send_after = $notice->timestamp;
-    }    
     
     drupal_write_record('notices',$notice);
     
     $settings = notices_load_settings($notice->uid);
-    $sendOptions = $settings->settings[$notice->callback];
+    $sendOptions = $settings->settings[$notice->provider];
     
     if(is_array($sendOptions)){
       foreach ($sendOptions as $name => $status) {
