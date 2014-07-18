@@ -16,9 +16,15 @@ ul.notice-links {
   display: none;
   text-align: right;
 }
+
+div.notice-view ul.notice-links {
+  display: block;
+}
+
 ul.notice-links li {
   display: inline;
 }
+
 ul.notice-links li a {
   display: inline;
   padding-left: 10px;
