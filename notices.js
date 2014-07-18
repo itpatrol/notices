@@ -35,6 +35,13 @@ Drupal.behaviors.notices  = {
       });
       return false;
     });
+    $("div.notice").bind("mouseenter", function() {    
+      $( this ).find("ul.notice-links").toggle("slow");
+    });
+    $("div.notice").bind("mouseleave", function() {    
+      $( this ).find("ul.notice-links").toggle("slow");
+    });
+
   },
 
 };

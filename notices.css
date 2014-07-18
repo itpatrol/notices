@@ -1,0 +1,14 @@
+div.notice {
+  border-bottom: #ddd 1px solid;
+  padding: 5px 10px;
+}
+div.notice-new {
+  background-color: #eceff5;
+}
+
+ul.notice-links {
+  display: none;
+}
+ul.notice-links li {
+  display: inline;
+}
