@@ -307,7 +307,7 @@ function noticeid_load($noticeid){
 }
 
 function notices_load_settings($uid){
-  $settings = db_fetch_object(db_query("SELECT * FROM {notices_settings} WHERE uid = %d", $uid));
+  $settings = db_query("SELECT * FROM {notices_settings} WHERE uid = :uid", array(':uid' => $uid))->fetchObject();
   if(!empty($settings)){
     $settings->settings = unserialize($settings->settings);
   }else{
@@ -404,11 +404,11 @@ function notices_delete($noticeid) {
 function notices_save(&$notice){
   $notice = (object) $notice;
   
-  if($notice->noticeid){
+  if(isset($notice->noticeid)){
     drupal_write_record('notices',$notice,'noticeid');
   }else{
     if(!isset($notice->format)){
-      $notice->format = FILTER_FORMAT_DEFAULT;
+      $notice->format = variable_get('filter_default_format', 1);
     }
 
     $notice->new = NOTICE_UNREAD;
@@ -418,20 +418,21 @@ function notices_save(&$notice){
     drupal_write_record('notices',$notice);
     
     $settings = notices_load_settings($notice->uid);
-    $sendOptions = $settings->settings[$notice->provider];
-    
-    if(is_array($sendOptions)){
-      foreach ($sendOptions as $name => $status) {
-        if($status['active'] == 1){
-          $function = $name . '_sendNotice';
-          $op="send";
-          if(function_exists($function)){
-            $function($op,$notice,$status['values']);
+    if(!empty($settings->settings)){
+      $sendOptions = $settings->settings[$notice->provider];
+      
+      if(is_array($sendOptions)){
+        foreach ($sendOptions as $name => $status) {
+          if($status['active'] == 1){
+            $function = $name . '_sendNotice';
+            $op="send";
+            if(function_exists($function)){
+              $function($op,$notice,$status['values']);
+            }
           }
-        }
-      }//foreach
+        }//foreach
+      }
     }
-
   }
 }
 

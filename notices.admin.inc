@@ -56,7 +56,11 @@ function notices_settings_add($form, &$form_state) {
 }
 
 function notices_settings_add_submit($form, &$form_state) {
-   $notice=$form_state['values'];
-   notices_save($notice);
+  $notice = new stdClass();
+  $notice->uid = $form_state['values']['uid'];
+  $notice->provider = $form_state['values']['provider'];
+  $notice->message = $form_state['values']['message']['value'];
+  $notice->format = $form_state['values']['message']['format'];
+  notices_save($notice);
 }
 
