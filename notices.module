@@ -12,29 +12,26 @@ define('NOTICE_UNREAD', 1);
 
 
 /**
- * Implements hook_init().
- */
-function notices_init(){
-    drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
-}
-/**
  * Implements hook_theme().
  */
 function notices_theme() {
   return array(
-    'notices_view'    => array(
-      'arguments'        => array('notice' => NULL),
-      'template'         => 'notices-view',
+    'notices_view' => array(
+      'arguments' => array('notice' => NULL),
+      'template'  => 'notices-view',
+      'file'      => 'notices.theme.inc',      
     ),
     'notices_view_teaser' => array(
-      'arguments'        => array('notice' => NULL),
-      'template'         => 'notices-view-teaser',
+      'arguments' => array('notice' => NULL),
+      'template'  => 'notices-view-teaser',
+      'file'      => 'notices.theme.inc',      
+
     ),
   );
 }
 
 /**
- * Implementation of hook_formfilterapi().
+ * Implements of hook_formfilterapi().
  */
  
 function notices_formfilterapi($op,$session_name,&$a1 = NULL){
@@ -63,54 +60,14 @@ function notices_formfilterapi($op,$session_name,&$a1 = NULL){
   }
 }
 
-
-
-function template_preprocess_notices_view(&$vars) {
-  $notice = $vars['notice'];
-  $links[] = array('title' => t('Delete'), 'href' => 'notices/delete/' .  $notice->noticeid);
-
-  $vars['time'] = format_date($notice->timestamp, 'medium');
-  $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
-  $vars['links'] = theme('links', $links);
-  $vars['teaser'] = l($notice->teaser ,"notices/view/".$notice->noticeid);
-  $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
-  
-  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->callback.'.png';
-  if(!file_exists($file)){
-    $file = drupal_get_path('module', 'notice').'/icons/default.png';  
-  }
-  $vars['picture'] = $file;
-  $vars['status'] = notices_getSendStatus($notice);
-}
-
-function template_preprocess_notices_view_teaser(&$vars) {
-  $notice = $vars['notice'];
-  $res=explode("\n", $notice->message);
-  
-  $res=$res[0]."\n".$res[1]."\n".$res[2]."\n".$res[3]."\n".$res[4]."\n";
-  $vars['content'] = check_markup($res, $notice->format, FALSE);
-
-  $links[] = array('title' => t('Read more'), 'href' => 'notices/view/' .  $notice->noticeid);
-
-  if($notice->new){
-    $links[] = array('title' => t('Mark as read'), 'href' => 'notices/read/' .  $notice->noticeid, 'attributes' => array('rel' => $notice->noticeid, 'id' => 'noticeread-'.$notice->noticeid, 'class' => 'noticeread'));
-  }
-  
-  $links[] = array('title' => t('Delete'), 'href' => 'notices/delete/' .  $notice->noticeid, 'attributes' => array('rel' => $notice->noticeid, 'id' => 'noticeremove-'.$notice->noticeid, 'class' => 'noticeremove'));
-
-  $vars['time'] = format_date($notice->timestamp, 'medium');
-  
-  $vars['links'] = theme('links', $links);
-  $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
-
-  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->callback.'.png';
-  if(!file_exists($file)){
-    $file = drupal_get_path('module', 'notice').'/icons/default.png';  
-  }
-  $vars['picture'] = $file;
-  $vars['status'] = notices_getSendStatus($notice);
-}
-
+/**
+ * Returns status from all Providers.
+ *
+ * @return array
+ *   Array with status by each Providers
+ *
+ * @ingroup api 
+ */ 
 function notices_getSendStatus($notice){
   $statuses = array();
   $notice = (object)$notice;
@@ -129,6 +86,14 @@ function notices_getSendStatus($notice){
   return $statuses;
 }
 
+/**
+ * Returns all Providers.
+ *
+ * @return array
+ *   Array with providers
+ *
+ * @ingroup api 
+ */
 function notices_getProviders(){
   $res = array();
   foreach (module_implements('provideNotice') as $name) {
@@ -139,6 +104,7 @@ function notices_getProviders(){
   }//foreach
   return $res;
 }
+
 /**
  * Implements hook_perm().
  */
@@ -244,7 +210,8 @@ function notices_menu() {
       'title'            => 'Ajax remove notice',
       'page callback'    => 'notices_remove_ajax',
       'page arguments'   => array(3,4),
-      'access callback'  => TRUE,
+      'access callback'  => 'notices_delete_access',
+      'access arguments' => array(3),
       'type'             => MENU_CALLBACK,
       'file'             => 'notices.ajax.inc',
   );
@@ -252,7 +219,8 @@ function notices_menu() {
       'title'            => 'Ajax mark notice as read',
       'page callback'    => 'notices_mark_read_ajax',
       'page arguments'   => array(3),      
-      'access callback'  => TRUE,
+      'access callback'  => 'notices_view_access',
+      'access arguments' => array(3),    
       'type'             => MENU_CALLBACK,
       'file'             => 'notices.ajax.inc',
   );
@@ -271,7 +239,6 @@ function notices_menu() {
  * @return
  *   TRUE if user has access, FALSE if not
  *
- * @ingroup api
  */
 function notices_user_access($permission = 'read notices', $account = NULL) {
   if ( $account === NULL ) {
@@ -290,11 +257,8 @@ function notices_user_access($permission = 'read notices', $account = NULL) {
 /**
  * Check access to the view notices page.
  *
- * Function to restrict the access of the view notices page to just the
- * notices/view/% pages and not to leave tabs artifact on other lower
- * level pages such as the notices/new/%.
+ * Function to restrict the access of the view notices page or ajax call by user_id
  *
- * @ingroup api
  */
 function notices_view_access($notice) {
   global $user;
@@ -308,6 +272,12 @@ function notices_view_access($notice) {
   return FALSE;
 }
 
+/**
+ * Check access to the delete notice.
+ *
+ * Function to restrict the access of the delete notice page or ajax call by user_id
+ *
+ */
 function notices_delete_access($notice) {
   global $user;
   if($notice->uid != $user->uid ){
@@ -320,7 +290,19 @@ function notices_delete_access($notice) {
   return FALSE;
 }
 
-
+/**
+ * Loads notice by ID.
+ *
+ * Used as menu autoload function.
+ *
+ * @param $noticeid
+ *   Notice ID
+ *
+ * @return object
+ *  Loaded notice
+ *
+ * @ingroup api 
+ */
 function noticeid_load($noticeid){
   $notice = db_fetch_object(db_query("SELECT * FROM {notices} WHERE noticeid = %d", $noticeid));
   if(!empty($notice)){
@@ -348,6 +330,9 @@ function notices_load_settings($uid){
   return $settings;
 }
 
+/**
+ * Menu item title callback for the 'notices' path.
+ */
 function notices_title_callback($title = NULL) {
   $count = notices_unread_count();
   if ($count > 0) {
@@ -374,11 +359,29 @@ function notices_unread_count($account = NULL) {
   return $res['notices'];
 }
 
+/*
+ * Mark notice as readed
+ *
+ * @param  $noticeid
+ *   Notice ID
+ * @return void
+ *
+ * @ingroup api 
+ */
 function notices_mark_read($notice) {
   $notice->new=NOTICE_READ;
   notices_save($notice);
 }
 
+/*
+ * Delete notice
+ *
+ * @param  $noticeid
+ *   Notice ID
+ * @return void
+ *
+ * @ingroup api
+ */
 function notices_delete($noticeid) {
   $notice=noticeid_load($noticeid);
   $settings = notices_load_settings($notice->uid);
@@ -394,6 +397,14 @@ function notices_delete($noticeid) {
   db_query('DELETE FROM {notices} WHERE noticeid=%d',$noticeid);
 }
 
+/**
+ * Save or update notice
+ *
+ * @param  $noticeid
+ * @return void
+ *
+ * @ingroup api 
+ */
 function notices_save(&$notice){
   $notice = (object) $notice;
   

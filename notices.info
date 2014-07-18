@@ -1,11 +1,9 @@
-; $Id$
 name = Notices
 description = Notices Manager. Notice users about new things on website.
 package = "Notification"
 
 dependencies[] = altpager
-dependencies[] = formfilterapi
+;dependencies[] = formfilterapi
 
-project = "notice"
-core = "6.x"
-version = VERSION
+project = "notices"
+core = "7.x"

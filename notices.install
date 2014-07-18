@@ -1,10 +1,8 @@
 <?php
 
 /**
- * @file
- * Install file for msg.module
+ * Implements hook_schema().
  */
-
 
 function notices_schema() {
   $schema = array();
@@ -80,17 +78,10 @@ function notices_schema() {
 
   return $schema;
 }
-function notices_install() {
-  drupal_install_schema('notices');
 
-}
-
-function notices_uninstall() {
-  drupal_uninstall_schema('notices');
-}
-
-
-function notices_update_0001() {
-  db_drop_field($ret, 'notices', 'send_after');
-  return $ret; 
+/**
+ * Implements hook_update_last_removed().
+ */
+function notices_update_last_removed() {
+  return 6000;
 }
