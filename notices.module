@@ -128,8 +128,8 @@ function notices_menu() {
     'title callback'   => 'notices_title_callback',
     'page callback'    => 'notices_list',
     'access callback'  => 'notices_user_access',
-    'type'             => MENU_NORMAL_ITEM,
-    'file'             => 'notices.inc',    
+    'file'             => 'notices.inc',  
+    'menu_name'        => 'user-menu',      
   );
   $items['notices/list'] = array(
     'title'            => 'Notices',
