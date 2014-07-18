@@ -2,6 +2,7 @@
 // $Id$
 
 function notices_list($account = null){
+  drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
   drupal_add_css(drupal_get_path('module', 'notice') .'/notice.css');
   
   if(!is_object($account)){
@@ -9,7 +10,7 @@ function notices_list($account = null){
     $account = $user;
   }
   
-  $filters = formfilterapi_build_filter_query('notices_list');
+//  $filters = formfilterapi_build_filter_query('notices_list');
   $header = array(
     array('data' => t('Date'), 'field' => 'timestamp', 'sort' => 'desc'),
     array('data' => t('Subject'), 'field' => 'subject'),
@@ -21,21 +22,28 @@ function notices_list($account = null){
   }
   $sql='SELECT * FROM {notices} '.$filters['join'].' '.$filters['where'].' ORDER BY new DESC,timestamp DESC';
   
-  $pagerCountShow=altpager_Show($sql,$filters['args']);
-  $count = altpager_getCount();
+  $pagerCountShow = theme('altpager');
   
-  $result = db_query_range($sql,$filters['args'],0,$count);
   
-  while ($notice = db_fetch_object($result)) {
-    
-    $output_notices .= theme('notices_view_teaser', $notice);
+  $notices = db_select('notices', 'n')->extend('AltPager')
+    ->fields('n', array('noticeid'))
+    ->orderBy('new', 'DESC')
+    ->orderBy('timestamp', 'DESC')
+    ->execute()
+    ->fetchAll();
+
+  $output_notices = '';
+  foreach ($notices as $row) {
+    $notice = noticeid_load($row->noticeid);
+    $output_notices .= theme('notices_view_teaser', array('notice' => $notice));
   }//while
+
   if(empty($output_notices)){
     $output_notices =  t('No notifications.');
   }
-  $output .= formfilterapi_getForm('notices_list');
-  $output .= $pagerCountShow;
-  $output .= '<div id="notices" rel="'.($count-1).'">';
+//  $output .= formfilterapi_getForm('notices_list');
+  $output = $pagerCountShow;
+  $output .= '<div id="notices" >';
   $output .=  $output_notices;
   $output .= "</div>";
   $output .= $pagerCountShow;
