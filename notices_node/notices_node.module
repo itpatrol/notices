@@ -32,28 +32,28 @@ function notices_node_node_insert($node) {
           'status' => $node->notices_node['status'],
       ))
       ->execute();
-    /*
-      if($node->notices_node['status']){
-        //process sending
-        $queue = notices_node_getUsers();
+    
+    if($node->notices_node['status']){
+      //process sending
+      $queue = notices_node_getUsers();
+      
+      foreach($queue as $uid => $receiver) {
         
-        foreach($queue as $uid => $receiver) {
-          
-          $account = user_load($uid);
-          $notice = new stdClass();        
-              
-          foreach($receiver as $name => $value){
-            $data[$name] = $value;
-          }
-  
-          $notice->uid = $uid;
-          $notice->message = token_replace($node->body,'notices_node',$data);
-          $notice->callback = 'notices_node';
-          notices_save($notice);
+        $account = user_load($uid);
+        $notice = new stdClass();        
+            
+        foreach($receiver as $name => $value){
+          $data[$name] = $value;
         }
 
+        $notice = new stdClass();
+        $notice->uid = $uid;
+        $notice->provider = 'notices_node';          
+        $notice->message = token_replace($node->body['und'][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
+        $notice->format = $node->body['und'][0]['format'];          
+        notices_save($notice);
       }
-    */
+    }
   }
 }
 
@@ -79,8 +79,6 @@ function notices_node_node_update($node) {
         foreach($receiver as $name => $value){
           $data[$name] = $value;
         }
-        
-        $account = user_load($uid);
 
         $notice = new stdClass();
         $notice->uid = $uid;

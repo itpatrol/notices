@@ -34,19 +34,21 @@ function notices_node_token_info() {
 function notices_node_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
   $sanitize = !empty($options['sanitize']);
-  $replace = (object)$data['notices_node'];
-  if($type == 'notices_node'){
-    foreach ($tokens as $name => $original) {
-      switch ($name) {
-        case 'uid':
-            $replacements[$original] = $replace->uid;
-          break;
-        case 'mail':
-            $replacements[$original] = $sanitize ? check_plain($replace->mail) : $replace->mail;
-          break;
-        case 'username':
-            $replacements[$original] = $sanitize ? check_plain($replace->username) : $replace->username;
-          break;
+  if(isset($data['notices_node'])){
+    $replace = (object)$data['notices_node'];
+    if($type == 'notices_node'){
+      foreach ($tokens as $name => $original) {
+        switch ($name) {
+          case 'uid':
+              $replacements[$original] = $replace->uid;
+            break;
+          case 'mail':
+              $replacements[$original] = $sanitize ? check_plain($replace->mail) : $replace->mail;
+            break;
+          case 'username':
+              $replacements[$original] = $sanitize ? check_plain($replace->username) : $replace->username;
+            break;
+        }
       }
     }
   }
