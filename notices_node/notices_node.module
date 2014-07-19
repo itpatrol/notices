@@ -122,6 +122,7 @@ function notices_node_node_load($nodes, $types) {
       $nodes[$nid]->notices_node = array(
         'status' => $status,
       );
+      $nodes[$nid]->safe_title = $node->title;
       $data=array(
             'uid' => $user->uid,
             'mail' => $user->mail,
@@ -173,6 +174,10 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
       $status = NOTICES_NODE_STATUS_NOT_SEND;
       if(isset($form['#node']->notices_node['status'])){
         $status = $form['#node']->notices_node['status'];
+      }
+      //fix title on form;
+      if(isset($form['#node']->safe_title)){
+        $form['title']['#default_value'] = $form['#node']->safe_title;
       }
       $form['help'] = array(
         '#type' => 'fieldset',
