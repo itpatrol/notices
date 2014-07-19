@@ -108,24 +108,6 @@ function notices_email_menu() {
 }
 
 
-function template_preprocess_notices_email_view(&$vars) {
-  $notice = $vars['notice'];
-  if($notice->is_new){
-    $links[] = array('title' => t('Mark as read'), 'href' => 'notices/read/' .  $notice->noticeid);
-  }
-  $links[] = array('title' => t('Delete'), 'href' => 'notices/delete/' .  $notice->noticeid);
-
-  $vars['time'] = format_date($notice->timestamp, 'medium');
-  $vars['content'] = check_markup($notice->body, $notice->format, FALSE);
-  $vars['links'] = theme('links', $links);
-  
-  $file = drupal_get_path('module', 'notice').'/icons/'.$notice->callback.'.png';
-  if(!file_exists($file)){
-    $file = drupal_get_path('module', 'notice').'/icons/default.png';  
-  }
-  $vars['picture'] = $file;
-}
-
 /**
  * Implements hook_theme().
  */
@@ -149,16 +131,14 @@ function notices_email_mail($key, &$message, $params) {
   
   $message['subject'] = $data->subject;
   
-  $notice=noticeid_load($data->noticeid);
-  
   if(module_exists('mimemail')) {
-    $message['body'] = theme('notices_email_view',$notice);
+    $notice=noticeid_load($data->noticeid);
+    $message['body'][] = theme('notices_email_view',array('notice' => $notice));
   }else{
-    $message['body'] = check_plain($notice->body);
-    $message['body'] .= "\n\n";
-    $message['body'] .= 'Read: '.url('notices/view/' .  $notice->noticeid,array('absolute' => true))."\n";
-    $message['body'] .= 'Delete: '.url('notices/delete/' .  $notice->noticeid,array('absolute' => true))."\n";
-    $message['body'] .= 'Mark as read: '.url('notices/read/' .  $notice->noticeid,array('absolute' => true))."\n";
+    $message['body'][] = $data->body;
+    $message['body'][] = 'Read: '.url('notices/view/' .  $data->noticeid,array('absolute' => true));
+    $message['body'][] = 'Delete: '.url('notices/delete/' .  $data->noticeid,array('absolute' => true));
+    $message['body'][] = 'Mark as read: '.url('notices/read/' .  $data->noticeid,array('absolute' => true));
    
   }
   
@@ -176,19 +156,21 @@ function notices_email_mail($key, &$message, $params) {
  */
 function notices_email_spool() {
   global $language;
-  
+
+  drupal_add_css(drupal_get_path('module', 'notices_email') .'/notices_email.css',array('group' => CSS_THEME));
+
   $limit = variable_get('notices_email_letters_by_cron', 20);
   
-  $res = db_query_range("SELECT * FROM {notices_email_spool}", 0, $limit);
+  $res = db_query_range("SELECT * FROM {notices_email_spool}", 0, $limit)->fetchAll();
   
-  while($data = db_fetch_object($res)){
+  foreach($res as $data){
     $params['data'] = $data;
     
     if(variable_get('notices_email_debug', false)){
       //watchdog it!
-      watchdog('mail key', '!data !params.', array('!data' => print_r($data,true) , '!params' => print_r($params,true)));
+      watchdog('mail key', '!data !params.', array('!data' => print_r($data,true) , '!params' => print_r($params,true)),WATCHDOG_DEBUG);
     }else{
-      $result = drupal_mail('notices_email', 'notification', $data->mail, user_preferred_language($account), $params);
+      $result = drupal_mail('notices_email', 'notification', $data->mail, language_default(), $params);
       if($result['result']){
         $status=array(
               'status'    => NOTICES_EMAIL_STATUS_SEND_SENT,
@@ -206,7 +188,7 @@ function notices_email_spool() {
       }
       drupal_write_record('notices_email_status',$status,'noticeid'); 
     }
-    db_query('DELETE FROM {notices_email_spool} WHERE qid=%d',$data->qid);
+    db_query('DELETE FROM {notices_email_spool} WHERE qid= :qid',array(':qid' => $data->qid));
     
   }
 }
