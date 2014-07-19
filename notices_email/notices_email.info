@@ -1,4 +1,3 @@
-; $Id$
 name = Notice email 
 description = Notice users about new things on website by email.
 package = "Notification"
@@ -6,4 +5,4 @@ package = "Notification"
 dependencies[] = notices
 dependencies[] = token
 
-core = "6.x"
+core = "7.x"

@@ -28,7 +28,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
                         );
           break;
       case 'delete':
-            db_query('DELETE FROM {notices_email_status} WHERE noticeid=%d',$notice->noticeid);
+            db_query('DELETE FROM {notices_email_status} WHERE noticeid=:noticeid', array (':noticeid' => $notice->noticeid));
           break;
       case 'send': 
             $account = user_load($notice->uid); 
@@ -40,14 +40,15 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
             
             $subject = t(variable_get('notices_email_mail_subject','Notification from [site_name]'));
             $data = array(
-              'site_name' => variable_get('site_name',''),
+              'uid' => $account->uid,
+              'mail' => $account->mail,
+              'username' => $account->name,
             ); 
-            $subject = token_replace($subject,'notices_email',$data);
-            
+
             $email=array(
               'mail'      => $mail,
-              'subject'   => $subject,
-              'body'      => check_markup($notice->body, $notice->format, FALSE),
+              'subject'   => token_replace($subject, array('user' => $account, 'notices_node' => $data)),
+              'body'      => check_markup($notice->message, $notice->format, FALSE),
               'noticeid'  => $notice->noticeid,
             );  
             drupal_write_record('notices_email_spool',$email);
@@ -95,7 +96,7 @@ function notices_email_cron(){
  * Implementation of hook_menu().
  */
 function notices_email_menu() {
-  $items['admin/settings/notices_email'] = array(
+  $items['admin/config/notices/notices_email'] = array(
     'title'          => t('Notice email settings'),
     'page callback'  => 'drupal_get_form',
     'page arguments' => array('notices_email_admin_settings'),
@@ -130,8 +131,9 @@ function template_preprocess_notices_email_view(&$vars) {
 function notices_email_theme() {
   return array(
     'notices_email_view'    => array(
-      'arguments'        => array('notice' => NULL),
-      'template'         => 'notices-email-view',
+      'render element' => 'elements',
+      'template'  => 'notices-email-view',
+      'file'      => 'notices_email.theme.inc',
     ),
   );
 }

@@ -47,13 +47,15 @@ function notices_email_admin_settings() {
   
   $form['help'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Tokens'),
+    '#title' => t('Replacement patterns'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#description' => t('These tokens can be used in all text fields except subject and will be replaced on-screen and in the email.'),
+    '#group' => 'additional_settings',
   );
   $form['help']['tokens'] = array(
-    '#type' => 'markup',
-    '#value' => theme('token_help', 'notices_email'),
+    '#theme' => 'token_tree',
+    '#token_types' => array('user', 'notices_node'),
   );
   
   $form['#validate'][] = 'notices_email_admin_settings_validate';

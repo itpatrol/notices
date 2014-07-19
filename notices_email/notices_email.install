@@ -1,14 +1,4 @@
 <?php
-function notices_email_install() {
-  drupal_install_schema('notices_email');
-  drupal_set_message(t("Notice email module installed."));
-}
-
-
-function notices_email_uninstall() {
-  drupal_set_message(t("Notice email module uninstalled."));
-  drupal_uninstall_schema('notices_email');
-}
 
 function notices_email_schema() {
   $schema['notices_email_spool'] = array(
