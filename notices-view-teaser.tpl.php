@@ -8,10 +8,9 @@
         <span class="new"><?php print t('new');?></span>
       <?php endif ?>
       <?php print $content; ?>
+    </div>
     <?php if ( isset($links)) : ?>
        <?php print $links ?>
     <?php endif ?>
-
-    </div>
   <div class="clear-both bottom-border"></div>
 </div>
