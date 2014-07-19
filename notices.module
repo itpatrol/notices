@@ -337,7 +337,9 @@ function notices_load_settings($uid){
       $function = $name . '_provideNotice';
       $op="settings";
       $result = $function($op);
-      $settings->settings[$name] = array ('notice_email' => array('active' => 1));
+      if (module_exists('notices_email')) {
+        $settings->settings[$name] = array ('notices_email' => array('active' => 1));
+      }
       $settings->is_empty = true;
     }//foreach
   }
