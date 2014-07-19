@@ -1,4 +1,3 @@
-; $Id$
 name = Notice node
 description = Send notice to all users via creating new node.
 package = "Notification"
@@ -7,4 +6,4 @@ project = "notices_node"
 dependencies[] = notices
 dependencies[] = token
 
-core = "6.x"
+core = "7.x"

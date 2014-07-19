@@ -1,42 +1,37 @@
 <?php
+
+/**
+ * Implements hook_install.
+ */
 function notices_node_install() {
-  db_query("UPDATE {system} SET weight = 999 WHERE name = 'notices_node' AND type = 'module'");
-  notices_node_install_nodetype();
-  drupal_install_schema('notices_node');
-  drupal_set_message(t("Notice node module have installed."));
-}
 
-
-function notices_node_uninstall() {
-  drupal_set_message(t("Notice node have uninstalled."));
-  drupal_uninstall_schema('notices_node');
+  // Create a newsletter type if needed.
+  $type = node_type_get_type('notices_node');
+  if (!$type) {
+    $type = node_type_set_defaults(array(
+      'type' => 'notices_node',
+      'name' => t('Notices node'),
+      'base' => 'node_content',
+      'description' => t('Create a custom notice to send to all users.'),
+      'locked' => 0,
+      'custom' => 1,
+      'modified' => 1,
+      ));
+    node_type_save($type);
+    node_add_body_field($type);
+  }
 }
 
 /**
- * Create notices_node node type.
+ * Implements hook_uninstall.
  */
-function notices_node_install_nodetype() {
-  // Create a newsletter type. If exists, modify it.
-  if ($type = node_get_types('type', 'notices_node')) {
-    $type->module = 'node';
-    $type->locked = FALSE;
-    $type->custom = TRUE;
-    node_type_save($type);
-  }
-  else {
-    $info = array(
-      'type' => 'notices_node',
-      'name' => t('Notice node'),
-      'module' => 'node',
-      'description' => t('Create a notice to send all users.'),
-      'locked' => FALSE,
-      'custom' => TRUE,
-    );
-    $info = _node_type_set_defaults($info);
-    node_type_save((object)$info);
-  }
+function notices_node_uninstall() {
+  node_type_delete('notices_node');
 }
 
+/**
+ * Implements hook_schema.
+ */
 function notices_node_schema() {
   $schema['notices_node_newsletters'] = array(
     'description' => 'The base table for notices nodes',
