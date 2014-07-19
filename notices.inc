@@ -103,7 +103,7 @@ function notices_delete_form_submit($form, &$form_state){
   drupal_goto('notices');
 }
 
-function notices_settings(&$form_state){
+function notices_settings($form, &$form_state){
   global $user;
   
   $settings = notices_load_settings($user->uid);
@@ -158,7 +158,7 @@ function notices_settings(&$form_state){
     }
     
   }
-
+  
   $form['submit'] = array(
     '#type'  => 'submit',
     '#value' => t('Save changes'),
