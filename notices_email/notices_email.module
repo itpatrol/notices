@@ -38,16 +38,17 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
               $mail = $settings['mail'];
             }
             
-            $subject = t(variable_get('notices_email_mail_subject','Notification from [site_name]'));
-            $data = array(
-              'uid' => $account->uid,
-              'mail' => $account->mail,
-              'username' => $account->name,
-            ); 
-
+            if(empty($notice->subject)){
+              $data = array(
+                'uid' => $account->uid,
+                'mail' => $account->mail,
+                'username' => $account->name,
+              );
+              $notice->subject = token_replace(t(variable_get('notices_email_mail_subject','Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));
+            }
             $email=array(
               'mail'      => $mail,
-              'subject'   => token_replace($subject, array('user' => $account, 'notices_node' => $data)),
+              'subject'   => $notice->subject,
               'body'      => check_markup($notice->message, $notice->format, FALSE),
               'noticeid'  => $notice->noticeid,
             );  
