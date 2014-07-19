@@ -8,8 +8,9 @@ div.notice-new {
 }
 
 div.notice div.date {
-  float:right;
-  color:#258dfc;
+  float: right;
+  color:#268efd;
+  padding: 0px 0px 0px 5px;
 }
 
 ul.notice-links {
