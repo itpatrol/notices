@@ -337,16 +337,21 @@ function notices_delete_access($notice) {
  * @ingroup api 
  */
 function noticeid_load($noticeid) {
-  $notice = db_query("SELECT * FROM {notices} WHERE noticeid = :noticeid", array(
-    ':noticeid' => $noticeid,
-  ))->fetchObject();
+  $notice = db_select('notices', 'n')
+    ->fields('n')
+    ->condition('noticeid', $noticeid, '=')
+    ->execute()
+    ->fetchObject();
+
   return $notice;
 }
 
 function notices_load_settings($uid) {
-  $settings = db_query("SELECT * FROM {notices_settings} WHERE uid = :uid", array(
-    ':uid' => $uid,
-  ))->fetchObject();
+  $settings = db_select('notices_settings', 'ns')
+    ->fields('ns')
+    ->condition('uid', $uid, '=')
+    ->execute()
+    ->fetchObject();
 
   if (!empty($settings)) {
     $settings->settings = unserialize($settings->settings);
@@ -450,9 +455,9 @@ function notices_delete($noticeid) {
     }
   }
 
-  db_query('DELETE FROM {notices} WHERE noticeid=:noticeid', array(
-    ':noticeid' => $noticeid,
-  ));
+  db_delete('notices')
+    ->condition('noticeid', $noticeid, '=')
+    ->execute();
 }
 
 /**
