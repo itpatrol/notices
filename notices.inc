@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function notices_list($account = null){
   drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
