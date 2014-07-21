@@ -53,15 +53,28 @@ function notices_remove_ajax($noticeid, $count) {
   drupal_exit();
 }
 
-function notices_mark_read_ajax($noticeid = NULL){
+function notices_mark_read_ajax($notice_id = NULL) {
   global $user;
-  if ($noticeid == 'all'){
-    db_query("UPDATE {notices} set new=0 WHERE uid = :uid", array( ':uid' => $user->uid));
-  }else{
-    db_query("UPDATE {notices} set new=0 WHERE noticeid = :noticeid AND uid = :uid", array(':noticeid' => $noticeid, ':uid' => $user->uid));
+
+  if ($notice_id == 'all') {
+    db_update('notices')
+      ->fields(array(
+        'new' => '0',
+      ))
+      ->condition('uid', $user->uid, '=')
+      ->execute();
   }
+  else {
+    db_update('notices')
+      ->fields(array(
+        'new' => '0',
+      ))
+      ->condition('noticeid', $notice_id, '=')
+      ->condition('uid', $user->uid, '=')
+      ->execute();
+  }
+
   return;
-  
 }
 
 function notices_load_ajax(){
