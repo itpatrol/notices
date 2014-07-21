@@ -8,7 +8,7 @@ function notices_email_schema() {
         'description' => 'The primary identifier for mail queue',
         'type' => 'serial',
         'unsigned' => TRUE,
-        'not null' => TRUE
+        'not null' => TRUE,
       ),
       'mail' => array(
         'description' => 'The formatted email address of mail message receipient.',
@@ -28,7 +28,7 @@ function notices_email_schema() {
         'description' => 'The body.',
         'type' => 'text',
         'not null' => TRUE,
-        'size' => 'big'
+        'size' => 'big',
       ),
       'noticeid' => array(
         'description' => 'The time status was set or changed.',
@@ -64,18 +64,18 @@ function notices_email_schema() {
         'not null' => TRUE,
         'default' => 0,
         'size' => 'tiny',
-      ), 
+      ),
       'error' => array(
         'description' => 'Text description for error if happen',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
-      ),           
+      ),
     ),
     'indexes' => array(
-      'noticeid' => array('noticeid')
+      'noticeid' => array('noticeid'),
     ),
-  );  
+  );
   return $schema;
 }
