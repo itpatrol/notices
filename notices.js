@@ -8,7 +8,6 @@
 /**
  * Implements Drupal.behaviors for the Notices module.
  */
- 
 Drupal.behaviors.notices  = {
   attach: function (context, settings) {
     $("div.notice-new a.notice-mark-read").bind("click", function() {
@@ -17,43 +16,40 @@ Drupal.behaviors.notices  = {
       $("#notice-" + id).find("span.new").hide();
       $(this).hide();
       
-      //submit ajax mark read
+      // Submit ajax mark read.
       $.get('/ajax/notices/notices-mark-as-read/' + id);
       return false;
     });
     $("div.notice a.notice-remove").bind("click", function() {
       var id = $(this).attr('rel');
       $("#notice-" + id).toggle("fast");
-      //submit ajax mark removed
+      // Submit ajax mark removed.
       $.ajax({
         url: '/ajax/notices/notices-remove/' + id + '/' + $("#notices").attr('rel'),
-        dataType: 'json',      
+        dataType: 'json',
         type: "get",
         success: function(data) {
-          $('#notices').append(data.data); 
+          $('#notices').append(data.data);
         }
       });
       return false;
     });
-    $("div.notice").bind("mouseenter", function() {    
-      $( this ).find("ul.notice-links").toggle("fast");
+    $("div.notice").bind("mouseenter", function() {
+      $(this).find("ul.notice-links").toggle("fast");
     });
-    $("div.notice").bind("mouseleave", function() {    
-      $( this ).find("ul.notice-links").toggle("fast");
+    $("div.notice").bind("mouseleave", function() {
+      $(this).find("ul.notice-links").toggle("fast");
     });
     $("#notices-mark-as-read").bind("click", function() {
       $('div.notice-new').find('span.new').hide();
       $('div.notice-new').removeClass('notice-new');
       $('a.notice-mark-read').hide();
-      
-      //submit ajax mark read
+
+      // Submit ajax mark read.
       $.get('/ajax/notices/notices-mark-as-read');
       return false;
     });
-
-
-  },
-
+  }
 };
 
 })(jQuery);
