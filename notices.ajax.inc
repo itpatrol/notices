@@ -1,11 +1,11 @@
 <?php
 
-function notices_remove_ajax($noticeid, $count) {
+function notices_remove_ajax($notice_id, $count) {
   global $user;
 
-  $notice = noticeid_load($noticeid);
+  $notice = noticeid_load($notice_id);
   if ($user->uid == $notice->uid) {
-    notices_delete($noticeid);
+    notices_delete($notice_id);
   }
   else {
     $admin_uid = variable_get('pg_account_admin_uid', '1');
@@ -16,13 +16,13 @@ function notices_remove_ajax($noticeid, $count) {
 
       $noticeadmin->teaser = t('Hack attempt from !uid (!IP) to !noticeid', array(
         '!uid' => $user->uid,
-        '!noticeid' => $noticeid,
+        '!noticeid' => $notice_id,
         '!IP' => $user->hostname,
       ));
 
       $noticeadmin->body = t('Hack attempt from !uid (!IP) to !noticeid', array(
         '!uid' => $user->uid,
-        '!noticeid' => $noticeid,
+        '!noticeid' => $notice_id,
         '!IP' => $user->hostname,
       ));
 
@@ -77,17 +77,24 @@ function notices_mark_read_ajax($notice_id = NULL) {
   return;
 }
 
-function notices_load_ajax(){
+function notices_load_ajax() {
   global $user;
+
   $output = '';
-  
-  $notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d',$user->uid, 1,2));
-  
+
+  $notice = db_select('notices', 'n')
+    ->fields('n')
+    ->condition('uid', $user->uid, '=')
+    ->orderBy('new', 'DESC')
+    ->orderBy('timestamp', 'DESC')
+    ->range(2, 1)
+    ->execute()
+    ->fetchObject();
+
   $output .= '<div id="notices">';
   $output .= theme('notices_view_teaser', $notice);
-  $output .= "</div>";
+  $output .= '</div>';
 
   print drupal_to_js(array('status' => TRUE, 'data' => $output));
-  exit();
-  
+  drupal_exit();
 }
