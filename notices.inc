@@ -1,23 +1,21 @@
 <?php
 
-function notices_list($account = null){
-  drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
-  drupal_add_css(drupal_get_path('module', 'notices') .'/notices.css');
+function notices_list($account = NULL) {
+  drupal_add_js(drupal_get_path('module', 'notices') . '/notices.js');
+  drupal_add_css(drupal_get_path('module', 'notices') . '/notices.css');
   
-  if(!is_object($account)){
+  if (!is_object($account)) {
     global $user;
     $account = $user;
   }
   
 //  $filters = formfilterapi_build_filter_query('notices_list');
-  $header = array(
-    array('data' => t('Date'), 'field' => 'timestamp', 'sort' => 'desc'),
-    array('data' => t('Subject'), 'field' => 'subject'),
-  );
-  if(empty($filters['where'])){
-    $filters['where'] = "WHERE uid='".$account->uid."'";
-  } else {
-    $filters['where'] .= " AND uid='".$account->uid."'";
+
+  if (empty($filters['where'])) {
+    $filters['where'] = "WHERE uid='" . $account->uid . "'";
+  }
+  else {
+    $filters['where'] .= " AND uid='" . $account->uid . "'";
   }
   
   $notices = db_select('notices', 'n')->extend('AltPager')
@@ -27,14 +25,18 @@ function notices_list($account = null){
     ->fetchAll();
 
   $output_notices = '';
+
   foreach ($notices as $row) {
     $notice = noticeid_load($row->noticeid);
-    $output_notices .= theme('notices_view_teaser', array('notice' => $notice));
-  }//while
+    $output_notices .= theme('notices_view_teaser', array(
+      'notice' => $notice,
+    ));
+  }
 
-  if(empty($output_notices)){
+  if (empty($output_notices)) {
     $output_notices =  t('No notifications.');
   }
+
   $pagerCountShow = theme('altpager');
 //  $output .= formfilterapi_getForm('notices_list');
   $links = array (
@@ -48,21 +50,19 @@ function notices_list($account = null){
         'href' => 'notices/settings',
         'title' => t('Settings'),
       ),
-
     ),
     'attributes' => array('class' => 'notices-links'),
   );
-  $output = theme('links',$links);
+
+  $output = theme('links', $links);
   $output .= $pagerCountShow;
   $output .= '<div id="notices" >';
-  $output .=  $output_notices;
-  $output .= "</div>";
+  $output .= $output_notices;
+  $output .= '</div>';
   $output .= $pagerCountShow;
   
   return $output;
-
 }
-
 
 function notices_view($notice){
   drupal_add_css(drupal_get_path('module', 'notices') .'/notices.css');
