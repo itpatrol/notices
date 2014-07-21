@@ -336,7 +336,7 @@ function notices_delete_access($notice) {
  *
  * @ingroup api 
  */
-function noticeid_load($noticeid) {
+function notices_load_by_id($noticeid) {
   $notice = db_select('notices', 'n')
     ->fields('n')
     ->condition('noticeid', $noticeid, '=')
@@ -440,7 +440,7 @@ function notices_mark_read($notice) {
  * @ingroup api
  */
 function notices_delete($noticeid) {
-  $notice = noticeid_load($noticeid);
+  $notice = notices_load_by_id($noticeid);
   $settings = notices_load_settings($notice->uid);
 
   if (isset($settings->settings)) {

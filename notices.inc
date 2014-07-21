@@ -27,7 +27,7 @@ function notices_list($account = NULL) {
   $output_notices = '';
 
   foreach ($notices as $row) {
-    $notice = noticeid_load($row->noticeid);
+    $notice = notices_load_by_id($row->noticeid);
     $output_notices .= theme('notices_view_teaser', array(
       'notice' => $notice,
     ));
