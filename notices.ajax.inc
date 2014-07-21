@@ -42,7 +42,7 @@ function notices_remove_ajax($notice_id, $count) {
   $output = '';
   $notice_sql = 'SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d';
   $notice_result = db_query($notice_sql, $user->uid, 1, $count);
-  
+
   if ($notice = db_fetch_object($notice_result)) {
     $output .= '<div id="notices">';
     $output .= theme('notices_view_teaser', $notice);
@@ -74,7 +74,7 @@ function notices_mark_read_ajax($notice_id = NULL) {
       ->execute();
   }
 
-  return;
+  return '';
 }
 
 function notices_load_ajax() {
