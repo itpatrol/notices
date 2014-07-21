@@ -8,7 +8,7 @@ function notices_remove_ajax($noticeid, $count) {
     notices_delete($noticeid);
   }
   else {
-    $admin_uid = variable_get('pg_account_admin_uid','1');
+    $admin_uid = variable_get('pg_account_admin_uid', '1');
     if (!empty($admin_uid)) {
       // Notify admin about balance update.
       $noticeadmin = new stdClass();
@@ -31,12 +31,19 @@ function notices_remove_ajax($noticeid, $count) {
       notices_save($noticeadmin);
     }
 
-    print drupal_to_js(array('status' => TRUE, 'data' => t('You are trying to hack our system. We sent notification about this action to system administrator.')));  
-    exit();  
+    print drupal_to_js(array(
+      'status' => TRUE,
+      'data' => t('You are trying to hack our system. We sent notification about this action to system administrator.'),
+    ));
+
+    drupal_exit();
   }
+
   $output = '';
+  $notice_sql = 'SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d';
+  $notice_result = db_query($notice_sql, $user->uid, 1, $count);
   
-  if ($notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d',$user->uid, 1,$count))){
+  if ($notice = db_fetch_object($notice_result)) {
     $output .= '<div id="notices">';
     $output .= theme('notices_view_teaser', $notice);
     $output .= "</div>";
