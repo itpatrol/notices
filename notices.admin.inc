@@ -12,17 +12,19 @@ function notices_admin_menu_block_page() {
   else {
     $output = t('You do not have any administrative items.');
   }
+
   return $output;
 }
 
 
-function notices_admin_settings($form,&$form_state) {
+function notices_admin_settings($form, &$form_state) {
   $form = array();
   return system_settings_form($form);
 }
 
 function notices_settings_add($form, &$form_state) {
   $form = array();
+
   $form['uid'] = array(
     '#type'               => 'textfield',
     '#title'              => t('UID'),
