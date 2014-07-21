@@ -3,13 +3,15 @@
 function notices_list($account = NULL) {
   drupal_add_js(drupal_get_path('module', 'notices') . '/notices.js');
   drupal_add_css(drupal_get_path('module', 'notices') . '/notices.css');
-  
+
   if (!is_object($account)) {
     global $user;
     $account = $user;
   }
-  
-//  $filters = formfilterapi_build_filter_query('notices_list');
+
+  /*
+   * $filters = formfilterapi_build_filter_query('notices_list');
+   */
 
   if (empty($filters['where'])) {
     $filters['where'] = "WHERE uid='" . $account->uid . "'";
@@ -17,7 +19,7 @@ function notices_list($account = NULL) {
   else {
     $filters['where'] .= " AND uid='" . $account->uid . "'";
   }
-  
+
   $notices = db_select('notices', 'n')->extend('AltPager')
     ->fields('n', array('noticeid'))
     ->orderBy('timestamp', 'DESC')
@@ -34,13 +36,13 @@ function notices_list($account = NULL) {
   }
 
   if (empty($output_notices)) {
-    $output_notices =  t('No notifications.');
+    $output_notices = t('No notifications.');
   }
 
-  $pagerCountShow = theme('altpager');
-//  $output .= formfilterapi_getForm('notices_list');
-  $links = array (
-    'links' => array (
+  $pager_count_show = theme('altpager');
+  // $output .= formfilterapi_getForm('notices_list');
+  $links = array(
+    'links' => array(
       array(
         'href' => 'notices/mark-as-read',
         'title' => t('Mark as Read'),
@@ -55,12 +57,12 @@ function notices_list($account = NULL) {
   );
 
   $output = theme('links', $links);
-  $output .= $pagerCountShow;
+  $output .= $pager_count_show;
   $output .= '<div id="notices" >';
   $output .= $output_notices;
   $output .= '</div>';
-  $output .= $pagerCountShow;
-  
+  $output .= $pager_count_show;
+
   return $output;
 }
 
@@ -71,7 +73,7 @@ function notices_view($notice) {
   $output .= theme('notices_view', array('notice' => $notice));
   $output .= '</div>';
 
-  if($notice->new) {
+  if ($notice->new) {
     notices_mark_read($notice);
   }
 
@@ -79,16 +81,16 @@ function notices_view($notice) {
 }
 
 function notices_delete_form($form, &$form_state, $notice) {
-  $form['noticeid'] = array (
+  $form['noticeid'] = array(
     '#type' => 'value',
     '#value' => $notice->noticeid,
   );
 
-  $form['alert'] = array (
+  $form['alert'] = array(
     '#markup' => t('Do you want to delete this message?'),
   );
 
-  $form['message'] = array (
+  $form['message'] = array(
     '#markup' => check_markup($notice->message, $notice->format, FALSE),
   );
 
@@ -108,39 +110,39 @@ function notices_delete_form_submit($form, &$form_state) {
 
 function notices_settings($form, &$form_state) {
   global $user;
-  
+
   $settings = notices_load_settings($user->uid);
-  
-  $sendOptions = array();
-  $sendOptionsSettings = array();
+
+  $send_options = array();
+  $send_options_settings = array();
   foreach (module_implements('sendNotice') as $name) {
     $function = $name . '_sendNotice';
     $op = 'settings';
     $result = $function($op);
-    $sendOptions[$name] = $result['title'];
-    $sendOptionsSettings[$name] = $result;
+    $send_options[$name] = $result['title'];
+    $send_options_settings[$name] = $result;
   }
 
-  $provideOptions = array();
+  $provide_options = array();
   foreach (module_implements('provideNotice') as $name) {
     $function = $name . '_provideNotice';
     $op = 'settings';
     $result = $function($op);
-    $provideOptions[$name] = $result;
+    $provide_options[$name] = $result;
   }
 
   $form['providers'] = array(
     '#tree' => TRUE,
   );
 
-  foreach($provideOptions as $provider) {
+  foreach ($provide_options as $provider) {
     $form['providers'][$provider['name']] = array(
       '#type' => 'fieldset',
       '#title' => $provider['title'],
       '#tree' => TRUE,
     );
 
-    foreach($sendOptions as $name => $title) {
+    foreach ($send_options as $name => $title) {
       $form['providers'][$provider['name']][$name] = array(
         '#type' => 'fieldset',
         '#title' => $title,
@@ -153,15 +155,15 @@ function notices_settings($form, &$form_state) {
         '#default_value' => $settings->settings[$provider['name']][$name]['active'],
       );
 
-      $form['providers'][$provider['name']][$name]['values'] = $sendOptionsSettings[$name]['values'];
-      foreach($sendOptionsSettings[$name]['values'] as $sendName => $value) {
-        if (!empty($settings->settings[$provider['name']][$name]['values'][$sendName])) {
-          $form['providers'][$provider['name']][$name]['values'][$sendName]['#default_value'] = $settings->settings[$provider['name']][$name]['values'][$sendName];
+      $form['providers'][$provider['name']][$name]['values'] = $send_options_settings[$name]['values'];
+      foreach ($send_options_settings[$name]['values'] as $send_name => $value) {
+        if (!empty($settings->settings[$provider['name']][$name]['values'][$send_name])) {
+          $form['providers'][$provider['name']][$name]['values'][$send_name]['#default_value'] = $settings->settings[$provider['name']][$name]['values'][$send_name];
         }
       }
     }
   }
-  
+
   $form['submit'] = array(
     '#type'  => 'submit',
     '#value' => t('Save changes'),
@@ -174,9 +176,9 @@ function notices_settings_submit($form, &$form_state) {
   global $user;
 
   $settings = notices_load_settings($user->uid);
-  
+
   $settings->settings = serialize($form_state['values']['providers']);
-  
+
   if ($settings->is_empty) {
     drupal_write_record('notices_settings', $settings);
   }
