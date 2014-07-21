@@ -5,5 +5,4 @@ package = "Notification"
 dependencies[] = altpager
 ;dependencies[] = formfilterapi
 
-project = "notices"
 core = "7.x"
