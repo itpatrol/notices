@@ -22,14 +22,13 @@ function notices_list($account = null){
   }
   
   $notices = db_select('notices', 'n')->extend('AltPager')
-    ->fields('n', array('noticeid'))
+    ->fields('n')
     ->orderBy('timestamp', 'DESC')
     ->execute()
     ->fetchAll();
 
   $output_notices = '';
-  foreach ($notices as $row) {
-    $notice = noticeid_load($row->noticeid);
+  foreach ($notices as $notice) {
     $output_notices .= theme('notices_view_teaser', array('notice' => $notice));
   }//while
 
