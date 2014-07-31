@@ -1,6 +1,6 @@
 div.notice {
   border-bottom: #ddd 1px solid;
-  padding: 15px 10px 5px 10px;
+  padding: 15px 10px 15px 10px;
 }
 
 div.notice-new {
@@ -13,9 +13,21 @@ div.notice div.date {
   padding: 0px 0px 0px 5px;
 }
 
-ul.notice-links {
+div.notice div.left {
+  display: inline-block;
+}
+
+div.notice div.right {
+  display: inline-block;
+  float: right;
+}
+
+
+div.notice ul.notice-links {
   text-align: right;
   font-size: 87.5%;
+  padding: 0px;
+  margin: 0px;
 }
 
 div.notice-view ul.notice-links {
@@ -29,9 +41,20 @@ ul.notice-links li {
 ul.notice-links li a {
   display: inline;
   padding-left: 10px;
+  padding-bottom: 3px;
 }
 
 ul.notices-links li{
+  display: inline;
+}
+
+div.notice ul.notices_status {
+  text-align: left;
+  font-size: 87.5%;
+  padding: 0px;
+  margin: 0px;
+}
+ul.notices_status li {
   display: inline;  
 }
 

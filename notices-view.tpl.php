@@ -9,8 +9,16 @@
       <?php endif ?>
       <?php print $content; ?>
     </div>
-    <?php if ( isset($links)) : ?>
-       <?php print $links ?>
+    <?php if ( isset($status)) : ?>
+    <div class="left">
+      <?php print $status ?>
+    </div>      
     <?php endif ?>
+    <?php if ( isset($links)) : ?>
+    <div class="right">
+       <?php print $links ?>
+    </div>
+    <?php endif ?>
+    </div>
   <div class="clear-both bottom-border"></div>
 </div>
