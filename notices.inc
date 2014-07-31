@@ -10,19 +10,18 @@ function notices_list($account = null){
     $account = $user;
   }
   
-//  $filters = formfilterapi_build_filter_query('notices_list');
+  $form = formfilterapi_get_form(NOTICES_FORM_NAME);
+
   $header = array(
     array('data' => t('Date'), 'field' => 'timestamp', 'sort' => 'desc'),
     array('data' => t('Subject'), 'field' => 'subject'),
   );
-  if(empty($filters['where'])){
-    $filters['where'] = "WHERE uid='".$account->uid."'";
-  } else {
-    $filters['where'] .= " AND uid='".$account->uid."'";
-  }
   
-  $notices = db_select('notices', 'n')->extend('AltPager')
+  
+  $notices = db_select('notices', 'n')->extend('AltPager')->extend('FormFilterAPI')
     ->fields('n')
+    ->condition('uid', $account->uid)
+    ->processFilters(NOTICES_FORM_NAME)
     ->orderBy('timestamp', 'DESC')
     ->execute()
     ->fetchAll();
@@ -52,7 +51,8 @@ function notices_list($account = null){
     ),
     'attributes' => array('class' => 'notices-links'),
   );
-  $output = theme('links',$links);
+  $output = drupal_render($form);
+  $output .= theme('links',$links);
   $output .= $pagerCountShow;
   $output .= '<div id="notices" >';
   $output .=  $output_notices;
