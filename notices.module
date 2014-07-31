@@ -118,16 +118,34 @@ function notices_getProviders(){
 }
 
 /**
- * Implements hook_perm().
+ * Implements hook_permission().
  */
-function notices_perm() {
+function notices_permission() {
+  // Add permission to admin pgapi.
   return array(
-    'read notices',
-    'read all notices',
-    'administer notice settings',
-    'write notices',
-    'delete notices',
-    'delete all notices',
+    'read notices' => array(
+      'title' => t('Read own notices'),
+      'description' => t('Allows to read own notices'),
+    ),
+    'read all notices' => array(
+      'title' => t('Read all notices'),
+      'description' => t('Allows to read all notices'),
+      'restrict access' => TRUE,
+    ),
+    'administer notice settings' => array(
+      'title' => t('Administer notices'),
+      'description' => t('Allows to change notices module settings'),
+      'restrict access' => TRUE,
+    ),
+    'delete notices' => array(
+      'title' => t('Delete own notices'),
+      'description' => t('Allows to delete own notices'),
+    ),
+    'delete all notices' => array(
+      'title' => t('Delete all notices'),
+      'description' => t('Allows to delete all notices'),
+      'restrict access' => TRUE,
+    ),
   );
 }
 
