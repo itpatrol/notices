@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function notices_list($account = null){
   drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
@@ -9,14 +8,6 @@ function notices_list($account = null){
     global $user;
     $account = $user;
   }
-  
-  $form = formfilterapi_get_form(NOTICES_FORM_NAME);
-
-  $header = array(
-    array('data' => t('Date'), 'field' => 'timestamp', 'sort' => 'desc'),
-    array('data' => t('Subject'), 'field' => 'subject'),
-  );
-  
   
   $notices = db_select('notices', 'n')->extend('AltPager')->extend('FormFilterAPI')
     ->fields('n')
@@ -35,7 +26,7 @@ function notices_list($account = null){
     $output_notices =  t('No notifications.');
   }
   $pagerCountShow = theme('altpager');
-//  $output .= formfilterapi_getForm('notices_list');
+
   $links = array (
     'links' => array (
       array(
@@ -51,6 +42,9 @@ function notices_list($account = null){
     ),
     'attributes' => array('class' => 'notices-links'),
   );
+  
+  $form = formfilterapi_get_form(NOTICES_FORM_NAME);
+
   $output = drupal_render($form);
   $output .= theme('links',$links);
   $output .= $pagerCountShow;
