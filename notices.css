@@ -1,6 +1,6 @@
 div.notice {
   border-bottom: #ddd 1px solid;
-  padding: 5px 10px;
+  padding: 15px 10px 5px 10px;
 }
 
 div.notice-new {
@@ -14,8 +14,8 @@ div.notice div.date {
 }
 
 ul.notice-links {
-  display: none;
   text-align: right;
+  font-size: 87.5%;
 }
 
 div.notice-view ul.notice-links {

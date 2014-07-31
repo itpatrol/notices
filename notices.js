@@ -35,12 +35,6 @@ Drupal.behaviors.notices  = {
       });
       return false;
     });
-    $("div.notice").bind("mouseenter", function() {    
-      $( this ).find("ul.notice-links").toggle("fast");
-    });
-    $("div.notice").bind("mouseleave", function() {    
-      $( this ).find("ul.notice-links").toggle("fast");
-    });
     $("#notices-mark-as-read").bind("click", function() {
       $('div.notice-new').find('span.new').hide();
       $('div.notice-new').removeClass('notice-new');
