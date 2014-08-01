@@ -42,7 +42,7 @@ function notices_settings_add($form, &$form_state) {
     '#title'              => t('Notice'),
     '#rows'               => 6,
     '#resizable'          => TRUE,
-    '#format' => isset($account->signature_format) ? $account->signature_format : NULL,
+    '#format' => NULL,
   );
 
   // Add the buttons.
