@@ -123,11 +123,20 @@ function notices_node_node_load($nodes, $types) {
         'status' => $status,
       );
       $nodes[$nid]->safe_title = $node->title;
-      $data=array(
-            'uid' => $user->uid,
-            'mail' => $user->mail,
-            'username' => $user->name,
-          );
+      if($user->uid > 0 ){
+        $data=array(
+          'uid' => $user->uid,
+          'mail' => $user->mail,
+          'username' => $user->name,
+        );
+      }
+      else {
+        $data=array(
+          'uid' => 0,
+          'mail' => t('Email'),
+          'username' => t('Anonymous'),
+        ); 
+      }
       $nodes[$nid]->title = token_replace($node->title, array('user' => $user, 'node' => $node, 'notices_node' => $data));
     }  
   }
@@ -152,11 +161,20 @@ function notices_node_node_view($node, $build_mode = 'full') {
         // Only fields which result in simple markup elements are supported for
         // token replacements for now.
         if (isset($item['#markup'])) {
-          $data=array(
-            'uid' => $user->uid,
-            'mail' => $user->mail,
-            'username' => $user->name,
-          );
+          if($user->uid > 0 ){
+            $data=array(
+              'uid' => $user->uid,
+              'mail' => $user->mail,
+              'username' => $user->name,
+            );
+          }
+          else {
+            $data=array(
+              'uid' => 0,
+              'mail' => t('Email'),
+              'username' => t('Anonymous'),
+            ); 
+          }
           $item['#markup'] = token_replace($item['#markup'], array('user' => $user, 'node' => $node, 'notices_node' => $data));
         }
       }
