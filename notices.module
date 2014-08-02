@@ -351,14 +351,16 @@ function notices_load_settings($uid){
     $settings->settings = unserialize($settings->settings);
   }else{
     global $user;
+    $account = user_load($uid);
+    
     $settings = new stdClass();
-    $settings->uid = $user->uid;
+    $settings->uid = $account->uid;
     foreach (module_implements('provideNotice') as $name) {
       $function = $name . '_provideNotice';
       $op="settings";
       $result = $function($op);
       if (module_exists('notices_email')) {
-        $settings->settings[$name] = array ('notices_email' => array('active' => 1));
+        $settings->settings[$name] = array ('notices_email' => array('active' => 1, 'values' => $account->mail));
       }
       $settings->is_empty = true;
     }//foreach
