@@ -114,7 +114,7 @@ function template_preprocess_notices_view_teaser(&$vars) {
     $file = drupal_get_path('module', 'notices') . '/default.png';
   }
   $vars['picture'] = $file;
-  $status_output = '';  
+  $status_output = '';
   $status = notices_getSendStatus($notice);
   foreach($status as $name => $value){
     $status_output .= '<li class="'.$name.'" style="background: url(/'.$value['icon'].') no-repeat center left; padding-left: 22px;"> <span class="status">'.$value['status'].'</span></li>';
