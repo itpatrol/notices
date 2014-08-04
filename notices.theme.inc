@@ -62,7 +62,7 @@ function template_preprocess_notices_view(&$vars) {
  */
 function template_preprocess_notices_view_teaser(&$vars) {
   $notice = $vars['notice'];
-  $res=explode("\n", $notice->message);
+  $res = explode("\n", $notice->message);
   
   if(count($res) > 5){
     $notice->message = $res=$res[0]."\n".$res[1]."\n".$res[2]."\n".$res[3]."\n".$res[4]."\n"; 
