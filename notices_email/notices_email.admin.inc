@@ -11,7 +11,7 @@ function notices_email_admin_settings() {
   $form['notices_email_debug'] = array(
     '#title' => t('Debug'),
     '#type' => 'select',
-    '#options' => array( 0 => t('No'), 1 => t('Yes')),
+    '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#description' => t('Debug mode, don\'t send email, write to watchdog instead'),
     '#default_value' => variable_get('notices_email_debug', ''),
   );
