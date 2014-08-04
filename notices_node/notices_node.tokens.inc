@@ -43,9 +43,11 @@ function notices_node_tokens($type, $tokens, array $data = array(), array $optio
           case 'uid':
               $replacements[$original] = $replace->uid;
             break;
+
           case 'mail':
               $replacements[$original] = $sanitize ? check_plain($replace->mail) : $replace->mail;
             break;
+
           case 'username':
               $replacements[$original] = $sanitize ? check_plain($replace->username) : $replace->username;
             break;
