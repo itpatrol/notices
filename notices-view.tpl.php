@@ -9,12 +9,12 @@
       <?php endif ?>
       <?php print $content; ?>
     </div>
-    <?php if ( isset($status)) : ?>
+    <?php if (isset($status)): ?>
     <div class="left">
       <?php print $status ?>
     </div>      
     <?php endif ?>
-    <?php if ( isset($links)) : ?>
+    <?php if (isset($links)): ?>
     <div class="right">
        <?php print $links ?>
     </div>
