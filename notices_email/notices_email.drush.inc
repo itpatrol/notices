@@ -48,7 +48,7 @@ function notices_email_drush_help($section) {
  */
 function drush_notices_email_callback() {
   drush_print(dt('We will process notices_email spool '));
-  if(drush_confirm(dt('You really want to continue?'))) {
+  if (drush_confirm(dt('You really want to continue?'))) {
     notices_email_spool();
   }
 }
