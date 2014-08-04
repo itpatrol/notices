@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Implements hook_install.
+ * Implements hook_install().
  */
 function notices_node_install() {
 
@@ -23,14 +23,14 @@ function notices_node_install() {
 }
 
 /**
- * Implements hook_uninstall.
+ * Implements hook_uninstall().
  */
 function notices_node_uninstall() {
   node_type_delete('notices_node');
 }
 
 /**
- * Implements hook_schema.
+ * Implements hook_schema().
  */
 function notices_node_schema() {
   $schema['notices_node_newsletters'] = array(
