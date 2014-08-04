@@ -13,8 +13,8 @@ function notices_remove_ajax($noticeid, $count) {
       // Notify admin about balance update.
       $noticeadmin = new stdClass();
       $noticeadmin->uid = $admin_uid;
-      $noticeadmin->teaser = t('Hack attempt from !uid (!IP) to !noticeid',array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
-      $noticeadmin->body = t('Hack attempt from !uid (!IP) to !noticeid',array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
+      $noticeadmin->teaser = t('Hack attempt from !uid (!IP) to !noticeid', array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
+      $noticeadmin->body = t('Hack attempt from !uid (!IP) to !noticeid', array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
       $noticeadmin->callback = 'notice';
       notices_save($noticeadmin);
     }
