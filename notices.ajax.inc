@@ -3,7 +3,7 @@
 function notices_remove_ajax($noticeid, $count) {
   global $user;
 
-  $notice=noticeid_load($noticeid);
+  $notice = noticeid_load($noticeid);
   if($user->uid == $notice->uid){
     notices_delete($noticeid);
   }else{
