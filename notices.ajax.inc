@@ -35,9 +35,20 @@ function notices_remove_ajax($noticeid,$count){
 function notices_mark_read_ajax($noticeid = NULL){
   global $user;
   if($noticeid == 'all'){
-    db_query("UPDATE {notices} set new=0 WHERE uid = :uid", array( ':uid' => $user->uid));
+    db_update('notices')
+      ->fields(array(
+        'new' => 0,
+      ))
+      ->condition('uid', $user->uid, '=')
+      ->execute();
   }else{
-    db_query("UPDATE {notices} set new=0 WHERE noticeid = :noticeid AND uid = :uid", array(':noticeid' => $noticeid, ':uid' => $user->uid));
+    db_update('notices')
+      ->fields(array(
+        'new' => 0,
+      ))
+      ->condition('uid', $user->uid, '=')
+      ->condition('noticeid', $noticeid, '=')
+      ->execute();
   }
   return;
   
