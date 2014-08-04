@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Drush support for node_export.
+ * Drush support for node_export.
  */
 
 /**
