@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Installation file for "Notice email" module.
+ */
 
 /**
  * Implements hook_schema().
