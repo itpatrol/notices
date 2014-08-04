@@ -79,11 +79,15 @@ function template_preprocess_notices_view_teaser(&$vars) {
   );
 
   if ($notice->new) {
-    $links[] = array('title' => t('Mark as read'), 
-                     'href' => 'notices/read/' .  $notice->noticeid, 
-                     'attributes' => array('rel' => $notice->noticeid, 
-                                           'id' => 'noticeread-'.$notice->noticeid, 
-                                           'class' => 'notice-mark-read'));
+    $links[] = array(
+      'title' => t('Mark as read'),
+      'href' => 'notices/read/' . $notice->noticeid,
+      'attributes' => array(
+        'rel' => $notice->noticeid,
+        'id' => 'noticeread-' . $notice->noticeid,
+        'class' => 'notice-mark-read',
+      ),
+    );
   }
 
   $links[] = array('title' => t('Delete'), 
