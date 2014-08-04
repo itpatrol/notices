@@ -39,7 +39,7 @@ Drupal.behaviors.notices  = {
       $('div.notice-new').removeClass('notice-new');
       $('a.notice-mark-read').hide();
 
-      //submit ajax mark read
+      // submit ajax mark read
       $.get('/ajax/notices/notices-mark-as-read');
       return false;
     });
