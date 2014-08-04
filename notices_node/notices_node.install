@@ -4,15 +4,17 @@
  * Implements hook_install().
  */
 function notices_node_install() {
+  // Ensure translations don't break during installation.
+  $t = get_t();
 
   // Create a newsletter type if needed.
   $type = node_type_get_type('notices_node');
   if (!$type) {
     $type = node_type_set_defaults(array(
       'type' => 'notices_node',
-      'name' => t('Notices node'),
+      'name' => $t('Notices node'),
       'base' => 'node_content',
-      'description' => t('Create a custom notice to send to all users.'),
+      'description' => $t('Create a custom notice to send to all users.'),
       'locked' => 0,
       'custom' => 1,
       'modified' => 1,
