@@ -18,7 +18,7 @@ function notices_email_admin_settings() {
   $form['notices_email_cron'] = array(
     '#title' => t('Cron'),
     '#type' => 'select',
-    '#options' => array( 0 => t('No'), 1 => t('Yes')),
+    '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#description' => t('Select yes to process queue by cron'),
     '#default_value' => variable_get('notices_email_cron', ''),
   );
