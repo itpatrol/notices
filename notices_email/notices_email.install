@@ -67,18 +67,18 @@ function notices_email_schema() {
         'not null' => TRUE,
         'default' => 0,
         'size' => 'tiny',
-      ), 
+      ),
       'error' => array(
         'description' => 'Text description for error if happen',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
-      ),           
+      ),
     ),
     'indexes' => array(
       'noticeid' => array('noticeid')
     ),
-  );  
+  );
   return $schema;
 }
