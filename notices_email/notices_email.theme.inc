@@ -3,7 +3,7 @@
 /**
  * Processes variables for notices-email-view.tpl.php.
  *
- * @param $variables
+ * @param array $vars
  *   An associative array containing the following key:
  *   - notice
  *
