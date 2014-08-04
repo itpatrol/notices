@@ -67,4 +67,3 @@ function notices_settings_add_submit($form, &$form_state) {
   $notice->format = $form_state['values']['message']['format'];
   notices_save($notice);
 }
-
