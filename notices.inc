@@ -91,7 +91,6 @@ function notices_delete_form($form, &$form_state,$notice){
 }
 
 function notices_delete_form_submit($form, &$form_state){
-  global $user;
   notices_delete($form_state['values']['noticeid']);
   drupal_goto('notices');
 }
