@@ -33,7 +33,7 @@ function notices_settings_add($form, &$form_state) {
     '#size'               => 50,
     '#maxlength'          => 255,
   );
-  
+
   $form['provider'] = array(
     '#type'               => 'textfield',
     '#title'              => t('provider'),
