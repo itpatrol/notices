@@ -12,7 +12,7 @@ function notices_email_admin_settings() {
     '#title' => t('Debug'),
     '#type' => 'select',
     '#options' => array(0 => t('No'), 1 => t('Yes')),
-    '#description' => t('Debug mode, don\'t send email, write to watchdog instead'),
+    '#description' => t("Debug mode, don't send email, write to watchdog instead"),
     '#default_value' => variable_get('notices_email_debug', ''),
   );
   $form['notices_email_cron'] = array(
