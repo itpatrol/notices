@@ -357,7 +357,7 @@ function notices_load_settings($uid){
     foreach (module_implements('provideNotice') as $name) {
       $function = $name . '_provideNotice';
       $op="settings";
-      $result = $function($op);
+      $function($op);
       if (module_exists('notices_email')) {
         $settings->settings[$name] = array ('notices_email' => array('active' => 1, 'values' => $account->mail));
       }
