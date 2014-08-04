@@ -33,7 +33,7 @@ function notices_email_drush_command() {
  * @param string $section
  *   A string with the help section (prepend with 'drush:')
  *
- * @return
+ * @return string
  *   A string with the help text for your command.
  */
 function notices_email_drush_help($section) {
