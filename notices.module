@@ -350,7 +350,6 @@ function notices_load_settings($uid){
   if(!empty($settings)){
     $settings->settings = unserialize($settings->settings);
   }else{
-    global $user;
     $account = user_load($uid);
     
     $settings = new stdClass();
