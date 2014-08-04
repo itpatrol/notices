@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  *   Drush support for node_export.
