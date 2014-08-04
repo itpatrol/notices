@@ -71,7 +71,7 @@ function notices_load_ajax() {
 
   $output .= '<div id="notices">';
   $output .= theme('notices_view_teaser', $notice);
-  $output .= "</div>";
+  $output .= '</div>';
 
   print drupal_to_js(array('status' => TRUE, 'data' => $output));
   exit();
