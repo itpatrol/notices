@@ -16,10 +16,13 @@
 function template_preprocess_notices_view(&$vars) {
   $notice = $vars['notice'];
   $links[] = array('title' => t('Delete'),
-                   'href' => 'notices/delete/' .  $notice->noticeid,
-                   'attributes' => array('rel' => $notice->noticeid, 
-                                         'id' => 'noticeremove-'.$notice->noticeid, 
-                                         'class' => 'notice-remove'));
+    'href' => 'notices/delete/' .  $notice->noticeid,
+    'attributes' => array(
+      'rel' => $notice->noticeid,
+      'id' => 'noticeremove-' . $notice->noticeid,
+      'class' => 'notice-remove',
+    ),
+  );
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
   $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
