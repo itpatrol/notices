@@ -50,8 +50,8 @@ function notices_node_node_insert($node) {
         $notice->uid = $uid;
         $notice->provider = 'notices_node'; 
         $notice->subject = token_replace($node->title, array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->message = token_replace($node->body['und'][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->format = $node->body['und'][0]['format'];          
+        $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
+        $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
       }
     }
@@ -85,8 +85,8 @@ function notices_node_node_update($node) {
         $notice->uid = $uid;
         $notice->provider = 'notices_node';
         $notice->subject = token_replace($node->title, array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->message = token_replace($node->body['und'][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->format = $node->body['und'][0]['format'];
+        $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
+        $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
 
       }
