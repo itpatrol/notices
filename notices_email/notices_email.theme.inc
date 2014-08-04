@@ -14,7 +14,7 @@ function template_preprocess_notices_email_view(&$vars) {
 
   $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
 
-  $links[] = array('title' => t('Read more'), 
+  $links[] = array('title' => t('Read more'),
                    'href' => 'notices/view/' . $notice->noticeid,
                    'attributes' => array('class' => 'notice-read-more'));
 
