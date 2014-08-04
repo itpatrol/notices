@@ -4,7 +4,7 @@ function notices_remove_ajax($noticeid, $count) {
   global $user;
 
   $notice = noticeid_load($noticeid);
-  if($user->uid == $notice->uid){
+  if ($user->uid == $notice->uid) {
     notices_delete($noticeid);
   }else{
     $admin_uid=variable_get('pg_account_admin_uid','1');
