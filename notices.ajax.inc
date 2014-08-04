@@ -1,6 +1,6 @@
 <?php
 
-function notices_remove_ajax($noticeid,$count) {
+function notices_remove_ajax($noticeid, $count) {
   global $user;
 
   $notice=noticeid_load($noticeid);
