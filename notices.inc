@@ -20,7 +20,7 @@ function notices_list($account = null){
   $output_notices = '';
   foreach ($notices as $notice) {
     $output_notices .= theme('notices_view_teaser', array('notice' => $notice));
-  }//while
+  }
 
   if(empty($output_notices)){
     $output_notices =  t('No notifications.');
