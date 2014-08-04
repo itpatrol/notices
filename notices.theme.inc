@@ -56,11 +56,10 @@ function template_preprocess_notices_view(&$vars) {
  *
  * @param array $vars
  *   An associative array containing the following key:
- *   - notice
+ *   - notice.
  *
  * @see notices-view-teaser.tpl.php
  */
-
 function template_preprocess_notices_view_teaser(&$vars) {
   $notice = $vars['notice'];
   $res=explode("\n", $notice->message);
