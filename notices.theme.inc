@@ -13,7 +13,6 @@
  *
  * @see notices-view.tpl.php
  */
-
 function template_preprocess_notices_view(&$vars) {
   $notice = $vars['notice'];
   $links[] = array('title' => t('Delete'), 
