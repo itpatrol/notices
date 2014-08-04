@@ -9,7 +9,7 @@
  *
  * @param array $vars
  *   An associative array containing the following key:
- *   - notice
+ *   - notice.
  *
  * @see notices-view.tpl.php
  */
