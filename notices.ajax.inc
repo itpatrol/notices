@@ -75,5 +75,4 @@ function notices_load_ajax() {
 
   print drupal_to_js(array('status' => TRUE, 'data' => $output));
   exit();
-  
 }
