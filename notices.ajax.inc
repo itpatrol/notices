@@ -68,7 +68,7 @@ function notices_load_ajax() {
   $output = '';
   
   $notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d', $user->uid, 1, 2));
-  
+
   $output .= '<div id="notices">';
   $output .= theme('notices_view_teaser', $notice);
   $output .= "</div>";
