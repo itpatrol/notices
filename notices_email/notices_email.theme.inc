@@ -9,8 +9,6 @@
  *
  * @see notices-email-view.tpl.php
  */
-
-
 function template_preprocess_notices_email_view(&$vars) {
   $notice = $vars['notice'];
   
@@ -23,14 +21,14 @@ function template_preprocess_notices_email_view(&$vars) {
 
   $links[] = array('title' => t('Mark as read'), 
                      'href' => 'notices/read/' .  $notice->noticeid, 
-                     'attributes' => array('rel' => $notice->noticeid, 
-                                           'id' => 'noticeread-'.$notice->noticeid, 
+                     'attributes' => array('rel' => $notice->noticeid,
+                                           'id' => 'noticeread-'.$notice->noticeid,
                                            'class' => 'notice-mark-read'));
-  
+
   $links[] = array('title' => t('Delete'), 
-                   'href' => 'notices/delete/' .  $notice->noticeid, 
-                   'attributes' => array('rel' => $notice->noticeid, 
-                                         'id' => 'noticeremove-'.$notice->noticeid, 
+                   'href' => 'notices/delete/' .  $notice->noticeid,
+                   'attributes' => array('rel' => $notice->noticeid,
+                                         'id' => 'noticeremove-'.$notice->noticeid,
                                          'class' => 'notice-remove'));
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
@@ -39,6 +37,7 @@ function template_preprocess_notices_email_view(&$vars) {
     'links' => $links,
     'attributes' => array('class' => 'notice-links'),
   );
+
   $vars['links'] = theme('links', $variables);
 
  $file = drupal_get_path('module', $notice->provider).'/'.$notice->provider.'.png';
