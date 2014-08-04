@@ -434,7 +434,9 @@ function notices_delete($noticeid) {
       }//foreach
     }
   }
-  db_query('DELETE FROM {notices} WHERE noticeid=:noticeid',array(':noticeid' => $noticeid));
+  db_delete('notices')
+    ->condition('noticeid', $noticeid, '=')
+    ->execute();
 }
 
 /**
