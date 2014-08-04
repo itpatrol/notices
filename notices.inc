@@ -175,6 +175,11 @@ function notices_settings_submit($form, &$form_state){
 
 function notices_mark_as_read(){
   global $user;
-  db_query("UPDATE {notices} set new=0 WHERE uid = :uid", array(':uid' => $user->uid));
+  db_update('notices')
+    ->fields(array(
+      'new' => 0,
+    ))
+    ->condition('uid', $user->uid, '=')
+    ->execute();
   drupal_goto('notices');
 }
