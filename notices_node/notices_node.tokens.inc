@@ -35,7 +35,8 @@ function notices_node_tokens($type, $tokens, array $data = array(), array $optio
   $replacements = array();
   $sanitize = !empty($options['sanitize']);
   if (isset($data['notices_node'])) {
-    $replace = (object)$data['notices_node'];
+    $replace = (object) $data['notices_node'];
+
     if ($type == 'notices_node') {
       foreach ($tokens as $name => $original) {
         switch ($name) {
