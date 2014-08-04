@@ -59,7 +59,7 @@ function notices_node_schema() {
         'size' => 'tiny',
       ),
     ),
-    'unique keys' => array('vid'=> array('vid')),
+    'unique keys' => array('vid' => array('vid')),
     'primary key' => array('nid'),
   );
   return $schema;
