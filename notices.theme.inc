@@ -35,7 +35,7 @@ function template_preprocess_notices_view(&$vars) {
   $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
 
   $file = drupal_get_path('module', $notice->provider) . '/' . $notice->provider . '.png';
-  if(!file_exists($file)){
+  if (!file_exists($file)) {
     $file = drupal_get_path('module', 'notices').'/default.png';  
   }
   $vars['picture'] = $file;
