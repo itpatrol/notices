@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  *   Provides theme functions
