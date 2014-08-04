@@ -63,7 +63,7 @@ function notices_mark_read_ajax($noticeid = NULL) {
   return NULL;
 }
 
-function notices_load_ajax(){
+function notices_load_ajax() {
   global $user;
   $output = '';
   
