@@ -30,7 +30,7 @@ function notices_email_drush_command() {
  * This function is called whenever a drush user calls
  * 'drush help <name-of-your-command>'
  *
- * @param
+ * @param string $section
  *   A string with the help section (prepend with 'drush:')
  *
  * @return
