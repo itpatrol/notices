@@ -20,7 +20,7 @@ function notices_admin_menu_block_page() {
 }
 
 
-function notices_admin_settings($form,&$form_state) {
+function notices_admin_settings($form, &$form_state) {
   $form = array();
   return system_settings_form($form);
 }
