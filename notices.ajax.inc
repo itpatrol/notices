@@ -66,7 +66,7 @@ function notices_mark_read_ajax($noticeid = NULL) {
 function notices_load_ajax() {
   global $user;
   $output = '';
-  
+
   $notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d', $user->uid, 1, 2));
 
   $output .= '<div id="notices">';
