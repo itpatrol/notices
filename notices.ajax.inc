@@ -31,7 +31,7 @@ function notices_remove_ajax($noticeid, $count) {
   }
   $output = '';
 
-  if($notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d',$user->uid, 1,$count))){
+  if ($notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d',$user->uid, 1,$count))) {
     $output .= '<div id="notices">';
     $output .= theme('notices_view_teaser', $notice);
     $output .= "</div>";
