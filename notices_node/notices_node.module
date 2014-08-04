@@ -65,9 +65,13 @@ function notices_node_node_update($node) {
   if($node->type == 'notices_node'){  
     if (array_key_exists('status', $node->notices_node) && $node->notices_node['status']) {
       //process sending
-      db_query("UPDATE {notices_node_newsletters} 
-                SET status = :status 
-                WHERE nid = :nid AND vid = :vid", array ( ':status' => $node->notices_node['status'], ':nid' => $node->nid, ':vid' => $node->vid));
+      db_update('notices_node_newsletters')
+        ->fields(array(
+          'status' => $node->notices_node['status'],
+        ))
+        ->condition('nid', $node->nid, '=')
+        ->condition('vid', $node->vid, '=')
+        ->execute();
                 
       //process sending
       $queue = notices_node_getUsers();
