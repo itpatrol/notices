@@ -70,9 +70,13 @@ function template_preprocess_notices_view_teaser(&$vars) {
 
   $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
 
-  $links[] = array('title' => t('Read more'), 
-                   'href' => 'notices/view/' .  $notice->noticeid,
-                   'attributes' => array('class' => 'notice-read-more'));
+  $links[] = array(
+    'title' => t('Read more'),
+    'href' => 'notices/view/' .  $notice->noticeid,
+    'attributes' => array(
+      'class' => 'notice-read-more',
+    ),
+  );
 
   if($notice->new){
     $links[] = array('title' => t('Mark as read'), 
