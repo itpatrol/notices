@@ -28,7 +28,9 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
                         );
           break;
       case 'delete':
-            db_query('DELETE FROM {notices_email_status} WHERE noticeid=:noticeid', array (':noticeid' => $notice->noticeid));
+        db_delete('notices_email_status')
+          ->condition('noticeid', $notice->noticeid, '=')
+          ->execute();
           break;
       case 'send': 
             $account = user_load($notice->uid); 
@@ -211,7 +213,9 @@ function notices_email_spool() {
       
     }
     foreach($qids as $qid){
-      db_query('DELETE FROM {notices_email_spool} WHERE qid= :qid',array(':qid' => $qid));
+      db_delete('notices_email_spool')
+        ->condition('qid', $qid, '=')
+        ->execute();
     }
   }
 }
