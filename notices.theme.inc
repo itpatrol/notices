@@ -7,13 +7,13 @@
 /**
  * Processes variables for notices-view.tpl.php.
  *
- * @param $variables
+ * @param array $vars
  *   An associative array containing the following key:
  *   - notice
  *
  * @see notices-view.tpl.php
  */
- 
+
 function template_preprocess_notices_view(&$vars) {
   $notice = $vars['notice'];
   $links[] = array('title' => t('Delete'), 
