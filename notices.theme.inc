@@ -54,7 +54,7 @@ function template_preprocess_notices_view(&$vars) {
 /**
  * Processes variables for notices-view.tpl.php.
  *
- * @param $variables
+ * @param array $vars
  *   An associative array containing the following key:
  *   - notice
  *
