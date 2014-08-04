@@ -10,7 +10,7 @@ function notices_node_token_info() {
     'needs-data' => 'notices_node',
   );
 
-  // Tokens
+  // Tokens.
   $info['tokens']['notices_node']['uid'] = array(
     'name' => t('uid'),
     'description' => t("The unique uid of the user who receive notice."),
