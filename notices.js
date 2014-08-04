@@ -23,7 +23,7 @@ Drupal.behaviors.notices  = {
     $("div.notice a.notice-remove").bind("click", function() {
       var id = $(this).attr('rel');
       $("#notice-" + id).toggle("fast");
-      // submit ajax mark removed
+      // Submit ajax mark removed
       $.ajax({
         url: '/ajax/notices/notices-remove/' + id + '/' + $("#notices").attr('rel'),
         dataType: 'json',
