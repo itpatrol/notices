@@ -61,7 +61,12 @@ function notices_schema() {
   $schema['notices_settings'] = array(
     'description' => t('Stores resource usage history.'),
     'fields' => array(
-      'uid'   => array('type' => 'int','unsigned' => TRUE,'not null' => TRUE,'default' => 0,),  
+      'uid'   => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'settings'  => array('type' => 'text'),
     ),
     'primary key' => array('uid'),
