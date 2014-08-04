@@ -55,5 +55,5 @@ function notices_node_tokens($type, $tokens, array $data = array(), array $optio
       }
     }
   }
-  return $replacements;  
+  return $replacements;
 }
