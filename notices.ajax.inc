@@ -43,7 +43,7 @@ function notices_remove_ajax($noticeid, $count) {
 
 function notices_mark_read_ajax($noticeid = NULL) {
   global $user;
-  if($noticeid == 'all'){
+  if ($noticeid == 'all') {
     db_update('notices')
       ->fields(array(
         'new' => 0,
