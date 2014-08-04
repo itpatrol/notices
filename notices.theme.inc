@@ -2,7 +2,7 @@
 
 /**
  * @file
- *   Provides theme functions.
+ *   Provides theme functions
  */
 
 /**
