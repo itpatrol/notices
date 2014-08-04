@@ -53,7 +53,7 @@ function notices_schema() {
     ),
     'indexes'         => array(
       'uid'             => array('uid'),
-      'is_new'          => array('noticeid', 'uid', 'new', ),
+      'is_new'          => array('noticeid', 'uid', 'new'),
     ),    
     'primary key'     => array('noticeid'),
   );
