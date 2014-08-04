@@ -12,7 +12,7 @@ function notices_remove_ajax($noticeid, $count) {
     if (!empty($admin_uid)) {
       // Notify admin about balance update.
       $noticeadmin = new stdClass();
-      $noticeadmin->uid=$admin_uid;
+      $noticeadmin->uid = $admin_uid;
       $noticeadmin->teaser = t('Hack attempt from !uid (!IP) to !noticeid',array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
       $noticeadmin->body = t('Hack attempt from !uid (!IP) to !noticeid',array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
       $noticeadmin->callback = 'notice';
