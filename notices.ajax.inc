@@ -6,7 +6,8 @@ function notices_remove_ajax($noticeid, $count) {
   $notice = noticeid_load($noticeid);
   if ($user->uid == $notice->uid) {
     notices_delete($noticeid);
-  }else {
+  }
+  else {
     $admin_uid=variable_get('pg_account_admin_uid','1');
     if(!empty($admin_uid)){
       //notify admin about balance update
