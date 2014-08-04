@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Admin page settings module.
+ */
 
 /**
  * Menu callback to list sub-items.
