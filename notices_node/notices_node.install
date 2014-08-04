@@ -42,7 +42,7 @@ function notices_node_schema() {
         'description' => 'The primary identifier for a node.',
         'type' => 'int',
         'unsigned' => TRUE,
-        'not null' => TRUE
+        'not null' => TRUE,
       ),
       'vid' => array(
         'description' => 'The current {node_revisions}.vid version identifier.',
