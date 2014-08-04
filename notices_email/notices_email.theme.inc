@@ -43,7 +43,7 @@ function template_preprocess_notices_email_view(&$vars) {
 
  $file = drupal_get_path('module', $notice->provider).'/'.$notice->provider.'.png';
   if(!file_exists($file)){
-    $file = drupal_get_path('module', 'notices').'/default.png';  
+    $file = drupal_get_path('module', 'notices').'/default.png';
   }
   $vars['picture'] = $file;
 }
