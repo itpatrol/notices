@@ -50,7 +50,8 @@ function notices_mark_read_ajax($noticeid = NULL) {
       ))
       ->condition('uid', $user->uid, '=')
       ->execute();
-  }else {
+  }
+  else {
     db_update('notices')
       ->fields(array(
         'new' => 0,
