@@ -60,8 +60,7 @@ function notices_mark_read_ajax($noticeid = NULL) {
       ->condition('noticeid', $noticeid, '=')
       ->execute();
   }
-  return;
-  
+  return NULL;
 }
 
 function notices_load_ajax(){
