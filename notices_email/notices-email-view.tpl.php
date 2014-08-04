@@ -6,7 +6,7 @@
     <div class="message">
       <?php print $content; ?>
     </div>
-    <?php if ( isset($links)) : ?>
+    <?php if (isset($links)): ?>
       <?php print $links ?>
     <?php endif ?>
   <div class="clear-both bottom-border"></div>
