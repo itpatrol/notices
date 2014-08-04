@@ -19,7 +19,7 @@ function notices_schema() {
         'type'          => 'int',
         'not null'      => TRUE,
         'unsigned'      => TRUE,
-      ),      
+      ),
       'provider'     => array(
         'description'   => 'Module system name that triggered this notification',
         'type'          => 'varchar',
