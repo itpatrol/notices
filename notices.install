@@ -129,7 +129,12 @@ function notices_update_7001() {
  * Changes fileds: type => service, method => gateway.
  */
 function notices_update_7002() {
-  db_change_field('notices', 'callback', 'provider', array('type' => 'varchar', 'length' => 32, 'not null' => TRUE, 'default' => ''));
+  db_change_field('notices', 'callback', 'provider', array(
+    'type' => 'varchar',
+    'length' => 32,
+    'not null' => TRUE,
+    'default' => '',
+  ));
   db_drop_field('notices', 'method');
 }
 
