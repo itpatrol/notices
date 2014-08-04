@@ -63,11 +63,11 @@ function template_preprocess_notices_view(&$vars) {
 function template_preprocess_notices_view_teaser(&$vars) {
   $notice = $vars['notice'];
   $res = explode("\n", $notice->message);
-  
+
   if(count($res) > 5){
     $notice->message = $res=$res[0]."\n".$res[1]."\n".$res[2]."\n".$res[3]."\n".$res[4]."\n"; 
   }
-  
+
   $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
 
   $links[] = array('title' => t('Read more'), 
@@ -81,7 +81,7 @@ function template_preprocess_notices_view_teaser(&$vars) {
                                            'id' => 'noticeread-'.$notice->noticeid, 
                                            'class' => 'notice-mark-read'));
   }
-  
+
   $links[] = array('title' => t('Delete'), 
                    'href' => 'notices/delete/' .  $notice->noticeid, 
                    'attributes' => array('rel' => $notice->noticeid, 
@@ -89,7 +89,7 @@ function template_preprocess_notices_view_teaser(&$vars) {
                                          'class' => 'notice-remove'));
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
-  
+
   $variables = array(
     'links' => $links,
     'attributes' => array('class' => 'notice-links'),
@@ -110,5 +110,4 @@ function template_preprocess_notices_view_teaser(&$vars) {
   if(!empty($status_output)) {
     $vars['status'] = '<ul class="notices_status">'.$status_output.'</ul>';
   }
-
 }
