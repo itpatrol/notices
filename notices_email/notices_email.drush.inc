@@ -26,15 +26,6 @@ function notices_email_drush_command() {
 
 /**
  * Implements hook_drush_help().
- *
- * This function is called whenever a drush user calls
- * 'drush help <name-of-your-command>'
- *
- * @param string $section
- *   A string with the help section (prepend with 'drush:')
- *
- * @return string
- *   A string with the help text for your command.
  */
 function notices_email_drush_help($section) {
   switch ($section) {
