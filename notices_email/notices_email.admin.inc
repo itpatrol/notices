@@ -70,7 +70,7 @@ function notices_email_admin_settings() {
 
 
 /**
- * Validate function
+ * Validate function.
  */
 function notices_email_admin_settings_validate($form, &$form_state) {
   if (!is_numeric($form_state['values']['notices_email_letters_by_cron'])) {
