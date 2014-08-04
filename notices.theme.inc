@@ -90,11 +90,15 @@ function template_preprocess_notices_view_teaser(&$vars) {
     );
   }
 
-  $links[] = array('title' => t('Delete'), 
-                   'href' => 'notices/delete/' .  $notice->noticeid, 
-                   'attributes' => array('rel' => $notice->noticeid, 
-                                         'id' => 'noticeremove-'.$notice->noticeid, 
-                                         'class' => 'notice-remove'));
+  $links[] = array(
+    'title' => t('Delete'),
+    'href' => 'notices/delete/' . $notice->noticeid,
+    'attributes' => array(
+      'rel' => $notice->noticeid,
+      'id' => 'noticeremove-' . $notice->noticeid,
+      'class' => 'notice-remove',
+    ),
+  );
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
 
