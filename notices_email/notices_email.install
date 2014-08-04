@@ -77,7 +77,7 @@ function notices_email_schema() {
       ),
     ),
     'indexes' => array(
-      'noticeid' => array('noticeid')
+      'noticeid' => array('noticeid'),
     ),
   );
   return $schema;
