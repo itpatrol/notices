@@ -8,6 +8,9 @@
  * Implements hook_schema().
  */
 function notices_schema() {
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
   $schema = array();
   $schema['notices'] = array(
     'description'       => '{notices} holds the message information',
@@ -63,7 +66,7 @@ function notices_schema() {
   );
 
   $schema['notices_settings'] = array(
-    'description' => t('Stores resource usage history.'),
+    'description' => $t('Stores resource usage history.'),
     'fields' => array(
       'uid'   => array(
         'type' => 'int',
@@ -141,7 +144,6 @@ function notices_update_7002() {
   ));
   db_drop_field('notices', 'method');
 }
-
 
 /**
  * Implements hook_update_last_removed().
