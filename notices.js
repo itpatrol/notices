@@ -43,8 +43,7 @@ Drupal.behaviors.notices  = {
       $.get('/ajax/notices/notices-mark-as-read');
       return false;
     });
-  },
-
+  }
 };
 
 })(jQuery);
