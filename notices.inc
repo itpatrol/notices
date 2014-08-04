@@ -108,7 +108,7 @@ function notices_settings($form, &$form_state){
     $result = $function($op);
     $sendOptions[$name] = $result['title'];
     $sendOptionsSettings[$name] = $result;
-  }//foreach
+  }
 
   $provideOptions=array();
   foreach (module_implements('provideNotice') as $name) {
@@ -116,7 +116,7 @@ function notices_settings($form, &$form_state){
     $op="settings";
     $result = $function($op);
     $provideOptions[$name] = $result;
-  }//foreach
+  }
   
 
   $form['providers']=array(
