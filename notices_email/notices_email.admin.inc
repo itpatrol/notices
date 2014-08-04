@@ -1,6 +1,11 @@
 <?php
 /**
- * Settings form
+ * @file
+ * Admin page settings module.
+ */
+
+/**
+ * Settings form.
  */
 function notices_email_admin_settings() {
   $form['notices_email_debug'] = array(
