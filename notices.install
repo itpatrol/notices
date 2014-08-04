@@ -72,7 +72,6 @@ function notices_schema() {
     'primary key' => array('uid'),
   );
 
-
   return $schema;
 }
 
