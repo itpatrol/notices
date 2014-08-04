@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Implements hook_schema().
+ */
 function notices_email_schema() {
   $schema['notices_email_spool'] = array(
     'description' => 'Mail queue table for notices_email',
