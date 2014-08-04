@@ -10,7 +10,7 @@ function notices_remove_ajax($noticeid, $count) {
   else {
     $admin_uid = variable_get('pg_account_admin_uid', '1');
     if (!empty($admin_uid)) {
-      //notify admin about balance update
+      // Notify admin about balance update.
       $noticeadmin = new stdClass();
       $noticeadmin->uid=$admin_uid;
       $noticeadmin->teaser = t('Hack attempt from !uid (!IP) to !noticeid',array('!uid' => $user->uid, '!noticeid' => $noticeid,'!IP' => $user->hostname));
