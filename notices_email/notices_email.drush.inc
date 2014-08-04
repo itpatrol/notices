@@ -17,8 +17,7 @@ function notices_email_drush_command() {
       'type' => 'no argumet\'s yet.',
     ),
     'examples' => array(
-      'drush notices_email' =>
-        'Invoke notices_email jobs.',
+      'drush notices_email' => 'Invoke notices_email jobs.',
     ),
   );
 
