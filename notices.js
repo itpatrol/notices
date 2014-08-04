@@ -16,7 +16,7 @@ Drupal.behaviors.notices  = {
       $("#notice-" + id).find("span.new").hide();
       $(this).hide();
 
-      //submit ajax mark read
+      // submit ajax mark read
       $.get('/ajax/notices/notices-mark-as-read/' + id);
       return false;
     });
