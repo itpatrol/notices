@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Installation file for Notices module.
+ */
 
 /**
  * Implements hook_schema().
