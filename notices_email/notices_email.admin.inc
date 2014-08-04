@@ -28,7 +28,7 @@ function notices_email_admin_settings() {
     '#default_value' => variable_get('notices_email_letters_by_cron', 20),
     '#size' => 5,
   );
-  
+
   $form['notices_email_clean_spool_by_cron'] = array(
     '#title' => t('Periodicity of cleaning spool'),
     '#type' => 'textfield',
@@ -36,20 +36,20 @@ function notices_email_admin_settings() {
     '#description' => t('Set periodicity in days'),
     '#size' => 5,
   );
-  
+
   $form['notices_email_from_mail'] = array(
     '#title' => t('E-mail from address'),
     '#type' => 'textfield',
     '#default_value' => variable_get('notices_email_from_mail', variable_get('site_mail', '')),
   );
-  
+
   $form['notices_email_mail_subject'] = array(
     '#title' => t('Subject for mail'),
     '#type' => 'textfield',
     '#description' => t('You can use tokens, which defines below'),
     '#default_value' => variable_get('notices_email_mail_subject', ''),
   );
-  
+
   $form['help'] = array(
     '#type' => 'fieldset',
     '#title' => t('Replacement patterns'),
@@ -62,9 +62,9 @@ function notices_email_admin_settings() {
     '#theme' => 'token_tree',
     '#token_types' => array('user', 'notices_node'),
   );
-  
+
   $form['#validate'][] = 'notices_email_admin_settings_validate';
-  
+
   return system_settings_form($form);
 }
 
@@ -76,11 +76,11 @@ function notices_email_admin_settings_validate($form, &$form_state) {
   if (!is_numeric($form_state['values']['notices_email_letters_by_cron'])) {
     form_set_error('notices_email_letters_by_cron', t('You must enter integer value'));
   }
-  
+
   if (!is_numeric($form_state['values']['notices_email_clean_spool_by_cron'])) {
     form_set_error('notices_email_clean_spool_by_cron', t('You must enter integer value'));
   }
-  
+
   if (!valid_email_address($form_state['values']['notices_email_from_mail'])) {
     form_set_error('notices_email_from_mail', t('You must enter correct e-mail'));
   }
