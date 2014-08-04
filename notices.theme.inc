@@ -15,7 +15,8 @@
  */
 function template_preprocess_notices_view(&$vars) {
   $notice = $vars['notice'];
-  $links[] = array('title' => t('Delete'),
+  $links[] = array(
+    'title' => t('Delete'),
     'href' => 'notices/delete/' .  $notice->noticeid,
     'attributes' => array(
       'rel' => $notice->noticeid,
