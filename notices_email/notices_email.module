@@ -199,7 +199,7 @@ function notices_email_spool() {
       if($result['result']){
         $status = NOTICES_EMAIL_STATUS_SEND_SENT;
       }else{
-        $status = NOTICES_EMAIL_STATUS_SEND_ERROR;        
+        $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
       }
       foreach ($notice_ids as $notice_id) {
         $status = array(
