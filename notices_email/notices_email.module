@@ -109,7 +109,7 @@ function notices_email_cron() {
  */
 function notices_email_menu() {
   $items['admin/config/notices/notices_email'] = array(
-    'title'          => t('Notice email settings'),
+    'title'          => 'Notice email settings',
     'page callback'  => 'drupal_get_form',
     'page arguments' => array('notices_email_admin_settings'),
     'access arguments' => array('administer site configuration'),
