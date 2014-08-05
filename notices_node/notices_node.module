@@ -199,7 +199,11 @@ function notices_node_node_view($node, $build_mode = 'full') {
               'username' => t('Anonymous'),
             );
           }
-          $item['#markup'] = token_replace($item['#markup'], array('user' => $user, 'node' => $node, 'notices_node' => $data));
+          $item['#markup'] = token_replace($item['#markup'], array(
+            'user' => $user,
+            'node' => $node,
+            'notices_node' => $data,
+          ));
         }
       }
     }
