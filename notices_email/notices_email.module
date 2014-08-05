@@ -155,14 +155,14 @@ function notices_email_spool() {
   
   $grouped=array();
   //group by  mail
-  foreach($res as $data){
+  foreach ($res as $data) {
     $grouped[$data->mail][] = $data;  
   }
-  foreach($grouped as $mail => $group){
+  foreach ($grouped as $mail => $group) {
     $body = array();
     $notice_ids = array();
     $qids = array();
-    foreach($group as $message){
+    foreach ($group as $message) {
       $notice_ids[] = $message->noticeid;
       $qids[] = $message->qid;
       if (module_exists('mimemail')) {
