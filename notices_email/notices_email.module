@@ -128,7 +128,7 @@ function notices_email_theme() {
 
 
 /**
- * Implementation of hook_mail().
+ * Implements hook_mail().
  */
 function notices_email_mail($key, &$message, $params) {
   $message['subject'] = $params['subject'];
