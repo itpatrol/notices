@@ -130,8 +130,11 @@ function notices_node_node_load($nodes, $types) {
   global $user;
   foreach ($nodes as $nid => $node) {
     if ($node->type == 'notices_node') {
-      $result = db_query("SELECT * FROM {notices_node_newsletters}
-                          WHERE nid = :nid AND vid = :vid", array(':nid' => $node->nid, ':vid' => $node->vid))->fetchObject();
+      $result = db_query("SELECT * FROM {notices_node_newsletters} WHERE nid = :nid AND vid = :vid", array(
+        ':nid' => $node->nid,
+        ':vid' => $node->vid,
+      ))->fetchObject();
+
       $status = NOTICES_NODE_STATUS_NOT_SEND;
       if(isset($result->status)){
         $status = $result->status;
