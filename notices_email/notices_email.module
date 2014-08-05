@@ -180,7 +180,8 @@ function notices_email_spool() {
     $params['body'] = $body;
     if(count($notice_ids) == 1){
       $params['subject'] = $message->subject;  
-    }else{
+    }
+    else{
       $notice = noticeid_load($message->noticeid);
       $account = user_load($notice->uid);
       $data = array(
