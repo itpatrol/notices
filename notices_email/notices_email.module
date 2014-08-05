@@ -89,7 +89,6 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
 /**
  * Implements hook_cron()
  */
-
 function notices_email_cron() {
   if (variable_get('notices_email_cron', '')) {
     notices_email_spool();
