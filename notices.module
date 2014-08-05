@@ -466,7 +466,7 @@ function notices_save(&$notice){
     $settings = notices_load_settings($notice->uid);
     if(!empty($settings->settings)){
       $send_options = $settings->settings[$notice->provider];
-      
+
       if (is_array($send_options)) {
         foreach ($send_options as $name => $status) {
           if ($status['active'] == 1) {
