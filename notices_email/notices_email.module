@@ -150,9 +150,9 @@ function notices_email_spool() {
   drupal_add_css(drupal_get_path('module', 'notices_email') .'/notices_email.css',array('group' => CSS_THEME));
 
   $limit = variable_get('notices_email_letters_by_cron', 20);
-  
+
   $res = db_query_range("SELECT * FROM {notices_email_spool}", 0, $limit)->fetchAll();
-  
+
   $grouped = array();
   // Group by mail.
   foreach ($res as $data) {
