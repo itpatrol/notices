@@ -442,7 +442,7 @@ function notices_delete($noticeid) {
 /**
  * Save or update notice
  *
- * @param $noticeid
+ * @param object $notice
  *
  * @ingroup api
  */
