@@ -332,16 +332,19 @@ function notices_delete_access($notice) {
  *
  * Used as menu autoload function.
  *
- * @param $noticeid
- *   Notice ID
+ * @param int $noticeid
+ *   Notice ID.
  *
  * @return object
- *  Loaded notice
+ *  Loaded notice.
  *
  * @ingroup api 
  */
-function noticeid_load($noticeid){
-  $notice = db_query("SELECT * FROM {notices} WHERE noticeid = :noticeid", array(':noticeid' => $noticeid))->fetchObject();
+function noticeid_load($noticeid) {
+  $notice = db_query('SELECT * FROM {notices} WHERE noticeid = :noticeid', array(
+    ':noticeid' => $noticeid,
+  ))->fetchObject();
+
   return $notice;
 }
 
