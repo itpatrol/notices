@@ -12,7 +12,7 @@ define('NOTICES_EMAIL_STATUS_SEND_ERROR', 2);
  * Implements hook_SendNotice().
  */
 function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
-  switch($op) {
+  switch ($op) {
     case 'settings':
       global $user;
       return array(
