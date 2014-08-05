@@ -144,7 +144,7 @@ function notices_email_mail($key, &$message, $params) {
 }
 
 /**
- * Send mail spool for current cron run
+ * Send mail spool for current cron run.
  */
 function notices_email_spool() {
   drupal_add_css(drupal_get_path('module', 'notices_email') . '/notices_email.css', array('group' => CSS_THEME));
