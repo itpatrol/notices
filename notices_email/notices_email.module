@@ -68,20 +68,24 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
         drupal_write_record('notices_email_status',$status);
         break;
 
-      case 'status':  
+      case 'status':
         $status=db_query('SELECT * FROM {notices_email_status} WHERE noticeid = :noticeid',array ( ':noticeid' => $notice->noticeid))->fetchObject();
+
         if($status){
           switch($status->status){
             case NOTICES_EMAIL_STATUS_SEND_PENDING:
               $status = t('Sending');
               break;
+
             case NOTICES_EMAIL_STATUS_SEND_SENT:
               $status = t('Sent');
               break;
+
             case NOTICES_EMAIL_STATUS_SEND_ERROR:
               $status = t('Error: !error', array('!error' => $status->error));
               break;
           }
+
           return array('title' => t('Email'), 'status' => $status, 'icon' => drupal_get_path('module', 'notices_email').'/email.png');
         }
         break;
