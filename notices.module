@@ -471,7 +471,7 @@ function notices_save(&$notice){
         foreach ($sendOptions as $name => $status) {
           if($status['active'] == 1){
             $function = $name . '_sendNotice';
-            $op="send";
+            $op = "send";
             if (function_exists($function)) {
               $function($op,$notice,$status['values']);
             }
