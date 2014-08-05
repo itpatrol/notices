@@ -167,7 +167,7 @@ function notices_email_spool() {
       $qids[] = $message->qid;
       if(module_exists('mimemail')) {
         $notice=noticeid_load($message->noticeid);
-        $body[] = theme('notices_email_view',array('notice' => $notice));
+        $body[] = theme('notices_email_view', array('notice' => $notice));
       }
       else {
         $body[] = $data->body;
