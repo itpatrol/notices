@@ -444,8 +444,6 @@ function notices_delete($noticeid) {
  *
  * @param  $noticeid
  *
- * @return void
- *
  * @ingroup api
  */
 function notices_save(&$notice) {
