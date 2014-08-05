@@ -238,7 +238,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
-/*
+/**
  * Get users uid
  */
 function notices_node_getUsers() {
