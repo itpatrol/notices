@@ -467,9 +467,9 @@ function notices_save(&$notice){
     if(!empty($settings->settings)){
       $sendOptions = $settings->settings[$notice->provider];
       
-      if(is_array($sendOptions)){
+      if (is_array($sendOptions)) {
         foreach ($sendOptions as $name => $status) {
-          if($status['active'] == 1){
+          if ($status['active'] == 1) {
             $function = $name . '_sendNotice';
             $op = "send";
             if (function_exists($function)) {
