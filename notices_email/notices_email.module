@@ -108,7 +108,7 @@ function notices_email_menu() {
     'page arguments' => array('notices_email_admin_settings'),
     'access arguments' => array('administer site configuration'),
     'file'           => 'notices_email.admin.inc',
-  );  
+  );
   return $items;
 }
 
