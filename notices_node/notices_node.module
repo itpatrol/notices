@@ -144,14 +144,14 @@ function notices_node_node_load($nodes, $types) {
       );
       $nodes[$nid]->safe_title = $node->title;
       if ($user->uid > 0) {
-        $data=array(
+        $data = array(
           'uid' => $user->uid,
           'mail' => $user->mail,
           'username' => $user->name,
         );
       }
       else {
-        $data=array(
+        $data = array(
           'uid' => 0,
           'mail' => t('Email'),
           'username' => t('Anonymous'),
@@ -182,14 +182,14 @@ function notices_node_node_view($node, $build_mode = 'full') {
         // token replacements for now.
         if (isset($item['#markup'])) {
           if($user->uid > 0 ){
-            $data=array(
+            $data = array(
               'uid' => $user->uid,
               'mail' => $user->mail,
               'username' => $user->name,
             );
           }
           else {
-            $data=array(
+            $data = array(
               'uid' => 0,
               'mail' => t('Email'),
               'username' => t('Anonymous'),
