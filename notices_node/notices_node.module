@@ -93,8 +93,16 @@ function notices_node_node_update($node) {
         $notice = new stdClass();
         $notice->uid = $uid;
         $notice->provider = 'notices_node';
-        $notice->subject = token_replace($node->title, array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
+        $notice->subject = token_replace($node->title, array(
+          'user' => $account,
+          'node' => $node,
+          'notices_node' => $data,
+        ));
+        $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array(
+          'user' => $account,
+          'node' => $node,
+          'notices_node' => $data,
+        ));
         $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
 
