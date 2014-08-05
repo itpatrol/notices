@@ -345,25 +345,37 @@ function noticeid_load($noticeid){
   return $notice;
 }
 
-function notices_load_settings($uid){
-  $settings = db_query("SELECT * FROM {notices_settings} WHERE uid = :uid", array(':uid' => $uid))->fetchObject();
-  if(!empty($settings)){
+function notices_load_settings($uid) {
+  $settings = db_query('SELECT * FROM {notices_settings} WHERE uid = :uid', array(
+    ':uid' => $uid,
+  ))->fetchObject();
+
+  if (!empty($settings)) {
     $settings->settings = unserialize($settings->settings);
-  }else{
+  }
+  else {
     $account = user_load($uid);
-    
+
     $settings = new stdClass();
     $settings->uid = $account->uid;
     foreach (module_implements('provideNotice') as $name) {
       $function = $name . '_provideNotice';
-      $op="settings";
+      $op = "settings";
       $function($op);
+
       if (module_exists('notices_email')) {
-        $settings->settings[$name] = array ('notices_email' => array('active' => 1, 'values' => $account->mail));
+        $settings->settings[$name] = array(
+          'notices_email' => array(
+            'active' => 1,
+            'values' => $account->mail,
+          ),
+        );
       }
-      $settings->is_empty = true;
-    }//foreach
+
+      $settings->is_empty = TRUE;
+    }
   }
+
   return $settings;
 }
 
