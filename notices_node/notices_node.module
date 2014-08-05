@@ -23,7 +23,7 @@ function notices_node_provideNotice($op){
  * Implements hook_node_insert().
  */
 function notices_node_node_insert($node) {
-  if($node->type == 'notices_node'){  
+  if ($node->type == 'notices_node') {
 
     db_insert('notices_node_newsletters')
       ->fields(array(
@@ -33,7 +33,7 @@ function notices_node_node_insert($node) {
       ))
       ->execute();
     
-    if($node->notices_node['status']){
+    if ($node->notices_node['status']) {
       //process sending
       $queue = notices_node_getUsers();
       
@@ -62,7 +62,7 @@ function notices_node_node_insert($node) {
  * Implements hook_node_update().
  */
 function notices_node_node_update($node) {
-  if($node->type == 'notices_node'){  
+  if ($node->type == 'notices_node') {
     if (array_key_exists('status', $node->notices_node) && $node->notices_node['status']) {
       //process sending
       db_update('notices_node_newsletters')
@@ -103,7 +103,7 @@ function notices_node_node_update($node) {
  * Implements hook_node_delete().
  */
 function notices_node_node_delete($node) {
-  if($node->type == 'notices_node'){
+  if ($node->type == 'notices_node') {
     db_delete('notices_node_newsletters')
       ->condition('nid', $node->nid)
       ->execute();
@@ -116,7 +116,7 @@ function notices_node_node_delete($node) {
 function notices_node_node_load($nodes, $types) {
   global $user;
   foreach ($nodes as $nid => $node) {
-    if($node->type == 'notices_node'){
+    if ($node->type == 'notices_node') {
       $result = db_query("SELECT * FROM {notices_node_newsletters}
                           WHERE nid = :nid AND vid = :vid", array(':nid' => $node->nid, ':vid' => $node->vid))->fetchObject();
       $status = NOTICES_NODE_STATUS_NOT_SEND;
@@ -127,7 +127,7 @@ function notices_node_node_load($nodes, $types) {
         'status' => $status,
       );
       $nodes[$nid]->safe_title = $node->title;
-      if($user->uid > 0 ){
+      if ($user->uid > 0) {
         $data=array(
           'uid' => $user->uid,
           'mail' => $user->mail,
@@ -151,7 +151,7 @@ function notices_node_node_load($nodes, $types) {
  */
 function notices_node_node_view($node, $build_mode = 'full') {
   global $user;
-  if($node->type == 'notices_node'){
+  if ($node->type == 'notices_node') {
     // Loop over all render array elements.
     foreach (element_children($node->content) as $key) {
       $element = &$node->content[$key];
@@ -194,11 +194,11 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
     case 'notices_node_node_form':
       //get all servers
       $status = NOTICES_NODE_STATUS_NOT_SEND;
-      if(isset($form['#node']->notices_node['status'])){
+      if (isset($form['#node']->notices_node['status'])) {
         $status = $form['#node']->notices_node['status'];
       }
       //fix title on form;
-      if(isset($form['#node']->safe_title)){
+      if (isset($form['#node']->safe_title)) {
         $form['title']['#default_value'] = $form['#node']->safe_title;
       }
       $form['help'] = array(
