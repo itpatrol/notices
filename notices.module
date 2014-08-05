@@ -312,18 +312,21 @@ function notices_view_access($notice) {
 /**
  * Check access to the delete notice.
  *
- * Function to restrict the access of the delete notice page or ajax call by user_id
- *
+ * Function to restrict the access of the delete notice page or
+ * ajax call by user_id.
  */
 function notices_delete_access($notice) {
   global $user;
-  if($notice->uid != $user->uid ){
-    if(notices_user_access('delete all notices',$user)){
+
+  if ($notice->uid != $user->uid ) {
+    if (notices_user_access('delete all notices', $user)) {
       return TRUE;
     }
-  } elseif (notices_user_access('delete notices') && arg(1) == 'delete') {
+  }
+  elseif (notices_user_access('delete notices') && arg(1) == 'delete') {
     return TRUE;
   }
+
   return FALSE;
 }
 
