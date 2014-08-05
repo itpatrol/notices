@@ -87,7 +87,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
 
 
 /**
- * Implementation of hook_cron()
+ * Implements hook_cron()
  */
 
 function notices_email_cron(){
@@ -99,7 +99,7 @@ function notices_email_cron(){
 
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function notices_email_menu() {
   $items['admin/config/notices/notices_email'] = array(
