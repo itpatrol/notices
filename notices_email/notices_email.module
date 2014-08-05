@@ -84,8 +84,6 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
   }//switch
 }
 
-
-
 /**
  * Implements hook_cron().
  */
