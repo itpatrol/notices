@@ -212,7 +212,7 @@ function notices_email_spool() {
       }
 
     }
-    foreach($qids as $qid){
+    foreach ($qids as $qid) {
       db_delete('notices_email_spool')
         ->condition('qid', $qid, '=')
         ->execute();
