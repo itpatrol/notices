@@ -157,7 +157,11 @@ function notices_node_node_load($nodes, $types) {
           'username' => t('Anonymous'),
         );
       }
-      $nodes[$nid]->title = token_replace($node->title, array('user' => $user, 'node' => $node, 'notices_node' => $data));
+      $nodes[$nid]->title = token_replace($node->title, array(
+        'user' => $user,
+        'node' => $node,
+        'notices_node' => $data,
+      ));
     }
   }
 }
