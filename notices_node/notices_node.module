@@ -136,7 +136,7 @@ function notices_node_node_load($nodes, $types) {
       ))->fetchObject();
 
       $status = NOTICES_NODE_STATUS_NOT_SEND;
-      if(isset($result->status)){
+      if (isset($result->status)) {
         $status = $result->status;
       }
       $nodes[$nid]->notices_node = array(
