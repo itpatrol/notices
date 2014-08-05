@@ -156,7 +156,7 @@ function notices_email_spool() {
   $grouped=array();
   //group by  mail
   foreach ($res as $data) {
-    $grouped[$data->mail][] = $data;  
+    $grouped[$data->mail][] = $data;
   }
   foreach ($grouped as $mail => $group) {
     $body = array();
