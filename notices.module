@@ -447,7 +447,7 @@ function notices_delete($noticeid) {
  *
  * @ingroup api 
  */
-function notices_save(&$notice){
+function notices_save(&$notice) {
   $notice = (object) $notice;
 
   if (isset($notice->noticeid)) {
