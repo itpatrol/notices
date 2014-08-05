@@ -13,7 +13,7 @@ function notices_node_provideNotice($op) {
         'name' => 'notices_node',
         'title' => t('Common notifications'),
       );
-  }//switch
+  }
 }
 
 /**
@@ -208,12 +208,12 @@ function notices_node_node_view($node, $build_mode = 'full') {
 function notices_node_form_alter(&$form, &$form_state, $form_id) {
   switch($form_id) {
     case 'notices_node_node_form':
-      //get all servers
+      // Get all servers.
       $status = NOTICES_NODE_STATUS_NOT_SEND;
       if (isset($form['#node']->notices_node['status'])) {
         $status = $form['#node']->notices_node['status'];
       }
-      //fix title on form;
+      // Fix title on form.
       if (isset($form['#node']->safe_title)) {
         $form['title']['#default_value'] = $form['#node']->safe_title;
       }
