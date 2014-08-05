@@ -72,7 +72,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
         $status=db_query('SELECT * FROM {notices_email_status} WHERE noticeid = :noticeid',array ( ':noticeid' => $notice->noticeid))->fetchObject();
 
         if ($status) {
-          switch($status->status){
+          switch ($status->status) {
             case NOTICES_EMAIL_STATUS_SEND_PENDING:
               $status = t('Sending');
               break;
