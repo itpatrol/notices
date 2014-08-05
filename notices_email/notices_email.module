@@ -169,7 +169,7 @@ function notices_email_spool() {
         $notice=noticeid_load($message->noticeid);
         $body[] = theme('notices_email_view',array('notice' => $notice));
       }
-      else{
+      else {
         $body[] = $data->body;
         $body[] = 'Read: '.url('notices/view/' . $message->noticeid, array('absolute' => TRUE));
         $body[] = 'Delete: ' . url('notices/delete/' . $message->noticeid, array('absolute' => TRUE));
