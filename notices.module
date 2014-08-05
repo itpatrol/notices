@@ -372,12 +372,13 @@ function notices_load_settings($uid){
  */
 function notices_title_callback($title = NULL) {
   $count = notices_unread_count();
+
   if ($count > 0) {
-    return t('Notices (@count new)',array('@count' => $count));
+    return t('Notices (@count new)', array('@count' => $count));
   }
+
   return t('Notices');
 }
-
 
 /**
  * Return number of unread notices for an account.
