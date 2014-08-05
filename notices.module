@@ -452,7 +452,8 @@ function notices_save(&$notice){
   
   if (isset($notice->noticeid)) {
     drupal_write_record('notices',$notice,'noticeid');
-  }else{
+  }
+  else{
     if (!isset($notice->format)) {
       $notice->format = variable_get('filter_default_format', 1);
     }
