@@ -191,7 +191,7 @@ function notices_email_spool() {
       $params['subject'] = token_replace(t(variable_get('notices_email_mail_subject','Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));  
     }
     
-    if(variable_get('notices_email_debug', false)){
+    if(variable_get('notices_email_debug', FALSE)){
       // Watchdog it!
       watchdog('mail key', '!grouped !params.', array(
         '!grouped' => print_r($grouped, TRUE),
