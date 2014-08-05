@@ -193,7 +193,10 @@ function notices_email_spool() {
     
     if(variable_get('notices_email_debug', false)){
       //watchdog it!
-      watchdog('mail key', '!grouped !params.', array('!grouped' => print_r($grouped, TRUE), '!body' => print_r($body, TRUE)), WATCHDOG_DEBUG);
+      watchdog('mail key', '!grouped !params.', array(
+        '!grouped' => print_r($grouped, TRUE),
+        '!body' => print_r($body, TRUE),
+      ), WATCHDOG_DEBUG);
     }
     else {
       $result = drupal_mail('notices_email', 'notification', $mail, language_default(), $params);
