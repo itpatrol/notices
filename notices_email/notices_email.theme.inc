@@ -5,7 +5,7 @@
  *
  * @param array $vars
  *   An associative array containing the following key:
- *   - notice
+ *   - notice.
  *
  * @see notices-email-view.tpl.php
  */
