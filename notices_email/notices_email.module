@@ -35,14 +35,14 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
           ->execute();
         break;
 
-      case 'send': 
+      case 'send':
         $account = user_load($notice->uid);
-            
+
         $mail = $account->mail;
         if (!empty($settings['mail'])) {
           $mail = $settings['mail'];
         }
-            
+
         if (empty($notice->subject)) {
           $data = array(
             'uid' => $account->uid,
