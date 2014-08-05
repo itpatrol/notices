@@ -172,7 +172,7 @@ function notices_email_spool() {
         $body[] = $data->body;
         $body[] = 'Read: '.url('notices/view/' .  $message->noticeid,array('absolute' => true));
         $body[] = 'Delete: '.url('notices/delete/' .  $message->noticeid,array('absolute' => true));
-        $body[] = 'Mark as read: '.url('notices/read/' .  $message->noticeid,array('absolute' => true));
+        $body[] = 'Mark as read: '.url('notices/read/' .  $message->noticeid,array('absolute' => TRUE));
         $body[] = '----------------------------------------------------';
       }
 
