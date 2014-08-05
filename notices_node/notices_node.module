@@ -253,5 +253,3 @@ function notices_node_getUsers() {
   }
   return $queue;
 }
-
-
