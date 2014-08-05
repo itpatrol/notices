@@ -208,9 +208,9 @@ function notices_email_spool() {
           'timestamp' => time(),
           'noticeid'  => $notice_id,
         ); 
-        drupal_write_record('notices_email_status',$status,'noticeid'); 
+        drupal_write_record('notices_email_status',$status,'noticeid');
       }
-      
+
     }
     foreach ($qids as $qid) Expected "foreach (...) {\n"; found "foreach(...){\n"{
       db_delete('notices_email_spool')
