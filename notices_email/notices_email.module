@@ -51,7 +51,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
           );
           $notice->subject = token_replace(t(variable_get('notices_email_mail_subject','Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));
         }
-        $email=array(
+        $email = array(
           'mail'      => $mail,
           'subject'   => $notice->subject,
           'body'      => check_markup($notice->message, $notice->format, FALSE),
@@ -59,7 +59,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
         );
 
         drupal_write_record('notices_email_spool',$email);
-        $status=array(
+        $status = array(
           'status'    => 0,
           'error'     => '',
           'timestamp' => time(),
