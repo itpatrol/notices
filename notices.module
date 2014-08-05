@@ -382,7 +382,7 @@ function notices_title_callback($title = NULL) {
 /**
  * Return number of unread notices for an account.
  *
- * @param $account
+ * @param object $account
  *   Specifiy the user for which the unread count should be loaded.
  *
  * @ingroup api
@@ -392,8 +392,12 @@ function notices_unread_count($account = NULL) {
     global $user;
     $account = $user;
   }
-  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new',
-  array (':uid' => $account->uid, ':new' => NOTICE_UNREAD))->fetchObject();
+
+  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new', array (
+    ':uid' => $account->uid,
+    ':new' => NOTICE_UNREAD,
+  ))->fetchObject();
+
   return $count->notices;
 }
 
