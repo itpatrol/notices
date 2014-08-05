@@ -185,7 +185,7 @@ function notices_node_node_view($node, $build_mode = 'full') {
         // Only fields which result in simple markup elements are supported for
         // token replacements for now.
         if (isset($item['#markup'])) {
-          if($user->uid > 0 ){
+          if ($user->uid > 0) {
             $data = array(
               'uid' => $user->uid,
               'mail' => $user->mail,
