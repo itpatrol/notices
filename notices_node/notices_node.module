@@ -6,14 +6,14 @@ define('NOTICES_NODE_STATUS_SENT', 1);
 /**
  * Implements hook_provideNotice().
  */
-function notices_node_provideNotice($op){
+function notices_node_provideNotice($op) {
   switch($op){
-      case 'settings':
-            return array(
-              'name' => 'notices_node',
-              'title' => t('Common notifications'),
-            );
-          break;
+    case 'settings':
+      return array(
+        'name' => 'notices_node',
+        'title' => t('Common notifications'),
+      );
+      break;
   }//switch
 }
 
