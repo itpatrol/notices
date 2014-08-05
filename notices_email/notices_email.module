@@ -154,7 +154,7 @@ function notices_email_spool() {
   $res = db_query_range("SELECT * FROM {notices_email_spool}", 0, $limit)->fetchAll();
   
   $grouped=array();
-  //group by  mail
+  // Group by mail.
   foreach ($res as $data) {
     $grouped[$data->mail][] = $data;
   }
