@@ -449,7 +449,7 @@ function notices_delete($noticeid) {
  */
 function notices_save(&$notice){
   $notice = (object) $notice;
-  
+
   if (isset($notice->noticeid)) {
     drupal_write_record('notices',$notice,'noticeid');
   }
