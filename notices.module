@@ -429,7 +429,7 @@ function notices_delete($noticeid) {
     if(is_array($sendOptions)){
       foreach ($sendOptions as $name => $status) {
         $function = $name . '_sendNotice';
-        $op="delete";
+        $op = "delete";
         $function($op,$notice);
       }//foreach
     }
