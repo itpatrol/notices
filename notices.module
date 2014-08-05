@@ -397,17 +397,16 @@ function notices_unread_count($account = NULL) {
   return $count->notices;
 }
 
-/*
- * Mark notice as readed
+/**
+ * Mark notice as readed.
  *
- * @param  $noticeid
- *   Notice ID
- * @return void
+ * @param object $notice
+ *   Notice object.
  *
  * @ingroup api 
  */
 function notices_mark_read($notice) {
-  $notice->new=NOTICE_READ;
+  $notice->new = NOTICE_READ;
   notices_save($notice);
 }
 
