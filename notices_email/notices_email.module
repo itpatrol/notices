@@ -143,7 +143,7 @@ function notices_email_mail($key, &$message, $params) {
   if ($from = variable_get('notices_email_from_mail', '')) {
     $message['from'] = $from;
   }
-  elseif($from = variable_get('site_mail', '')) {
+  elseif ($from = variable_get('site_mail', '')) {
     $message['from'] = $from;
   }
 
