@@ -13,7 +13,6 @@ function notices_node_provideNotice($op) {
         'name' => 'notices_node',
         'title' => t('Common notifications'),
       );
-      break;
   }//switch
 }
 
