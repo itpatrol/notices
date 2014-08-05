@@ -460,7 +460,7 @@ function notices_save(&$notice){
     $notice->new = NOTICE_UNREAD;
     $notice->timestamp = time();  
 
-    drupal_write_record('notices',$notice);
+    drupal_write_record('notices', $notice);
 
     $settings = notices_load_settings($notice->uid);
     if (!empty($settings->settings)) {
