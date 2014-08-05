@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Theme functions for module.
+ */
 
 /**
  * Processes variables for notices-email-view.tpl.php.
