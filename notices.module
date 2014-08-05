@@ -443,6 +443,7 @@ function notices_delete($noticeid) {
  * Save or update notice
  *
  * @param  $noticeid
+ *
  * @return void
  *
  * @ingroup api
