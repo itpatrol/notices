@@ -219,4 +219,3 @@ function notices_email_spool() {
     }
   }
 }
-
