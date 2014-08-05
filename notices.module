@@ -424,10 +424,10 @@ function notices_delete($noticeid) {
   $notice=noticeid_load($noticeid);
   $settings = notices_load_settings($notice->uid);
   if(isset($settings->settings)){
-    $sendOptions = $settings->settings[$notice->provider];
+    $send_options = $settings->settings[$notice->provider];
   
-    if(is_array($sendOptions)){
-      foreach ($sendOptions as $name => $status) {
+    if(is_array($send_options)){
+      foreach ($send_options as $name => $status) {
         $function = $name . '_sendNotice';
         $op = "delete";
         $function($op,$notice);
