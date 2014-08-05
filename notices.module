@@ -440,7 +440,7 @@ function notices_delete($noticeid) {
 }
 
 /**
- * Save or update notice
+ * Save or update notice.
  *
  * @param object $notice
  *   Object notice.
