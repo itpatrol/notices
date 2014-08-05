@@ -84,7 +84,11 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
               break;
           }
 
-          return array('title' => t('Email'), 'status' => $status, 'icon' => drupal_get_path('module', 'notices_email').'/email.png');
+          return array(
+            'title' => t('Email'),
+            'status' => $status,
+            'icon' => drupal_get_path('module', 'notices_email') . '/email.png',
+          );
         }
         break;
   }//switch
