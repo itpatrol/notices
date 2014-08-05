@@ -198,7 +198,8 @@ function notices_email_spool() {
       $result = drupal_mail('notices_email', 'notification', $mail, language_default(), $params);
       if($result['result']){
         $status = NOTICES_EMAIL_STATUS_SEND_SENT;
-      }else{
+      }
+      else{
         $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
       }
       foreach ($notice_ids as $notice_id) {
