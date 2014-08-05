@@ -472,7 +472,7 @@ function notices_save(&$notice){
             $function = $name . '_sendNotice';
             $op = "send";
             if (function_exists($function)) {
-              $function($op,$notice,$status['values']);
+              $function($op, $notice, $status['values']);
             }
           }
         }//foreach
