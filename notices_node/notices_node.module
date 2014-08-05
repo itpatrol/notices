@@ -69,7 +69,7 @@ function notices_node_node_insert($node) {
 function notices_node_node_update($node) {
   if ($node->type == 'notices_node') {
     if (array_key_exists('status', $node->notices_node) && $node->notices_node['status']) {
-      //process sending
+      // Process sending.
       db_update('notices_node_newsletters')
         ->fields(array(
           'status' => $node->notices_node['status'],
