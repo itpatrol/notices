@@ -78,7 +78,7 @@ function notices_node_node_update($node) {
         ->condition('vid', $node->vid, '=')
         ->execute();
 
-      //process sending
+      // Process sending.
       $queue = notices_node_getUsers();
 
       foreach ($queue as $uid => $receiver) {
