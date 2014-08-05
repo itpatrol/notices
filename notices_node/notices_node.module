@@ -6,8 +6,8 @@ define('NOTICES_NODE_STATUS_SENT', 1);
 /**
  * Implements hook_provideNotice().
  */
- 
- 
+
+
 function notices_node_provideNotice($op){
   switch($op){
       case 'settings':
@@ -32,23 +32,23 @@ function notices_node_node_insert($node) {
           'status' => $node->notices_node['status'],
       ))
       ->execute();
-    
+
     if ($node->notices_node['status']) {
       //process sending
       $queue = notices_node_getUsers();
-      
+
       foreach ($queue as $uid => $receiver) {
-        
+
         $account = user_load($uid);
-        $notice = new stdClass();        
-            
+        $notice = new stdClass();
+
         foreach ($receiver as $name => $value) {
           $data[$name] = $value;
         }
 
         $notice = new stdClass();
         $notice->uid = $uid;
-        $notice->provider = 'notices_node'; 
+        $notice->provider = 'notices_node';
         $notice->subject = token_replace($node->title, array('user' => $account, 'node' => $node, 'notices_node' => $data));
         $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
         $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
@@ -72,15 +72,15 @@ function notices_node_node_update($node) {
         ->condition('nid', $node->nid, '=')
         ->condition('vid', $node->vid, '=')
         ->execute();
-                
+
       //process sending
       $queue = notices_node_getUsers();
-      
+
       foreach ($queue as $uid => $receiver) {
-        
+
         $account = user_load($uid);
         $notice = new stdClass();        
-            
+
         foreach ($receiver as $name => $value) {
           $data[$name] = $value;
         }
@@ -94,7 +94,7 @@ function notices_node_node_update($node) {
         notices_save($notice);
 
       }
-      
+
     }
   }
 }
@@ -139,10 +139,10 @@ function notices_node_node_load($nodes, $types) {
           'uid' => 0,
           'mail' => t('Email'),
           'username' => t('Anonymous'),
-        ); 
+        );
       }
       $nodes[$nid]->title = token_replace($node->title, array('user' => $user, 'node' => $node, 'notices_node' => $data));
-    }  
+    }
   }
 }
 
@@ -177,13 +177,13 @@ function notices_node_node_view($node, $build_mode = 'full') {
               'uid' => 0,
               'mail' => t('Email'),
               'username' => t('Anonymous'),
-            ); 
+            );
           }
           $item['#markup'] = token_replace($item['#markup'], array('user' => $user, 'node' => $node, 'notices_node' => $data));
         }
       }
     }
-  }  
+  }
 }
 
 /**
@@ -213,7 +213,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
         '#theme' => 'token_tree',
         '#token_types' => array('user', 'node', 'notices_node'),
       );
-      
+
       $form['notices_node'] = array(
         '#type' => 'fieldset',
         '#title' => t('Notice node settings'),
@@ -223,7 +223,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
       );
       if ($status == NOTICES_NODE_STATUS_SENT) {
         $form['notices_node']['message_status'] = array(
-          '#markup' => 'Notice is already sent', 
+          '#markup' => 'Notice is already sent',
         );
       }
       else {
@@ -233,7 +233,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
           '#default_value' => $status,
           '#disabled' => $status,
         );
-      }      
+      }
       break;
   }
 }
