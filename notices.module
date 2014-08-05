@@ -411,29 +411,29 @@ function notices_mark_read($notice) {
   notices_save($notice);
 }
 
-/*
- * Delete notice
+/**
+ * Delete notice.
  *
- * @param  $noticeid
- *   Notice ID
- * @return void
+ * @param int $noticeid
+ *   Notice ID.
  *
  * @ingroup api
  */
 function notices_delete($noticeid) {
-  $notice=noticeid_load($noticeid);
+  $notice = noticeid_load($noticeid);
   $settings = notices_load_settings($notice->uid);
-  if(isset($settings->settings)){
+  if (isset($settings->settings)) {
     $send_options = $settings->settings[$notice->provider];
   
-    if(is_array($send_options)){
+    if (is_array($send_options)) {
       foreach ($send_options as $name => $status) {
         $function = $name . '_sendNotice';
         $op = "delete";
-        $function($op,$notice);
-      }//foreach
+        $function($op, $notice);
+      }
     }
   }
+
   db_delete('notices')
     ->condition('noticeid', $noticeid, '=')
     ->execute();
