@@ -1,15 +1,18 @@
 <?php
 
-function notices_list($account = null){
-  drupal_add_js(drupal_get_path('module', 'notices') .'/notices.js');
-  drupal_add_css(drupal_get_path('module', 'notices') .'/notices.css');
-  
-  if(!is_object($account)){
+function notices_list($account = NULL) {
+  drupal_add_js(drupal_get_path('module', 'notices') . '/notices.js');
+  drupal_add_css(drupal_get_path('module', 'notices') . '/notices.css');
+
+  if (!is_object($account)) {
     global $user;
+
     $account = $user;
   }
-  
-  $notices = db_select('notices', 'n')->extend('AltPager')->extend('FormFilterAPI')
+
+  $notices = db_select('notices', 'n')
+    ->extend('AltPager')
+    ->extend('FormFilterAPI')
     ->fields('n')
     ->condition('uid', $account->uid)
     ->processFilters(NOTICES_FORM_NAME)
@@ -22,13 +25,14 @@ function notices_list($account = null){
     $output_notices .= theme('notices_view_teaser', array('notice' => $notice));
   }
 
-  if(empty($output_notices)){
-    $output_notices =  t('No notifications.');
+  if (empty($output_notices)) {
+    $output_notices = t('No notifications.');
   }
-  $pagerCountShow = theme('altpager');
 
-  $links = array (
-    'links' => array (
+  $pager_count_show = theme('altpager');
+
+  $links = array(
+    'links' => array(
       array(
         'href' => 'notices/mark-as-read',
         'title' => t('Mark as Read'),
@@ -38,23 +42,23 @@ function notices_list($account = null){
         'href' => 'notices/settings',
         'title' => t('Settings'),
       ),
-
     ),
-    'attributes' => array('class' => 'notices-links'),
+    'attributes' => array(
+      'class' => 'notices-links',
+    ),
   );
-  
+
   $form = formfilterapi_get_form(NOTICES_FORM_NAME);
 
   $output = drupal_render($form);
-  $output .= theme('links',$links);
-  $output .= $pagerCountShow;
+  $output .= theme('links', $links);
+  $output .= $pager_count_show;
   $output .= '<div id="notices" >';
-  $output .=  $output_notices;
-  $output .= "</div>";
-  $output .= $pagerCountShow;
-  
-  return $output;
+  $output .= $output_notices;
+  $output .= '</div>';
+  $output .= $pager_count_show;
 
+  return $output;
 }
 
 
