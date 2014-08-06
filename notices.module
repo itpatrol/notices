@@ -429,7 +429,7 @@ function notices_unread_count($account = NULL) {
  * @param object $notice
  *   Notice object.
  *
- * @ingroup api 
+ * @ingroup api
  */
 function notices_mark_read($notice) {
   $notice->new = NOTICE_READ;
@@ -449,7 +449,7 @@ function notices_delete($noticeid) {
   $settings = notices_load_settings($notice->uid);
   if (isset($settings->settings)) {
     $send_options = $settings->settings[$notice->provider];
-  
+
     if (is_array($send_options)) {
       foreach ($send_options as $name => $status) {
         $function = $name . '_sendNotice';
@@ -484,7 +484,7 @@ function notices_save(&$notice) {
     }
 
     $notice->new = NOTICE_UNREAD;
-    $notice->timestamp = time();  
+    $notice->timestamp = time();
 
     drupal_write_record('notices', $notice);
 
