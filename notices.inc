@@ -76,19 +76,19 @@ function notices_view($notice) {
   return $output;
 }
 
-function notices_delete_form($form, &$form_state,$notice){
-  $form['noticeid'] = array (
+function notices_delete_form($form, &$form_state, $notice) {
+  $form['noticeid'] = array(
     '#type' => 'value',
     '#value' => $notice->noticeid,
   );
-  $form['alert'] = array (
+  $form['alert'] = array(
     '#markup' => t('Do you want to delete this message?'),
   );
-  $form['message'] = array (
+  $form['message'] = array(
     '#markup' => check_markup($notice->message, $notice->format, FALSE),
   );
   $form['submit'] = array(
-    '#type'  => 'submit',
+    '#type' => 'submit',
     '#value' => t('Delete'),
   );
   return $form;
