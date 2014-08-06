@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @file
+ * Notices.
+ *
+ * Notices Manager. Notice users about new things on website.
+ */
 
 /**
  * Status constant for read notices.
@@ -9,11 +14,10 @@ define('NOTICE_READ', 0);
  * Status constant for unread notices.
  */
 define('NOTICE_UNREAD', 1);
-/*
+/**
  * Name form with filters.
  */
 define('NOTICES_FORM_NAME', 'notices_list');
-
 
 /**
  * Implements hook_theme().
