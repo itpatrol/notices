@@ -62,17 +62,17 @@ function notices_list($account = NULL) {
 }
 
 
-function notices_view($notice){
-  drupal_add_css(drupal_get_path('module', 'notices') .'/notices.css');
+function notices_view($notice) {
+  drupal_add_css(drupal_get_path('module', 'notices') . '/notices.css');
 
   $output = '<div id="notices">';
   $output .= theme('notices_view', array('notice' => $notice));
-  $output .= "</div>";
+  $output .= '</div>';
 
-  if($notice->new){
+  if ($notice->new) {
     notices_mark_read($notice);
   }
-  
+
   return $output;
 }
 
