@@ -99,64 +99,66 @@ function notices_delete_form_submit($form, &$form_state) {
   drupal_goto('notices');
 }
 
-function notices_settings($form, &$form_state) {
+function notices_settings($form, &$form_state){
   global $user;
-
+  
   $settings = notices_load_settings($user->uid);
-
-  $send_options = array();
-  $send_options_settings = array();
+  
+  $sendOptions=array();
+  $sendOptionsSettings=array();
   foreach (module_implements('sendNotice') as $name) {
     $function = $name . '_sendNotice';
-    $op = 'settings';
+    $op="settings";
     $result = $function($op);
-    $send_options[$name] = $result['title'];
-    $send_options_settings[$name] = $result;
+    $sendOptions[$name] = $result['title'];
+    $sendOptionsSettings[$name] = $result;
   }
 
-  $provide_options = array();
+  $provideOptions=array();
   foreach (module_implements('provideNotice') as $name) {
     $function = $name . '_provideNotice';
-    $op = 'settings';
+    $op="settings";
     $result = $function($op);
-    $provide_options[$name] = $result;
+    $provideOptions[$name] = $result;
   }
+  
 
-  $form['providers'] = array(
-    '#tree' => TRUE,
+  $form['providers']=array(
+    '#tree' => true,
   );
 
-  foreach ($provide_options as $provider) {
+  foreach($provideOptions as $provider){
     $form['providers'][$provider['name']] = array(
-      '#type' => 'fieldset',
+      '#type'  => 'fieldset',
       '#title' => $provider['title'],
-      '#tree' => TRUE,
-    );
-    foreach ($send_options as $name => $title) {
+      '#tree'  => true,
+    );  
+    foreach($sendOptions as $name => $title){
       $form['providers'][$provider['name']][$name] = array(
-        '#type' => 'fieldset',
+        '#type'  => 'fieldset',
         '#title' => $title,
-        '#tree' => TRUE,
+        '#tree'  => true,
       );
       $form['providers'][$provider['name']][$name]['active'] = array(
         '#type'  => 'checkbox',
         '#title' => t('Activate'),
         '#default_value' => $settings->settings[$provider['name']][$name]['active'],
       );
-      $form['providers'][$provider['name']][$name]['values'] = $send_options_settings[$name]['values'];
-      foreach ($send_options_settings[$name]['values'] as $send_name => $value) {
-        if (!empty($settings->settings[$provider['name']][$name]['values'][$send_name])) {
-          $form['providers'][$provider['name']][$name]['values'][$send_name]['#default_value'] = $settings->settings[$provider['name']][$name]['values'][$send_name];
-        }
+      $form['providers'][$provider['name']][$name]['values'] = $sendOptionsSettings[$name]['values'];
+      foreach($sendOptionsSettings[$name]['values'] as $sendName => $value){
+        if(!empty($settings->settings[$provider['name']][$name]['values'][$sendName])){
+          $form['providers'][$provider['name']][$name]['values'][$sendName]['#default_value'] = $settings->settings[$provider['name']][$name]['values'][$sendName];
+        }  
       }
+      
     }
+    
   }
-
+  
   $form['submit'] = array(
     '#type'  => 'submit',
     '#value' => t('Save changes'),
   );
-
   return $form;
 }
 
