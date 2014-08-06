@@ -415,7 +415,7 @@ function notices_unread_count($account = NULL) {
     $account = $user;
   }
 
-  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new', array (
+  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new', array(
     ':uid' => $account->uid,
     ':new' => NOTICE_UNREAD,
   ))->fetchObject();
