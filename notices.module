@@ -94,18 +94,20 @@ function notices_getSendStatus($notice){
  * Returns all Providers.
  *
  * @return array
- *   Array with providers
+ *   Array with providers.
  *
- * @ingroup api 
+ * @ingroup api
  */
-function notices_getProviders(){
+function notices_getProviders() {
   $res = array();
+
   foreach (module_implements('provideNotice') as $name) {
     $function = $name . '_provideNotice';
-    $op="settings";
+    $op = "settings";
     $result = $function($op);
-    $res[$name]=$result['title'];
-  }//foreach
+    $res[$name] = $result['title'];
+  }
+
   return $res;
 }
 
