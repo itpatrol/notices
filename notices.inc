@@ -173,13 +173,15 @@ function notices_settings_submit($form, &$form_state){
   drupal_set_message(t('Changes saved'));
 }
 
-function notices_mark_as_read(){
+function notices_mark_as_read() {
   global $user;
+
   db_update('notices')
     ->fields(array(
       'new' => 0,
     ))
     ->condition('uid', $user->uid, '=')
     ->execute();
+
   drupal_goto('notices');
 }
