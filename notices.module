@@ -35,21 +35,21 @@ function notices_theme() {
 }
 
 /**
- * Implements of hook_formfilterapi().
+ * Implements hook_formfilterapi().
  */
- 
-function notices_formfilterapi($op,$session_name,&$a1 = NULL){
-  if($op == 'filters'){
+function notices_formfilterapi($op, $session_name, &$a1 = NULL) {
+  if ($op == 'filters') {
     $filters = array();
-    switch($session_name){
+
+    switch ($session_name) {
       case NOTICES_FORM_NAME;
         $filters['message'] = array(
           '#type' => 'textfield',
           '#title' => t('Message'),
           '#where' => array('like' => "message"),
         );
-  
-        $filters['provider']= array(
+
+        $filters['provider'] = array(
           '#type'  => 'select',
           '#title' => t('From'),
           '#where' => "provider",
@@ -64,7 +64,7 @@ function notices_formfilterapi($op,$session_name,&$a1 = NULL){
             0 => t('Read'),
           ),
         );
-        break;            
+        break;
     }
     return $filters;
   }
