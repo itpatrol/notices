@@ -342,9 +342,9 @@ function notices_delete_access($notice) {
  *   Notice ID.
  *
  * @return object
- *  Loaded notice.
+ *   Loaded notice.
  *
- * @ingroup api 
+ * @ingroup api
  */
 function noticeid_load($noticeid) {
   $notice = db_query('SELECT * FROM {notices} WHERE noticeid = :noticeid', array(
