@@ -17,7 +17,7 @@ function template_preprocess_notices_view(&$vars) {
   $notice = $vars['notice'];
   $links[] = array(
     'title' => t('Delete'),
-    'href' => 'notices/delete/' .  $notice->noticeid,
+    'href' => 'notices/delete/' . $notice->noticeid,
     'attributes' => array(
       'rel' => $notice->noticeid,
       'id' => 'noticeremove-' . $notice->noticeid,
@@ -72,7 +72,7 @@ function template_preprocess_notices_view_teaser(&$vars) {
 
   $links[] = array(
     'title' => t('Read more'),
-    'href' => 'notices/view/' .  $notice->noticeid,
+    'href' => 'notices/view/' . $notice->noticeid,
     'attributes' => array(
       'class' => 'notice-read-more',
     ),

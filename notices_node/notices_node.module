@@ -24,9 +24,9 @@ function notices_node_node_insert($node) {
 
     db_insert('notices_node_newsletters')
       ->fields(array(
-          'nid' => $node->nid,
-          'vid' => $node->vid,
-          'status' => $node->notices_node['status'],
+        'nid' => $node->nid,
+        'vid' => $node->vid,
+        'status' => $node->notices_node['status'],
       ))
       ->execute();
 

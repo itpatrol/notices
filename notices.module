@@ -53,13 +53,13 @@ function notices_formfilterapi($op, $session_name, &$a1 = NULL) {
         );
 
         $filters['provider'] = array(
-          '#type'  => 'select',
+          '#type' => 'select',
           '#title' => t('From'),
           '#where' => "provider",
           '#options' => notices_getProviders(),
         );
         $filters['status'] = array(
-          '#type'  => 'select',
+          '#type' => 'select',
           '#title' => t('Status'),
           '#where' => 'new',
           '#options' => array(
@@ -244,7 +244,7 @@ function notices_menu() {
   $items['ajax/notices/notices-remove/%/%'] = array(
     'title' => 'Ajax remove notice',
     'page callback' => 'notices_remove_ajax',
-    'page arguments' => array(3,4),
+    'page arguments' => array(3, 4),
     'access callback' => 'notices_delete_access',
     'access arguments' => array(3),
     'type' => MENU_CALLBACK,
@@ -513,7 +513,8 @@ function notices_save(&$notice) {
               $function($op, $notice, $status['values']);
             }
           }
-        }//foreach
+        }
+        //foreach
       }
     }
   }

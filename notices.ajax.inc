@@ -26,7 +26,10 @@ function notices_remove_ajax($noticeid, $count) {
       $noticeadmin->callback = 'notice';
       notices_save($noticeadmin);
     }
-    print drupal_to_js(array('status' => TRUE, 'data' => t('You are trying to hack our system. We sent notification about this action to system administrator.')));
+    print drupal_to_js(array(
+      'status' => TRUE,
+      'data' => t('You are trying to hack our system. We sent notification about this action to system administrator.')
+    ));
     exit();
   }
   $output = '';

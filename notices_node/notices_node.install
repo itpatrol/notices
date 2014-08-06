@@ -18,7 +18,7 @@ function notices_node_install() {
       'locked' => 0,
       'custom' => 1,
       'modified' => 1,
-      ));
+    ));
     node_type_save($type);
     node_add_body_field($type);
   }

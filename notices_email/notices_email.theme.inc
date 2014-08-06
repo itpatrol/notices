@@ -28,7 +28,7 @@ function template_preprocess_notices_email_view(&$vars) {
 
   $links[] = array(
     'title' => t('Mark as read'),
-    'href' => 'notices/read/' .  $notice->noticeid,
+    'href' => 'notices/read/' . $notice->noticeid,
     'attributes' => array(
       'rel' => $notice->noticeid,
       'id' => 'noticeread-' . $notice->noticeid,
@@ -38,7 +38,7 @@ function template_preprocess_notices_email_view(&$vars) {
 
   $links[] = array(
     'title' => t('Delete'),
-    'href' => 'notices/delete/' .  $notice->noticeid,
+    'href' => 'notices/delete/' . $notice->noticeid,
     'attributes' => array(
       'rel' => $notice->noticeid,
       'id' => 'noticeremove-' . $notice->noticeid,

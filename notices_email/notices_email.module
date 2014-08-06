@@ -46,21 +46,24 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
           'mail' => $account->mail,
           'username' => $account->name,
         );
-        $notice->subject = token_replace(t(variable_get('notices_email_mail_subject', 'Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));
+        $notice->subject = token_replace(t(variable_get('notices_email_mail_subject', 'Notification from [site_name]')), array(
+          'user' => $account,
+          'notices_node' => $data
+        ));
       }
       $email = array(
-        'mail'      => $mail,
-        'subject'   => $notice->subject,
-        'body'      => check_markup($notice->message, $notice->format, FALSE),
-        'noticeid'  => $notice->noticeid,
+        'mail' => $mail,
+        'subject' => $notice->subject,
+        'body' => check_markup($notice->message, $notice->format, FALSE),
+        'noticeid' => $notice->noticeid,
       );
 
       drupal_write_record('notices_email_spool', $email);
       $status = array(
-        'status'    => 0,
-        'error'     => '',
+        'status' => 0,
+        'error' => '',
         'timestamp' => time(),
-        'noticeid'  => $notice->noticeid,
+        'noticeid' => $notice->noticeid,
       );
       drupal_write_record('notices_email_status', $status);
       break;
@@ -91,7 +94,8 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
         );
       }
       break;
-  }//switch
+  }
+  //switch
 }
 
 /**
@@ -109,11 +113,11 @@ function notices_email_cron() {
  */
 function notices_email_menu() {
   $items['admin/config/notices/notices_email'] = array(
-    'title'          => 'Notice email settings',
-    'page callback'  => 'drupal_get_form',
+    'title' => 'Notice email settings',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('notices_email_admin_settings'),
     'access arguments' => array('administer site configuration'),
-    'file'           => 'notices_email.admin.inc',
+    'file' => 'notices_email.admin.inc',
   );
   return $items;
 }
@@ -124,10 +128,10 @@ function notices_email_menu() {
  */
 function notices_email_theme() {
   return array(
-    'notices_email_view'    => array(
+    'notices_email_view' => array(
       'render element' => 'elements',
-      'template'  => 'notices-email-view',
-      'file'      => 'notices_email.theme.inc',
+      'template' => 'notices-email-view',
+      'file' => 'notices_email.theme.inc',
     ),
   );
 }
@@ -196,7 +200,10 @@ function notices_email_spool() {
         'mail' => $account->mail,
         'username' => $account->name,
       );
-      $params['subject'] = token_replace(t(variable_get('notices_email_mail_subject', 'Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));
+      $params['subject'] = token_replace(t(variable_get('notices_email_mail_subject', 'Notification from [site_name]')), array(
+        'user' => $account,
+        'notices_node' => $data
+      ));
     }
 
     if (variable_get('notices_email_debug', FALSE)) {
@@ -216,10 +223,10 @@ function notices_email_spool() {
       }
       foreach ($notice_ids as $notice_id) {
         $status = array(
-          'status'    => $status,
-          'error'     => '',
+          'status' => $status,
+          'error' => '',
           'timestamp' => time(),
-          'noticeid'  => $notice_id,
+          'noticeid' => $notice_id,
         );
         drupal_write_record('notices_email_status', $status, 'noticeid');
       }

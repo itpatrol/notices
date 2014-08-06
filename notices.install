@@ -13,62 +13,62 @@ function notices_schema() {
 
   $schema = array();
   $schema['notices'] = array(
-    'description'       => '{notices} holds the message information',
-    'fields'        => array(
-      'noticeid'    => array(
-        'description'   => 'Primary Key: Unique notice ID.',
-        'type'          => 'serial',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
+    'description' => '{notices} holds the message information',
+    'fields' => array(
+      'noticeid' => array(
+        'description' => 'Primary Key: Unique notice ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
       ),
-      'uid'         => array(
-        'description'   => 'The {users}.uid of the user who will receive the notice.',
-        'type'          => 'int',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
+      'uid' => array(
+        'description' => 'The {users}.uid of the user who will receive the notice.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
       ),
-      'provider'     => array(
-        'description'   => 'Module system name that triggered this notification',
-        'type'          => 'varchar',
-        'length'        => 32,
-        'not null'      => TRUE,
+      'provider' => array(
+        'description' => 'Module system name that triggered this notification',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
       ),
-      'message'     => array(
-        'description'   => 'Text of notice.',
-        'type'          => 'text',
-        'not null'      => TRUE,
-        'size'          => 'big',
+      'message' => array(
+        'description' => 'Text of notice.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
       ),
-      'new'         => array(
-        'type'          => 'int',
-        'size'          => 'small',
-        'not null'      => TRUE,
-        'description'   => 'The flag for unread notice.',
+      'new' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+        'description' => 'The flag for unread notice.',
       ),
-      'format'      => array(
-        'type'          => 'varchar',
-        'length'        => 255,
-        'not null'      => FALSE,
-        'description'   => 'The {filter_format}.format of the signature.',
+      'format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The {filter_format}.format of the signature.',
       ),
-      'timestamp'   => array(
-        'description'   => 'Unix timestamp of when notice created.',
-        'type'          => 'int',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
+      'timestamp' => array(
+        'description' => 'Unix timestamp of when notice created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
       ),
     ),
-    'indexes'         => array(
-      'uid'             => array('uid'),
-      'is_new'          => array('noticeid', 'uid', 'new'),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'is_new' => array('noticeid', 'uid', 'new'),
     ),
-    'primary key'     => array('noticeid'),
+    'primary key' => array('noticeid'),
   );
 
   $schema['notices_settings'] = array(
     'description' => $t('Stores resource usage history.'),
     'fields' => array(
-      'uid'   => array(
+      'uid' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
