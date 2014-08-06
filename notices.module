@@ -22,14 +22,13 @@ function notices_theme() {
   return array(
     'notices_view' => array(
       'render element' => 'elements',
-      'template'  => 'notices-view',
-      'file'      => 'notices.theme.inc',      
+      'template' => 'notices-view',
+      'file' => 'notices.theme.inc',
     ),
     'notices_view_teaser' => array(
       'render element' => 'elements',
-      'template'  => 'notices-view-teaser',
-      'file'      => 'notices.theme.inc',      
-
+      'template' => 'notices-view-teaser',
+      'file' => 'notices.theme.inc',
     ),
   );
 }
