@@ -266,28 +266,33 @@ function notices_menu() {
 }
 
 /**
- * notice  wrapper for user_access.
+ * Notice  wrapper for user_access. Never allows anonymous user access as
+ * that doesn't makes sense.
  *
- * Never allows anonymous user access as that doesn't makes sense.
+ * @param string $permission
+ *   Permission string, defaults to read private notice.
  *
- * @param $permission
- *   Permission string, defaults to read privatenotice
+ * @param object $account
+ *   User object.
  *
- * @return
- *   TRUE if user has access, FALSE if not
- *
+ * @return bool
+ *   TRUE if user has access, FALSE if not.
  */
 function notices_user_access($permission = 'read notices', $account = NULL) {
-  if ( $account === NULL ) {
+  if ($account === NULL) {
     global $user;
     $account = $user;
   }
-  if (!$account->uid) { // Disallow anonymous access, regardless of permissions
+
+  // Disallow anonymous access, regardless of permissions.
+  if (!$account->uid) {
     return FALSE;
   }
+
   if (!user_access($permission, $account)) {
     return FALSE;
   }
+
   return TRUE;
 }
 
