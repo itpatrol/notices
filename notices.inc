@@ -160,18 +160,20 @@ function notices_settings($form, &$form_state) {
   return $form;
 }
 
-function notices_settings_submit($form, &$form_state){
+function notices_settings_submit($form, &$form_state) {
   global $user;
 
   $settings = notices_load_settings($user->uid);
-  
+
   $settings->settings = serialize($form_state['values']['providers']);
-  
-  if($settings->is_empty){
-    drupal_write_record('notices_settings',$settings);
-  }else{
-    drupal_write_record('notices_settings',$settings,'uid');
+
+  if ($settings->is_empty) {
+    drupal_write_record('notices_settings', $settings);
   }
+  else {
+    drupal_write_record('notices_settings', $settings, 'uid');
+  }
+
   drupal_set_message(t('Changes saved'));
 }
 
