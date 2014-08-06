@@ -73,20 +73,24 @@ function notices_formfilterapi($op,$session_name,&$a1 = NULL){
 /**
  * Returns status from all Providers.
  *
- * @return array
- *   Array with status by each Providers
+ * @param array $notice
+ *   Array with status by each Providers.
  *
- * @ingroup api 
- */ 
-function notices_getSendStatus($notice){
+ * @return array
+ *   Statuses notice.
+ *
+ * @ingroup api
+ */
+function notices_getSendStatus($notice) {
   $statuses = array();
-  $notice = (object)$notice;
-  
+  $notice = (object) $notice;
+
   foreach (module_implements('sendNotice') as $name) {
     $function = $name . '_sendNotice';
-    $op="status";
-    $statuses[$name] = $function($op,$notice);
-  }//foreach
+    $op = 'status';
+    $statuses[$name] = $function($op, $notice);
+  }
+
   return $statuses;
 }
 
