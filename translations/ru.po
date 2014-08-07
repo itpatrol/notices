@@ -1,6 +1,7 @@
 # $Id$
 #
 # Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
 #  notices.inc: n/a
 #  notices.module: n/a
@@ -14,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2014-08-07 22:27+0400\n"
-"PO-Revision-Date: 2014-08-07 21:28+0200\n"
+"PO-Revision-Date: 2014-08-07 21:54+0200\n"
 "Last-Translator: sergei <sergiy.pavlenko@gmail.com>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -27,11 +28,11 @@ msgstr ""
 
 #: notices.inc:26
 msgid "No notifications."
-msgstr ""
+msgstr "Нет уведомлений."
 
 #: notices.inc:34 notices.module:174
 msgid "Mark as Read"
-msgstr ""
+msgstr "Отметить как прочитанное"
 
 #: notices.inc:39 notices.module:165
 msgid "Settings"
@@ -39,7 +40,7 @@ msgstr "Настройки"
 
 #: notices.inc:81
 msgid "Do you want to delete this message?"
-msgstr ""
+msgstr "Вы хотите удалить это сообщение?"
 
 #: notices.inc:88 notices.theme.inc:20;82
 msgid "Delete"
@@ -47,7 +48,7 @@ msgstr "Удалить"
 
 #: notices.inc:141
 msgid "Activate"
-msgstr ""
+msgstr "Активировать"
 
 #: notices.inc:157
 msgid "Save changes"
@@ -55,7 +56,7 @@ msgstr "Сохранить изменения"
 
 #: notices.inc:174
 msgid "Changes saved"
-msgstr ""
+msgstr "Изменения сохранены"
 
 #: notices.admin.inc:13
 msgid "You do not have any administrative items."
@@ -67,33 +68,35 @@ msgstr ""
 
 #: notices.admin.inc:36
 msgid "provider"
-msgstr ""
+msgstr "поставщик"
 
 #: notices.admin.inc:43
 msgid "Notice"
-msgstr ""
+msgstr "Уведомление"
 
 #: notices.admin.inc:53
 msgid "Update status of payment gateways"
-msgstr ""
+msgstr "Обновить статус платежных шлюзов"
 
 #: notices.admin.inc:72
 msgid "User not found."
-msgstr ""
+msgstr "Пользователь не найден."
 
 #: notices.admin.inc:87
 msgid "Notification has been sent!"
-msgstr ""
+msgstr "Уведомление было отправлено!"
 
 #: notices.ajax.inc:14;15
 msgid "Hack attempt from !uid (!IP) to !noticeid"
-msgstr ""
+msgstr "Попытка взлома от !uid (!IP) к !noticeid"
 
 #: notices.ajax.inc:19
 msgid ""
 "You are trying to hack our system. We sent notification about this action to "
 "system administrator."
 msgstr ""
+"Вы пытаетесь взломать нашу систему. Мы отправили уведомление об этом "
+"системному администратору."
 
 #: notices.theme.inc:33;95
 msgid "@time ago"
@@ -105,7 +108,7 @@ msgstr "Подробнее"
 
 #: notices.theme.inc:75
 msgid "Mark as read"
-msgstr ""
+msgstr "Отметить как прочитанное"
 
 #: notices.module:48
 msgid "Message"
@@ -113,7 +116,7 @@ msgstr "Сообщение"
 
 #: notices.module:54
 msgid "From"
-msgstr ""
+msgstr "ОТ"
 
 #: notices.module:60
 msgid "Status"
@@ -125,51 +128,51 @@ msgstr "Новый"
 
 #: notices.module:64
 msgid "Read"
-msgstr ""
+msgstr "Прочитанные"
 
 #: notices.module:119
 msgid "Read own notices"
-msgstr ""
+msgstr "Прочитать мои уведомления"
 
 #: notices.module:120
 msgid "Allows to read own notices"
-msgstr ""
+msgstr "Разрешить читать мои уведомления"
 
 #: notices.module:123
 msgid "Read all notices"
-msgstr ""
+msgstr "Прочитать все уведомления"
 
 #: notices.module:124
 msgid "Allows to read all notices"
-msgstr ""
+msgstr "Разрешить читать все уведомления"
 
 #: notices.module:128
 msgid "Administer notices"
-msgstr ""
+msgstr "Администрирование уведомлений"
 
 #: notices.module:129
 msgid "Allows to change notices module settings"
-msgstr ""
+msgstr "Разрешить изменять настройки модуля уведомлений"
 
 #: notices.module:133
 msgid "Delete own notices"
-msgstr ""
+msgstr "Удалить мои уведомления"
 
 #: notices.module:134
 msgid "Allows to delete own notices"
-msgstr ""
+msgstr "Разрешить удалить собственные уведомления"
 
 #: notices.module:137
 msgid "Delete all notices"
-msgstr ""
+msgstr "Удалить все уведомления"
 
 #: notices.module:138
 msgid "Allows to delete all notices"
-msgstr ""
+msgstr "Разрешить удалять все уведомления"
 
 #: notices.module:377
 msgid "Notices (@count new)"
-msgstr ""
+msgstr "Уведомления (@count новый)"
 
 #: notices.module:379;149;157 notices.info:0
 msgid "Notices"
@@ -177,39 +180,39 @@ msgstr "Уведомления"
 
 #: notices.module:166;202
 msgid "Configure notice settings."
-msgstr ""
+msgstr "Настройка параметров уведомлений."
 
 #: notices.module:175
 msgid "Mark all notices as read."
-msgstr ""
+msgstr "Отметить все уведомления как прочитанные."
 
 #: notices.module:182
 msgid "Read message"
-msgstr ""
+msgstr "Подробнее"
 
 #: notices.module:192
 msgid "Delete message"
-msgstr ""
+msgstr "Удалить сообщение"
 
 #: notices.module:201
 msgid "Notices Tools"
-msgstr ""
+msgstr "Инструменты уведомлений"
 
 #: notices.module:210
 msgid "Notices Settings"
-msgstr ""
+msgstr "Настройки уведомлений"
 
 #: notices.module:211
 msgid "Configure private messaging settings."
-msgstr ""
+msgstr "Настройка параметров личных сообщений."
 
 #: notices.module:219
 msgid "Add notice"
-msgstr ""
+msgstr "Добавить уведомление"
 
 #: notices.module:220
 msgid "Create custom notice."
-msgstr ""
+msgstr "Создание свое уведомление."
 
 #: notices.module:227
 msgid "notices"
@@ -217,20 +220,21 @@ msgstr "уведомления"
 
 #: notices.module:238
 msgid "Ajax remove notice"
-msgstr ""
+msgstr "Ajax удалить уведомление"
 
 #: notices.module:247;256
 msgid "Ajax mark notice as read"
-msgstr ""
+msgstr "Ajax пометить уведомление как прочитанное"
 
 #: notices.install:63
 msgid "Stores resource usage history."
-msgstr ""
+msgstr "История использования."
 
 #: notices.info:0
 msgid "Notices Manager. Notice users about new things on website."
 msgstr ""
+"Менеджер уведомлений. Уведомление пользователей о новых изменениях на сайте."
 
 #: notices.info:0
 msgid "Notification"
-msgstr ""
+msgstr "Уведомление"
