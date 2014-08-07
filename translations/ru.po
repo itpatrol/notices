@@ -1,0 +1,236 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Generated from files:
+#  notices.inc: n/a
+#  notices.module: n/a
+#  notices.theme.inc: n/a
+#  notices.admin.inc: n/a
+#  notices.ajax.inc: n/a
+#  notices.info: n/a
+#  notices.install: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-08-07 22:27+0400\n"
+"PO-Revision-Date: 2014-08-07 21:28+0200\n"
+"Last-Translator: sergei <sergiy.pavlenko@gmail.com>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n"
+"%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"Language: ru\n"
+"X-Generator: Poedit 1.6.7\n"
+
+#: notices.inc:26
+msgid "No notifications."
+msgstr ""
+
+#: notices.inc:34 notices.module:174
+msgid "Mark as Read"
+msgstr ""
+
+#: notices.inc:39 notices.module:165
+msgid "Settings"
+msgstr "Настройки"
+
+#: notices.inc:81
+msgid "Do you want to delete this message?"
+msgstr ""
+
+#: notices.inc:88 notices.theme.inc:20;82
+msgid "Delete"
+msgstr "Удалить"
+
+#: notices.inc:141
+msgid "Activate"
+msgstr ""
+
+#: notices.inc:157
+msgid "Save changes"
+msgstr "Сохранить изменения"
+
+#: notices.inc:174
+msgid "Changes saved"
+msgstr ""
+
+#: notices.admin.inc:13
+msgid "You do not have any administrative items."
+msgstr "У Вас нет административных элементов."
+
+#: notices.admin.inc:28
+msgid "UID"
+msgstr ""
+
+#: notices.admin.inc:36
+msgid "provider"
+msgstr ""
+
+#: notices.admin.inc:43
+msgid "Notice"
+msgstr ""
+
+#: notices.admin.inc:53
+msgid "Update status of payment gateways"
+msgstr ""
+
+#: notices.admin.inc:72
+msgid "User not found."
+msgstr ""
+
+#: notices.admin.inc:87
+msgid "Notification has been sent!"
+msgstr ""
+
+#: notices.ajax.inc:14;15
+msgid "Hack attempt from !uid (!IP) to !noticeid"
+msgstr ""
+
+#: notices.ajax.inc:19
+msgid ""
+"You are trying to hack our system. We sent notification about this action to "
+"system administrator."
+msgstr ""
+
+#: notices.theme.inc:33;95
+msgid "@time ago"
+msgstr "@time назад"
+
+#: notices.theme.inc:70
+msgid "Read more"
+msgstr "Подробнее"
+
+#: notices.theme.inc:75
+msgid "Mark as read"
+msgstr ""
+
+#: notices.module:48
+msgid "Message"
+msgstr "Сообщение"
+
+#: notices.module:54
+msgid "From"
+msgstr ""
+
+#: notices.module:60
+msgid "Status"
+msgstr "Статус"
+
+#: notices.module:63
+msgid "New"
+msgstr "Новый"
+
+#: notices.module:64
+msgid "Read"
+msgstr ""
+
+#: notices.module:119
+msgid "Read own notices"
+msgstr ""
+
+#: notices.module:120
+msgid "Allows to read own notices"
+msgstr ""
+
+#: notices.module:123
+msgid "Read all notices"
+msgstr ""
+
+#: notices.module:124
+msgid "Allows to read all notices"
+msgstr ""
+
+#: notices.module:128
+msgid "Administer notices"
+msgstr ""
+
+#: notices.module:129
+msgid "Allows to change notices module settings"
+msgstr ""
+
+#: notices.module:133
+msgid "Delete own notices"
+msgstr ""
+
+#: notices.module:134
+msgid "Allows to delete own notices"
+msgstr ""
+
+#: notices.module:137
+msgid "Delete all notices"
+msgstr ""
+
+#: notices.module:138
+msgid "Allows to delete all notices"
+msgstr ""
+
+#: notices.module:377
+msgid "Notices (@count new)"
+msgstr ""
+
+#: notices.module:379;149;157 notices.info:0
+msgid "Notices"
+msgstr "Уведомления"
+
+#: notices.module:166;202
+msgid "Configure notice settings."
+msgstr ""
+
+#: notices.module:175
+msgid "Mark all notices as read."
+msgstr ""
+
+#: notices.module:182
+msgid "Read message"
+msgstr ""
+
+#: notices.module:192
+msgid "Delete message"
+msgstr ""
+
+#: notices.module:201
+msgid "Notices Tools"
+msgstr ""
+
+#: notices.module:210
+msgid "Notices Settings"
+msgstr ""
+
+#: notices.module:211
+msgid "Configure private messaging settings."
+msgstr ""
+
+#: notices.module:219
+msgid "Add notice"
+msgstr ""
+
+#: notices.module:220
+msgid "Create custom notice."
+msgstr ""
+
+#: notices.module:227
+msgid "notices"
+msgstr "уведомления"
+
+#: notices.module:238
+msgid "Ajax remove notice"
+msgstr ""
+
+#: notices.module:247;256
+msgid "Ajax mark notice as read"
+msgstr ""
+
+#: notices.install:63
+msgid "Stores resource usage history."
+msgstr ""
+
+#: notices.info:0
+msgid "Notices Manager. Notice users about new things on website."
+msgstr ""
+
+#: notices.info:0
+msgid "Notification"
+msgstr ""
