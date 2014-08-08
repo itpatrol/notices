@@ -37,7 +37,6 @@ function notices_node_node_insert($node) {
       foreach ($queue as $uid => $receiver) {
 
         $account = user_load($uid);
-        $notice = new stdClass();
 
         foreach ($receiver as $name => $value) {
           $data[$name] = $value;
