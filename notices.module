@@ -496,7 +496,7 @@ function notices_save(&$notice) {
     }
 
     $notice->new = NOTICE_UNREAD;
-    $notice->timestamp = time();
+    $notice->timestamp = REQUEST_TIME;
 
     drupal_write_record('notices', $notice);
 

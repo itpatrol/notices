@@ -32,7 +32,7 @@ function template_preprocess_notices_view(&$vars) {
     'attributes' => array('class' => 'notice-links'),
   );
   $vars['links'] = theme('links', $variables);
-  $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
+  $vars['timeago'] = t('@time ago', array('@time' => format_interval(REQUEST_TIME - $notice->timestamp)));
 
   $file = drupal_get_path('module', $notice->provider) . '/' . $notice->provider . '.png';
   if (!file_exists($file)) {
@@ -107,7 +107,7 @@ function template_preprocess_notices_view_teaser(&$vars) {
     'attributes' => array('class' => 'notice-links'),
   );
   $vars['links'] = theme('links', $variables);
-  $vars['timeago'] = t('@time ago', array('@time' => format_interval(time() - $notice->timestamp)));
+  $vars['timeago'] = t('@time ago', array('@time' => format_interval(REQUEST_TIME - $notice->timestamp)));
 
   $file = drupal_get_path('module', $notice->provider) . '/' . $notice->provider . '.png';
   if (!file_exists($file)) {

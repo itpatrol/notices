@@ -62,7 +62,7 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
       $status = array(
         'status' => 0,
         'error' => '',
-        'timestamp' => time(),
+        'timestamp' => REQUEST_TIME,
         'noticeid' => $notice->noticeid,
       );
       drupal_write_record('notices_email_status', $status);
@@ -225,7 +225,7 @@ function notices_email_spool() {
         $status = array(
           'status' => $status,
           'error' => '',
-          'timestamp' => time(),
+          'timestamp' => REQUEST_TIME,
           'noticeid' => $notice_id,
         );
         drupal_write_record('notices_email_status', $status, 'noticeid');
