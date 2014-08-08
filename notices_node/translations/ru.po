@@ -1,0 +1,109 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  notices_node.tokens.inc: n/a
+#  notices_node.module: n/a
+#  notices_node.install: n/a
+#  notices_node.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-08-08 08:16+0400\n"
+"PO-Revision-Date: 2014-08-08 07:21+0200\n"
+"Last-Translator: sergei <sergiy.pavlenko@gmail.com>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n"
+"%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"Language: ru\n"
+"X-Generator: Poedit 1.6.7\n"
+
+#: notices_node.tokens.inc:8
+msgid "Notices"
+msgstr "Уведомления"
+
+#: notices_node.tokens.inc:9
+msgid "Tokens related to notice."
+msgstr "Маркеры связанные с уведомлением."
+
+#: notices_node.tokens.inc:15
+msgid "uid"
+msgstr ""
+
+#: notices_node.tokens.inc:16
+msgid "The unique uid of the user who receive notice."
+msgstr "Уникальный UID пользователя, который получает уведомление."
+
+#: notices_node.tokens.inc:20
+msgid "mail"
+msgstr "почта"
+
+#: notices_node.tokens.inc:21
+msgid "The mail address of the user who receive notice."
+msgstr "Почты пользователя, который получит уведомление."
+
+#: notices_node.tokens.inc:24
+msgid "username"
+msgstr "имя пользователя"
+
+#: notices_node.tokens.inc:25
+msgid "The username of the user who receive notice."
+msgstr "Имя пользователя, который получают уведомление."
+
+#: notices_node.module:16
+msgid "Common notifications"
+msgstr "Общие уведомления"
+
+#: notices_node.module:136;174
+msgid "Email"
+msgstr "Email"
+
+#: notices_node.module:137;175
+msgid "Anonymous"
+msgstr "Гость"
+
+#: notices_node.module:202
+msgid "Replacement patterns"
+msgstr "Подстановочные шаблоны"
+
+#: notices_node.module:205
+msgid ""
+"These tokens can be used in all text fields except subject and will be "
+"replaced on-screen and in the email."
+msgstr ""
+"Эти маркеры могут быть использованы во всех текстовых полях, за исключением "
+"темы и будут заменены на экране и в письме."
+
+#: notices_node.module:215
+msgid "Notice node settings"
+msgstr "Настройки Notice node"
+
+#: notices_node.module:228
+msgid "Send notice"
+msgstr "Отправить уведомление"
+
+#: notices_node.install:13
+msgid "Notices node"
+msgstr ""
+
+#: notices_node.install:15
+msgid "Create a custom notice to send to all users."
+msgstr ""
+"Создание пользовательского уведомление, чтобы отправить всем пользователям."
+
+#: notices_node.info:0
+msgid "Notice node"
+msgstr ""
+
+#: notices_node.info:0
+msgid "Send notice to all users via creating new node."
+msgstr "Отправить уведомление всем пользователям через создание нового node."
+
+#: notices_node.info:0
+msgid "Notification"
+msgstr "Уведомление"
