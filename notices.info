@@ -7,3 +7,5 @@ dependencies[] = formfilterapi
 
 project = "notices"
 core = "7.x"
+
+files[] = notices.test
