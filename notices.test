@@ -1,0 +1,30 @@
+<?php
+/**
+ * @file
+ * Tests for notices module.
+ */
+
+/**
+ * Testing accesses to the notifications.
+ */
+class NoticesAccessTestCase extends DrupalWebTestCase {
+
+  /**
+   * A user with permission the access example page.
+   *
+   * @var object
+   */
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Testing access notices',
+      'description' => 'Testing accesses to the notifications.',
+      'group' => 'Notices',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('notices'));
+  }
+}
