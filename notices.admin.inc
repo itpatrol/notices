@@ -19,7 +19,6 @@ function notices_admin_menu_block_page() {
   return $output;
 }
 
-
 function notices_admin_settings($form, &$form_state) {
   $form = array();
   return system_settings_form($form);
@@ -32,6 +31,7 @@ function notices_settings_add($form, &$form_state) {
     '#title'              => t('UID'),
     '#size'               => 50,
     '#maxlength'          => 255,
+    '#required' => TRUE,
   );
 
   $form['provider'] = array(
@@ -59,11 +59,34 @@ function notices_settings_add($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Implements hook_FORMID_validate().
+ */
+function notices_settings_add_validate($form, &$form_state) {
+  $uid = $form_state['values']['uid'];
+
+  $user = db_select('users', 'u')
+    ->condition('uid', $uid, '=')
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+  if ($user == 0) {
+    form_error($form['uid'], t('User not found.'));
+  }
+}
+
+/**
+ * Implements hook_FORMID_submit().
+ */
 function notices_settings_add_submit($form, &$form_state) {
   $notice = new stdClass();
   $notice->uid = $form_state['values']['uid'];
   $notice->provider = $form_state['values']['provider'];
   $notice->message = $form_state['values']['message']['value'];
   $notice->format = $form_state['values']['message']['format'];
-  notices_save($notice);
+
+  if (notices_save($notice)) {
+    drupal_set_message(t('Notification has been sent!'));
+  }
 }

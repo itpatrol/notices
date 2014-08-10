@@ -437,6 +437,9 @@ function notices_unread_count($account = NULL) {
  * @param object $notice
  *   Notice object.
  *
+ * @return bool
+ *   Create new notice or not.
+ *
  * @ingroup api
  */
 function notices_mark_read($notice) {
@@ -482,7 +485,7 @@ function notices_save(&$notice) {
   $notice = (object) $notice;
 
   if (isset($notice->noticeid)) {
-    drupal_write_record('notices', $notice, 'noticeid');
+    return drupal_write_record('notices', $notice, 'noticeid');
   }
   else {
     if (!isset($notice->format)) {
@@ -492,11 +495,11 @@ function notices_save(&$notice) {
     $notice->new = NOTICE_UNREAD;
     $notice->timestamp = REQUEST_TIME;
 
-    drupal_write_record('notices', $notice);
+    $new_notice = drupal_write_record('notices', $notice);
 
     $settings = notices_load_settings($notice->uid);
     if (!empty($settings->settings)) {
-      $send_options = $settings->settings[$notice->provider];
+      $send_options = isset($settings->settings[$notice->provider]) ? $settings->settings[$notice->provider] : FALSE;
 
       if (is_array($send_options)) {
         foreach ($send_options as $name => $status) {
@@ -507,5 +510,7 @@ function notices_save(&$notice) {
         //foreach
       }
     }
+
+    return $new_notice;
   }
 }
