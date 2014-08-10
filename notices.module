@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @file
+ * Notices.
+ *
+ * Notices Manager. Notice users about new things on website.
+ */
 
 /**
  * Status constant for read notices.
@@ -9,11 +14,10 @@ define('NOTICE_READ', 0);
  * Status constant for unread notices.
  */
 define('NOTICE_UNREAD', 1);
-/*
+/**
  * Name form with filters.
  */
 define('NOTICES_FORM_NAME', 'notices_list');
-
 
 /**
  * Implements hook_theme().
@@ -22,41 +26,40 @@ function notices_theme() {
   return array(
     'notices_view' => array(
       'render element' => 'elements',
-      'template'  => 'notices-view',
-      'file'      => 'notices.theme.inc',      
+      'template' => 'notices-view',
+      'file' => 'notices.theme.inc',
     ),
     'notices_view_teaser' => array(
       'render element' => 'elements',
-      'template'  => 'notices-view-teaser',
-      'file'      => 'notices.theme.inc',      
-
+      'template' => 'notices-view-teaser',
+      'file' => 'notices.theme.inc',
     ),
   );
 }
 
 /**
- * Implements of hook_formfilterapi().
+ * Implements hook_formfilterapi().
  */
- 
-function notices_formfilterapi($op,$session_name,&$a1 = NULL){
-  if($op == 'filters'){
+function notices_formfilterapi($op, $session_name, &$a1 = NULL) {
+  if ($op == 'filters') {
     $filters = array();
-    switch($session_name){
+
+    switch ($session_name) {
       case NOTICES_FORM_NAME;
         $filters['message'] = array(
           '#type' => 'textfield',
           '#title' => t('Message'),
           '#where' => array('like' => "message"),
         );
-  
-        $filters['provider']= array(
-          '#type'  => 'select',
+
+        $filters['provider'] = array(
+          '#type' => 'select',
           '#title' => t('From'),
           '#where' => "provider",
           '#options' => notices_getProviders(),
         );
         $filters['status'] = array(
-          '#type'  => 'select',
+          '#type' => 'select',
           '#title' => t('Status'),
           '#where' => 'new',
           '#options' => array(
@@ -64,7 +67,7 @@ function notices_formfilterapi($op,$session_name,&$a1 = NULL){
             0 => t('Read'),
           ),
         );
-        break;            
+        break;
     }
     return $filters;
   }
@@ -73,20 +76,24 @@ function notices_formfilterapi($op,$session_name,&$a1 = NULL){
 /**
  * Returns status from all Providers.
  *
- * @return array
- *   Array with status by each Providers
+ * @param array $notice
+ *   Array with status by each Providers.
  *
- * @ingroup api 
- */ 
-function notices_getSendStatus($notice){
+ * @return array
+ *   Statuses notice.
+ *
+ * @ingroup api
+ */
+function notices_getSendStatus($notice) {
   $statuses = array();
-  $notice = (object)$notice;
-  
+  $notice = (object) $notice;
+
   foreach (module_implements('sendNotice') as $name) {
     $function = $name . '_sendNotice';
-    $op="status";
-    $statuses[$name] = $function($op,$notice);
-  }//foreach
+    $op = 'status';
+    $statuses[$name] = $function($op, $notice);
+  }
+
   return $statuses;
 }
 
@@ -94,18 +101,20 @@ function notices_getSendStatus($notice){
  * Returns all Providers.
  *
  * @return array
- *   Array with providers
+ *   Array with providers.
  *
- * @ingroup api 
+ * @ingroup api
  */
-function notices_getProviders(){
+function notices_getProviders() {
   $res = array();
+
   foreach (module_implements('provideNotice') as $name) {
     $function = $name . '_provideNotice';
-    $op="settings";
+    $op = "settings";
     $result = $function($op);
-    $res[$name]=$result['title'];
-  }//foreach
+    $res[$name] = $result['title'];
+  }
+
   return $res;
 }
 
@@ -146,184 +155,193 @@ function notices_permission() {
  */
 function notices_menu() {
   $items['notices'] = array(
-    'title'            => 'Notices',
-    'title callback'   => 'notices_title_callback',
-    'page callback'    => 'notices_list',
-    'access callback'  => 'notices_user_access',
-    'file'             => 'notices.inc',  
-    'menu_name'        => 'user-menu',      
+    'title' => 'Notices',
+    'title callback' => 'notices_title_callback',
+    'page callback' => 'notices_list',
+    'access callback' => 'notices_user_access',
+    'file' => 'notices.inc',
+    'menu_name' => 'user-menu',
   );
   $items['notices/list'] = array(
-    'title'            => 'Notices',
-    'page callback'    => 'notices_list',
-    'access callback'  => 'notices_user_access',
-    'type'             => MENU_DEFAULT_LOCAL_TASK,
-    'weight'           => -10,
-    'file'             => 'notices.inc',    
+    'title' => 'Notices',
+    'page callback' => 'notices_list',
+    'access callback' => 'notices_user_access',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+    'file' => 'notices.inc',
   );
   $items['notices/settings'] = array(
-    'title'            => 'Settings',
-    'description'      => 'Configure notice settings.',
-    'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('notices_settings'),
-    'access callback'  => 'notices_user_access',
-    'type'             => MENU_LOCAL_TASK,
-    'file'             => 'notices.inc',    
-  );  
+    'title' => 'Settings',
+    'description' => 'Configure notice settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('notices_settings'),
+    'access callback' => 'notices_user_access',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'notices.inc',
+  );
   $items['notices/mark-as-read'] = array(
-    'title'            => 'Mark as Read',
-    'description'      => 'Mark all notices as read.',
-    'page callback'    => 'notices_mark_as_read',
-    'access callback'  => 'notices_user_access',
-    'type'             => MENU_CALLBACK,
-    'file'             => 'notices.inc',    
-  );  
+    'title' => 'Mark as Read',
+    'description' => 'Mark all notices as read.',
+    'page callback' => 'notices_mark_as_read',
+    'access callback' => 'notices_user_access',
+    'type' => MENU_CALLBACK,
+    'file' => 'notices.inc',
+  );
   $items['notices/view/%noticeid'] = array(
-    'title'            => 'Read message',
-    'page callback'    => 'notices_view',
-    'page arguments'   => array(2),
-    'access callback'  => 'notices_view_access',
-    'access arguments' => array(2),    
-    'type'             => MENU_LOCAL_TASK,
-    'weight'           => -5,
-    'file'             => 'notices.inc',    
+    'title' => 'Read message',
+    'page callback' => 'notices_view',
+    'page arguments' => array(2),
+    'access callback' => 'notices_view_access',
+    'access arguments' => array(2),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -5,
+    'file' => 'notices.inc',
   );
   $items['notices/delete/%noticeid'] = array(
-    'title'            => 'Delete message',
-    'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('notices_delete_form', 2),
-    'access callback'  => 'notices_delete_access',
+    'title' => 'Delete message',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('notices_delete_form', 2),
+    'access callback' => 'notices_delete_access',
     'access arguments' => array(2),
-    'type'             => MENU_CALLBACK,
-    'file'             => 'notices.inc',    
+    'type' => MENU_CALLBACK,
+    'file' => 'notices.inc',
   );
   $items['admin/config/notices'] = array(
-    'title'            => 'Notices Tools',
-    'description'      => 'Configure notice settings.',
-    'position'         => 'right',
-    'weight'           => 7,    
-    'page callback'    => 'notices_admin_menu_block_page',
+    'title' => 'Notices Tools',
+    'description' => 'Configure notice settings.',
+    'position' => 'right',
+    'weight' => 7,
+    'page callback' => 'notices_admin_menu_block_page',
     'access arguments' => array('administer notice settings'),
-    'file'             => 'notices.admin.inc',       
+    'file' => 'notices.admin.inc',
   );
   $items['admin/config/notices/default'] = array(
-    'title'            => 'Notices Settings',
-    'description'      => 'Configure private messaging settings.',
-    'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('notices_admin_settings'),
+    'title' => 'Notices Settings',
+    'description' => 'Configure private messaging settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('notices_admin_settings'),
     'access arguments' => array('administer notice settings'),
-    'weight'           => -10,
-    'file'             => 'notices.admin.inc',       
+    'weight' => -10,
+    'file' => 'notices.admin.inc',
   );
   $items['admin/config/notices/add'] = array(
-    'title'            => 'Add notice',
-    'description'      => 'Create custom notice.',
-    'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('notices_settings_add'),
+    'title' => 'Add notice',
+    'description' => 'Create custom notice.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('notices_settings_add'),
     'access arguments' => array('administer notice settings'),
-    'file'             => 'notices.admin.inc',      
-  );  
+    'file' => 'notices.admin.inc',
+  );
   $items['user/%user/notices'] = array(
     'title' => 'notices',
-    'page callback'    => 'notices_list',
-    'page arguments'   => array(1),
-    'access callback'  => 'notices_user_access',
+    'page callback' => 'notices_list',
+    'page arguments' => array(1),
+    'access callback' => 'notices_user_access',
     'access arguments' => array('read all notices'),
-    'type'             => MENU_LOCAL_TASK,
-    'file'             => 'notices.inc',    
-
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'notices.inc',
   );
-/* ajax part */  
   $items['ajax/notices/notices-remove/%/%'] = array(
-      'title'            => 'Ajax remove notice',
-      'page callback'    => 'notices_remove_ajax',
-      'page arguments'   => array(3,4),
-      'access callback'  => 'notices_delete_access',
-      'access arguments' => array(3),
-      'type'             => MENU_CALLBACK,
-      'file'             => 'notices.ajax.inc',
+    'title' => 'Ajax remove notice',
+    'page callback' => 'notices_remove_ajax',
+    'page arguments' => array(3, 4),
+    'access callback' => 'notices_delete_access',
+    'access arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'file' => 'notices.ajax.inc',
   );
   $items['ajax/notices/notices-mark-as-read'] = array(
-      'title'            => 'Ajax mark notice as read',
-      'page callback'    => 'notices_mark_read_ajax',
-      'page arguments'   => array('all'),       
-      'access callback'  => TRUE,
-      'type'             => MENU_CALLBACK,
-      'file'             => 'notices.ajax.inc',
+    'title' => 'Ajax mark notice as read',
+    'page callback' => 'notices_mark_read_ajax',
+    'page arguments' => array('all'),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'notices.ajax.inc',
   );
 
   $items['ajax/notices/notices-mark-as-read/%'] = array(
-      'title'            => 'Ajax mark notice as read',
-      'page callback'    => 'notices_mark_read_ajax',
-      'page arguments'   => array(3),      
-      'access callback'  => 'notices_view_access',
-      'access arguments' => array(3),    
-      'type'             => MENU_CALLBACK,
-      'file'             => 'notices.ajax.inc',
+    'title' => 'Ajax mark notice as read',
+    'page callback' => 'notices_mark_read_ajax',
+    'page arguments' => array(3),
+    'access callback' => 'notices_view_access',
+    'access arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'file' => 'notices.ajax.inc',
   );
 
   return $items;
 }
 
 /**
- * notice  wrapper for user_access.
+ * Notice  wrapper for user_access. Never allows anonymous user access as
+ * that doesn't makes sense.
  *
- * Never allows anonymous user access as that doesn't makes sense.
+ * @param string $permission
+ *   Permission string, defaults to read private notice.
  *
- * @param $permission
- *   Permission string, defaults to read privatenotice
+ * @param object $account
+ *   User object.
  *
- * @return
- *   TRUE if user has access, FALSE if not
- *
+ * @return bool
+ *   TRUE if user has access, FALSE if not.
  */
 function notices_user_access($permission = 'read notices', $account = NULL) {
-  if ( $account === NULL ) {
+  if ($account === NULL) {
     global $user;
     $account = $user;
   }
-  if (!$account->uid) { // Disallow anonymous access, regardless of permissions
+
+  // Disallow anonymous access, regardless of permissions.
+  if (!$account->uid) {
     return FALSE;
   }
+
   if (!user_access($permission, $account)) {
     return FALSE;
   }
+
   return TRUE;
 }
 
 /**
  * Check access to the view notices page.
  *
- * Function to restrict the access of the view notices page or ajax call by user_id
- *
+ * Function to restrict the access of the view notices page or
+ * ajax call by user_id.
  */
 function notices_view_access($notice) {
   global $user;
-  if($notice->uid != $user->uid ){
-    if(notices_user_access('read all notices',$user)){
+
+  if ($notice->uid != $user->uid) {
+    if (notices_user_access('read all notices', $user)) {
       return TRUE;
     }
-  } elseif (notices_user_access('read notices') && arg(1) == 'view') {
+  }
+  elseif (notices_user_access('read notices') && arg(1) == 'view') {
     return TRUE;
   }
+
   return FALSE;
 }
 
 /**
  * Check access to the delete notice.
  *
- * Function to restrict the access of the delete notice page or ajax call by user_id
- *
+ * Function to restrict the access of the delete notice page or
+ * ajax call by user_id.
  */
 function notices_delete_access($notice) {
   global $user;
-  if($notice->uid != $user->uid ){
-    if(notices_user_access('delete all notices',$user)){
+
+  if ($notice->uid != $user->uid) {
+    if (notices_user_access('delete all notices', $user)) {
       return TRUE;
     }
-  } elseif (notices_user_access('delete notices') && arg(1) == 'delete') {
+  }
+  elseif (notices_user_access('delete notices') && arg(1) == 'delete') {
     return TRUE;
   }
+
   return FALSE;
 }
 
@@ -332,39 +350,53 @@ function notices_delete_access($notice) {
  *
  * Used as menu autoload function.
  *
- * @param $noticeid
- *   Notice ID
+ * @param int $noticeid
+ *   Notice ID.
  *
  * @return object
- *  Loaded notice
+ *   Loaded notice.
  *
- * @ingroup api 
+ * @ingroup api
  */
-function noticeid_load($noticeid){
-  $notice = db_query("SELECT * FROM {notices} WHERE noticeid = :noticeid", array(':noticeid' => $noticeid))->fetchObject();
+function noticeid_load($noticeid) {
+  $notice = db_query('SELECT * FROM {notices} WHERE noticeid = :noticeid', array(
+    ':noticeid' => $noticeid,
+  ))->fetchObject();
+
   return $notice;
 }
 
-function notices_load_settings($uid){
-  $settings = db_query("SELECT * FROM {notices_settings} WHERE uid = :uid", array(':uid' => $uid))->fetchObject();
-  if(!empty($settings)){
+function notices_load_settings($uid) {
+  $settings = db_query('SELECT * FROM {notices_settings} WHERE uid = :uid', array(
+    ':uid' => $uid,
+  ))->fetchObject();
+
+  if (!empty($settings)) {
     $settings->settings = unserialize($settings->settings);
-  }else{
-    global $user;
+  }
+  else {
     $account = user_load($uid);
-    
+
     $settings = new stdClass();
     $settings->uid = $account->uid;
     foreach (module_implements('provideNotice') as $name) {
       $function = $name . '_provideNotice';
-      $op="settings";
-      $result = $function($op);
+      $op = "settings";
+      $function($op);
+
       if (module_exists('notices_email')) {
-        $settings->settings[$name] = array ('notices_email' => array('active' => 1, 'values' => $account->mail));
+        $settings->settings[$name] = array(
+          'notices_email' => array(
+            'active' => 1,
+            'values' => $account->mail,
+          ),
+        );
       }
-      $settings->is_empty = true;
-    }//foreach
+
+      $settings->is_empty = TRUE;
+    }
   }
+
   return $settings;
 }
 
@@ -373,17 +405,18 @@ function notices_load_settings($uid){
  */
 function notices_title_callback($title = NULL) {
   $count = notices_unread_count();
+
   if ($count > 0) {
-    return t('Notices (@count new)',array('@count' => $count));
+    return t('Notices (@count new)', array('@count' => $count));
   }
+
   return t('Notices');
 }
-
 
 /**
  * Return number of unread notices for an account.
  *
- * @param $account
+ * @param object $account
  *   Specifiy the user for which the unread count should be loaded.
  *
  * @ingroup api
@@ -393,91 +426,96 @@ function notices_unread_count($account = NULL) {
     global $user;
     $account = $user;
   }
-  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new',
-  array (':uid' => $account->uid, ':new' => NOTICE_UNREAD))->fetchObject();
+
+  $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new', array(
+    ':uid' => $account->uid,
+    ':new' => NOTICE_UNREAD,
+  ))->fetchObject();
+
   return $count->notices;
 }
 
-/*
- * Mark notice as readed
+/**
+ * Mark notice as readed.
  *
- * @param  $noticeid
- *   Notice ID
- * @return void
+ * @param object $notice
+ *   Notice object.
  *
- * @ingroup api 
+ * @ingroup api
  */
 function notices_mark_read($notice) {
-  $notice->new=NOTICE_READ;
+  $notice->new = NOTICE_READ;
   notices_save($notice);
 }
 
-/*
- * Delete notice
+/**
+ * Delete notice.
  *
- * @param  $noticeid
- *   Notice ID
- * @return void
+ * @param int $noticeid
+ *   Notice ID.
  *
  * @ingroup api
  */
 function notices_delete($noticeid) {
-  $notice=noticeid_load($noticeid);
+  $notice = noticeid_load($noticeid);
   $settings = notices_load_settings($notice->uid);
-  if(isset($settings->settings)){
-    $sendOptions = $settings->settings[$notice->provider];
-  
-    if(is_array($sendOptions)){
-      foreach ($sendOptions as $name => $status) {
+  if (isset($settings->settings)) {
+    $send_options = $settings->settings[$notice->provider];
+
+    if (is_array($send_options)) {
+      foreach ($send_options as $name => $status) {
         $function = $name . '_sendNotice';
-        $op="delete";
-        $function($op,$notice);
-      }//foreach
+        $op = "delete";
+        $function($op, $notice);
+      }
     }
   }
-  db_query('DELETE FROM {notices} WHERE noticeid=:noticeid',array(':noticeid' => $noticeid));
+
+  db_delete('notices')
+    ->condition('noticeid', $noticeid, '=')
+    ->execute();
 }
 
 /**
- * Save or update notice
+ * Save or update notice.
  *
- * @param  $noticeid
- * @return void
+ * @param object $notice
+ *   Object notice.
  *
- * @ingroup api 
+ * @ingroup api
  */
-function notices_save(&$notice){
+function notices_save(&$notice) {
   $notice = (object) $notice;
-  
-  if(isset($notice->noticeid)){
-    drupal_write_record('notices',$notice,'noticeid');
-  }else{
-    if(!isset($notice->format)){
+
+  if (isset($notice->noticeid)) {
+    drupal_write_record('notices', $notice, 'noticeid');
+  }
+  else {
+    if (!isset($notice->format)) {
       $notice->format = variable_get('filter_default_format', 1);
     }
 
     $notice->new = NOTICE_UNREAD;
+    $notice->timestamp = REQUEST_TIME;
 
-    $notice->timestamp = time();  
-    
-    drupal_write_record('notices',$notice);
-    
+    drupal_write_record('notices', $notice);
+
     $settings = notices_load_settings($notice->uid);
-    if(!empty($settings->settings)){
-      $sendOptions = $settings->settings[$notice->provider];
-      
-      if(is_array($sendOptions)){
-        foreach ($sendOptions as $name => $status) {
-          if($status['active'] == 1){
+    if (!empty($settings->settings)) {
+      $send_options = $settings->settings[$notice->provider];
+
+      if (is_array($send_options)) {
+        foreach ($send_options as $name => $status) {
+          if ($status['active'] == 1) {
             $function = $name . '_sendNotice';
-            $op="send";
-            if(function_exists($function)){
-              $function($op,$notice,$status['values']);
+            $op = "send";
+            if (function_exists($function)) {
+              $function($op, $notice, $status['values']);
             }
           }
-        }//foreach
+        }
+        //foreach
       }
     }
   }
 }
-

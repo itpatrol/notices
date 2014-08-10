@@ -1,73 +1,83 @@
 <?php
+/**
+ * @file
+ * Installation file for Notices module.
+ */
 
 /**
  * Implements hook_schema().
  */
-
 function notices_schema() {
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
   $schema = array();
   $schema['notices'] = array(
-    'description'       => '{notices} holds the message information',
-    'fields'        => array(
-      'noticeid'    => array(
-        'description'   => 'Primary Key: Unique notice ID.',
-        'type'          => 'serial',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
+    'description' => '{notices} holds the message information',
+    'fields' => array(
+      'noticeid' => array(
+        'description' => 'Primary Key: Unique notice ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
       ),
-      'uid'         => array(
-        'description'   => 'The {users}.uid of the user who will receive the notice.',
-        'type'          => 'int',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
-      ),      
-      'provider'     => array(
-        'description'   => 'Module system name that triggered this notification',
-        'type'          => 'varchar',
-        'length'        => 32,
-        'not null'      => TRUE,
+      'uid' => array(
+        'description' => 'The {users}.uid of the user who will receive the notice.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
       ),
-      'message'     => array(
-        'description'   => 'Text of notice.',
-        'type'          => 'text',
-        'not null'      => TRUE,
-        'size'          => 'big',
+      'provider' => array(
+        'description' => 'Module system name that triggered this notification',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
       ),
-      'new'         => array(
-        'type'          => 'int',
-        'size'          => 'small',
-        'not null'      => TRUE,
-        'description'   => 'The flag for unread notice.',
+      'message' => array(
+        'description' => 'Text of notice.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
       ),
-      'format'      => array(
-        'type'          => 'varchar',
-        'length'        => 255,
-        'not null'      => FALSE,
-        'description'   => 'The {filter_format}.format of the signature.',
+      'new' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+        'description' => 'The flag for unread notice.',
       ),
-      'timestamp'   => array(
-        'description'   => 'Unix timestamp of when notice created.',
-        'type'          => 'int',
-        'not null'      => TRUE,
-        'unsigned'      => TRUE,
+      'format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The {filter_format}.format of the signature.',
+      ),
+      'timestamp' => array(
+        'description' => 'Unix timestamp of when notice created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
       ),
     ),
-    'indexes'         => array(
-      'uid'             => array('uid'),
-      'is_new'          => array('noticeid', 'uid', 'new', ),
-    ),    
-    'primary key'     => array('noticeid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'is_new' => array('noticeid', 'uid', 'new'),
+    ),
+    'primary key' => array('noticeid'),
   );
 
   $schema['notices_settings'] = array(
-    'description' => t('Stores resource usage history.'),
+    'description' => $t('Stores resource usage history.'),
     'fields' => array(
-      'uid'   => array('type' => 'int','unsigned' => TRUE,'not null' => TRUE,'default' => 0,),  
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'settings'  => array('type' => 'text'),
     ),
     'primary key' => array('uid'),
   );
-
 
   return $schema;
 }
@@ -126,10 +136,14 @@ function notices_update_7001() {
  * Changes fileds: type => service, method => gateway.
  */
 function notices_update_7002() {
-  db_change_field('notices', 'callback', 'provider', array('type' => 'varchar', 'length' => 32, 'not null' => TRUE, 'default' => ''));
+  db_change_field('notices', 'callback', 'provider', array(
+    'type' => 'varchar',
+    'length' => 32,
+    'not null' => TRUE,
+    'default' => '',
+  ));
   db_drop_field('notices', 'method');
 }
-
 
 /**
  * Implements hook_update_last_removed().

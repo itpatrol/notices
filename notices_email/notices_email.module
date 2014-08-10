@@ -1,7 +1,7 @@
 <?php
 
 /**
- * NOTICE SENT STATUS
+ * NOTICE SENT STATUS.
  */
 define('NOTICES_EMAIL_STATUS_SEND_PENDING', 0);
 define('NOTICES_EMAIL_STATUS_SEND_SENT', 1);
@@ -11,102 +11,114 @@ define('NOTICES_EMAIL_STATUS_SEND_ERROR', 2);
 /**
  * Implements hook_SendNotice().
  */
- 
- 
-function notices_email_SendNotice($op,$notice = null,$settings = null){
-  switch($op){
-      case 'settings':
-            global $user;
-            return array( 'title' => t('Email'),
-                          'values' => array(
-                            'mail' => array(
-                              '#type' => 'textfield',
-                              '#title' => t('Email'),
-                              '#default_value' => $user->mail,
-                            )
-                          )
-                        );
-          break;
-      case 'delete':
-            db_query('DELETE FROM {notices_email_status} WHERE noticeid=:noticeid', array (':noticeid' => $notice->noticeid));
-          break;
-      case 'send': 
-            $account = user_load($notice->uid); 
-            
-            $mail = $account->mail;
-            if(!empty($settings['mail'])){
-              $mail = $settings['mail'];
-            }
-            
-            if(empty($notice->subject)){
-              $data = array(
-                'uid' => $account->uid,
-                'mail' => $account->mail,
-                'username' => $account->name,
-              );
-              $notice->subject = token_replace(t(variable_get('notices_email_mail_subject','Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));
-            }
-            $email=array(
-              'mail'      => $mail,
-              'subject'   => $notice->subject,
-              'body'      => check_markup($notice->message, $notice->format, FALSE),
-              'noticeid'  => $notice->noticeid,
-            );  
-            drupal_write_record('notices_email_spool',$email);
-            $status=array(
-              'status'    => 0,
-              'error'     => '',
-              'timestamp' => time(),
-              'noticeid'  => $notice->noticeid,
-            );
-             
-            drupal_write_record('notices_email_status',$status);            
-          break;
-      case 'status':  
-            $status=db_query('SELECT * FROM {notices_email_status} WHERE noticeid = :noticeid',array ( ':noticeid' => $notice->noticeid))->fetchObject();
-            if($status){
-              switch($status->status){
-                case NOTICES_EMAIL_STATUS_SEND_PENDING: 
-                      $status = t('Sending');
-                    break;
-                case NOTICES_EMAIL_STATUS_SEND_SENT: 
-                      $status = t('Sent');
-                    break;
-                case NOTICES_EMAIL_STATUS_SEND_ERROR: 
-                      $status = t('Error: !error', array('!error' => $status->error));
-                    break;
-              }
-              return array('title' => t('Email'), 'status' => $status, 'icon' => drupal_get_path('module', 'notices_email').'/email.png');
-            }
-          break;
-  }//switch
+function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
+  switch ($op) {
+    case 'settings':
+      global $user;
+      return array(
+        'title' => t('Email'),
+        'values' => array(
+          'mail' => array(
+            '#type' => 'textfield',
+            '#title' => t('Email'),
+            '#default_value' => $user->mail,
+          ),
+        ),
+      );
+
+    case 'delete':
+      db_delete('notices_email_status')
+        ->condition('noticeid', $notice->noticeid, '=')
+        ->execute();
+      break;
+
+    case 'send':
+      $account = user_load($notice->uid);
+
+      $mail = $account->mail;
+      if (!empty($settings['mail'])) {
+        $mail = $settings['mail'];
+      }
+
+      if (empty($notice->subject)) {
+        $data = array(
+          'uid' => $account->uid,
+          'mail' => $account->mail,
+          'username' => $account->name,
+        );
+        $notice->subject = token_replace(t(variable_get('notices_email_mail_subject', 'Notification from [site_name]')), array(
+          'user' => $account,
+          'notices_node' => $data
+        ));
+      }
+      $email = array(
+        'mail' => $mail,
+        'subject' => $notice->subject,
+        'body' => check_markup($notice->message, $notice->format, FALSE),
+        'noticeid' => $notice->noticeid,
+      );
+
+      drupal_write_record('notices_email_spool', $email);
+      $status = array(
+        'status' => 0,
+        'error' => '',
+        'timestamp' => REQUEST_TIME,
+        'noticeid' => $notice->noticeid,
+      );
+      drupal_write_record('notices_email_status', $status);
+      break;
+
+    case 'status':
+      $status = db_query('SELECT * FROM {notices_email_status} WHERE noticeid = :noticeid', array(':noticeid' => $notice->noticeid))
+        ->fetchObject();
+
+      if ($status) {
+        switch ($status->status) {
+          case NOTICES_EMAIL_STATUS_SEND_PENDING:
+            $status = t('Sending');
+            break;
+
+          case NOTICES_EMAIL_STATUS_SEND_SENT:
+            $status = t('Sent');
+            break;
+
+          case NOTICES_EMAIL_STATUS_SEND_ERROR:
+            $status = t('Error: !error', array('!error' => $status->error));
+            break;
+        }
+
+        return array(
+          'title' => t('Email'),
+          'status' => $status,
+          'icon' => drupal_get_path('module', 'notices_email') . '/email.png',
+        );
+      }
+      break;
+  }
+  //switch
 }
 
-
-
 /**
- * Implementation of hook_cron()
+ * Implements hook_cron().
  */
-
-function notices_email_cron(){
-
-  if(variable_get('notices_email_cron', '')){
+function notices_email_cron() {
+  if (variable_get('notices_email_cron', '')) {
     notices_email_spool();
   }
 }
 
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function notices_email_menu() {
   $items['admin/config/notices/notices_email'] = array(
-    'title'          => t('Notice email settings'),
-    'page callback'  => 'drupal_get_form',
+    'title' => 'Notice email settings',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('notices_email_admin_settings'),
     'access arguments' => array('administer site configuration'),
-    'file'           => 'notices_email.admin.inc',
-  );  
+    'file' => 'notices_email.admin.inc',
+  );
   return $items;
 }
 
@@ -116,105 +128,114 @@ function notices_email_menu() {
  */
 function notices_email_theme() {
   return array(
-    'notices_email_view'    => array(
+    'notices_email_view' => array(
       'render element' => 'elements',
-      'template'  => 'notices-email-view',
-      'file'      => 'notices_email.theme.inc',
+      'template' => 'notices-email-view',
+      'file' => 'notices_email.theme.inc',
     ),
   );
 }
 
 
 /**
- * Implementation of hook_mail().
+ * Implements hook_mail().
  */
 function notices_email_mail($key, &$message, $params) {
-  
   $message['subject'] = $params['subject'];
   $message['body'] = $params['body'];
 
-  if($from = variable_get('notices_email_from_mail', '')){
+  if ($from = variable_get('notices_email_from_mail', '')) {
     $message['from'] = $from;
-  }elseif($from = variable_get('site_mail', '')){
+  }
+  elseif ($from = variable_get('site_mail', '')) {
     $message['from'] = $from;
   }
 
 }
 
 /**
- * Send mail spool for current cron run
+ * Send mail spool for current cron run.
  */
 function notices_email_spool() {
-  global $language;
-
-  drupal_add_css(drupal_get_path('module', 'notices_email') .'/notices_email.css',array('group' => CSS_THEME));
+  drupal_add_css(drupal_get_path('module', 'notices_email') . '/notices_email.css', array('group' => CSS_THEME));
 
   $limit = variable_get('notices_email_letters_by_cron', 20);
-  
+
   $res = db_query_range("SELECT * FROM {notices_email_spool}", 0, $limit)->fetchAll();
-  
-  $grouped=array();
-  //group by  mail
-  foreach($res as $data){
-    $grouped[$data->mail][] = $data;  
+
+  $grouped = array();
+  // Group by mail.
+  foreach ($res as $data) {
+    $grouped[$data->mail][] = $data;
   }
-  foreach($grouped as $mail => $group){
+  foreach ($grouped as $mail => $group) {
     $body = array();
     $notice_ids = array();
     $qids = array();
-    foreach($group as $message){
+    foreach ($group as $message) {
       $notice_ids[] = $message->noticeid;
       $qids[] = $message->qid;
-      if(module_exists('mimemail')) {
-        $notice=noticeid_load($message->noticeid);
-        $body[] = theme('notices_email_view',array('notice' => $notice));
-      }else{
+      if (module_exists('mimemail')) {
+        $notice = noticeid_load($message->noticeid);
+        $body[] = theme('notices_email_view', array('notice' => $notice));
+      }
+      else {
         $body[] = $data->body;
-        $body[] = 'Read: '.url('notices/view/' .  $message->noticeid,array('absolute' => true));
-        $body[] = 'Delete: '.url('notices/delete/' .  $message->noticeid,array('absolute' => true));
-        $body[] = 'Mark as read: '.url('notices/read/' .  $message->noticeid,array('absolute' => true));
+        $body[] = 'Read: ' . url('notices/view/' . $message->noticeid, array('absolute' => TRUE));
+        $body[] = 'Delete: ' . url('notices/delete/' . $message->noticeid, array('absolute' => TRUE));
+        $body[] = 'Mark as read: ' . url('notices/read/' . $message->noticeid, array('absolute' => TRUE));
         $body[] = '----------------------------------------------------';
       }
 
     }
     $params['body'] = $body;
-    if(count($notice_ids) == 1){
-      $params['subject'] = $message->subject;  
-    }else{
+    if (count($notice_ids) == 1) {
+      $params['subject'] = $message->subject;
+    }
+    else {
       $notice = noticeid_load($message->noticeid);
-      $account = user_load($notice->uid); 
+      $account = user_load($notice->uid);
       $data = array(
         'uid' => $account->uid,
         'mail' => $account->mail,
         'username' => $account->name,
       );
-      $params['subject'] = token_replace(t(variable_get('notices_email_mail_subject','Notification from [site_name]')), array('user' => $account, 'notices_node' => $data));  
+      $params['subject'] = token_replace(t(variable_get('notices_email_mail_subject', 'Notification from [site_name]')), array(
+        'user' => $account,
+        'notices_node' => $data
+      ));
     }
-    
-    if(variable_get('notices_email_debug', false)){
-      //watchdog it!
-      watchdog('mail key', '!grouped !params.', array('!grouped' => print_r($grouped,true) , '!body' => print_r($body,true)),WATCHDOG_DEBUG);
-    }else{
-      $result = drupal_mail('notices_email', 'notification', $mail, language_default(), $params);
-      if($result['result']){
-        $status = NOTICES_EMAIL_STATUS_SEND_SENT;
-      }else{
-        $status = NOTICES_EMAIL_STATUS_SEND_ERROR;        
-      }
-      foreach($notice_ids as $notice_id){
-        $status=array(
-          'status'    => $status,
-          'error'     => '',
-          'timestamp' => time(),
-          'noticeid'  => $notice_id,
-        ); 
-        drupal_write_record('notices_email_status',$status,'noticeid'); 
-      }//foreach
-      
-    }//ifelse
-    foreach($qids as $qid){
-      db_query('DELETE FROM {notices_email_spool} WHERE qid= :qid',array(':qid' => $qid));
-    }//foreach
-  }//foreach
-}
 
+    if (variable_get('notices_email_debug', FALSE)) {
+      // Watchdog it!
+      watchdog('mail key', '!grouped !params.', array(
+        '!grouped' => print_r($grouped, TRUE),
+        '!body' => print_r($body, TRUE),
+      ), WATCHDOG_DEBUG);
+    }
+    else {
+      $result = drupal_mail('notices_email', 'notification', $mail, language_default(), $params);
+      if ($result['result']) {
+        $status = NOTICES_EMAIL_STATUS_SEND_SENT;
+      }
+      else {
+        $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
+      }
+      foreach ($notice_ids as $notice_id) {
+        $status = array(
+          'status' => $status,
+          'error' => '',
+          'timestamp' => REQUEST_TIME,
+          'noticeid' => $notice_id,
+        );
+        drupal_write_record('notices_email_status', $status, 'noticeid');
+      }
+
+    }
+    foreach ($qids as $qid) {
+      db_delete('notices_email_spool')
+        ->condition('qid', $qid, '=')
+        ->execute();
+    }
+  }
+}

@@ -10,7 +10,7 @@ function notices_node_token_info() {
     'needs-data' => 'notices_node',
   );
 
-  // Tokens
+  // Tokens.
   $info['tokens']['notices_node']['uid'] = array(
     'name' => t('uid'),
     'description' => t("The unique uid of the user who receive notice."),
@@ -34,23 +34,26 @@ function notices_node_token_info() {
 function notices_node_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
   $sanitize = !empty($options['sanitize']);
-  if(isset($data['notices_node'])){
-    $replace = (object)$data['notices_node'];
-    if($type == 'notices_node'){
+  if (isset($data['notices_node'])) {
+    $replace = (object) $data['notices_node'];
+
+    if ($type == 'notices_node') {
       foreach ($tokens as $name => $original) {
         switch ($name) {
           case 'uid':
-              $replacements[$original] = $replace->uid;
+            $replacements[$original] = $replace->uid;
             break;
+
           case 'mail':
-              $replacements[$original] = $sanitize ? check_plain($replace->mail) : $replace->mail;
+            $replacements[$original] = $sanitize ? check_plain($replace->mail) : $replace->mail;
             break;
+
           case 'username':
-              $replacements[$original] = $sanitize ? check_plain($replace->username) : $replace->username;
+            $replacements[$original] = $sanitize ? check_plain($replace->username) : $replace->username;
             break;
         }
       }
     }
   }
-  return $replacements;  
+  return $replacements;
 }

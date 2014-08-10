@@ -1,9 +1,6 @@
 name = Notices
 description = Notices Manager. Notice users about new things on website.
 package = "Notification"
-
 dependencies[] = altpager
 dependencies[] = formfilterapi
-
-project = "notices"
 core = "7.x"

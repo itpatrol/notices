@@ -1,8 +1,6 @@
 name = Notice email 
 description = Notice users about new things on website by email.
 package = "Notification"
-
 dependencies[] = notices
 dependencies[] = token
-
 core = "7.x"

@@ -1,4 +1,4 @@
-<div class="notice notice-view<?php if ($notice->new) { print " notice-new";}?>" id="notice-<?php print $notice->noticeid; ?>">
+<div class="notice notice-view<?php if ($notice->new): ?> <?php print " notice-new"; ?> <?php endif; ?>" id="notice-<?php print $notice->noticeid; ?>">
     <div class="date">
       <?php print $timeago; ?>
     </div>
@@ -9,12 +9,12 @@
       <?php endif ?>
       <?php print $content; ?>
     </div>
-    <?php if ( isset($status)) : ?>
+    <?php if (isset($status)): ?>
     <div class="left">
       <?php print $status ?>
     </div>      
     <?php endif ?>
-    <?php if ( isset($links)) : ?>
+    <?php if (isset($links)): ?>
     <div class="right">
        <?php print $links ?>
     </div>

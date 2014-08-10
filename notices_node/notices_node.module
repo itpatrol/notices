@@ -6,52 +6,56 @@ define('NOTICES_NODE_STATUS_SENT', 1);
 /**
  * Implements hook_provideNotice().
  */
- 
- 
-function notices_node_provideNotice($op){
-  switch($op){
-      case 'settings':
-            return array(
-              'name' => 'notices_node',
-              'title' => t('Common notifications'),
-            );
-          break;
-  }//switch
+function notices_node_provideNotice($op) {
+  switch ($op) {
+    case 'settings':
+      return array(
+        'name' => 'notices_node',
+        'title' => t('Common notifications'),
+      );
+  }
 }
 
 /**
  * Implements hook_node_insert().
  */
 function notices_node_node_insert($node) {
-  if($node->type == 'notices_node'){  
+  if ($node->type == 'notices_node') {
 
     db_insert('notices_node_newsletters')
       ->fields(array(
-          'nid' => $node->nid,
-          'vid' => $node->vid,
-          'status' => $node->notices_node['status'],
+        'nid' => $node->nid,
+        'vid' => $node->vid,
+        'status' => $node->notices_node['status'],
       ))
       ->execute();
-    
-    if($node->notices_node['status']){
-      //process sending
+
+    if ($node->notices_node['status']) {
+      // Process sending.
       $queue = notices_node_getUsers();
-      
-      foreach($queue as $uid => $receiver) {
-        
+
+      foreach ($queue as $uid => $receiver) {
+
         $account = user_load($uid);
-        $notice = new stdClass();        
-            
-        foreach($receiver as $name => $value){
+
+        foreach ($receiver as $name => $value) {
           $data[$name] = $value;
         }
 
         $notice = new stdClass();
         $notice->uid = $uid;
-        $notice->provider = 'notices_node'; 
-        $notice->subject = token_replace($node->title, array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->message = token_replace($node->body['und'][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->format = $node->body['und'][0]['format'];          
+        $notice->provider = 'notices_node';
+        $notice->subject = token_replace($node->title, array(
+          'user' => $account,
+          'node' => $node,
+          'notices_node' => $data,
+        ));
+        $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array(
+          'user' => $account,
+          'node' => $node,
+          'notices_node' => $data,
+        ));
+        $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
       }
     }
@@ -62,35 +66,47 @@ function notices_node_node_insert($node) {
  * Implements hook_node_update().
  */
 function notices_node_node_update($node) {
-  if($node->type == 'notices_node'){  
+  if ($node->type == 'notices_node') {
     if (array_key_exists('status', $node->notices_node) && $node->notices_node['status']) {
-      //process sending
-      db_query("UPDATE {notices_node_newsletters} 
-                SET status = :status 
-                WHERE nid = :nid AND vid = :vid", array ( ':status' => $node->notices_node['status'], ':nid' => $node->nid, ':vid' => $node->vid));
-                
-      //process sending
+      // Process sending.
+      db_update('notices_node_newsletters')
+        ->fields(array(
+          'status' => $node->notices_node['status'],
+        ))
+        ->condition('nid', $node->nid, '=')
+        ->condition('vid', $node->vid, '=')
+        ->execute();
+
+      // Process sending.
       $queue = notices_node_getUsers();
-      
-      foreach($queue as $uid => $receiver) {
-        
+
+      foreach ($queue as $uid => $receiver) {
+
         $account = user_load($uid);
-        $notice = new stdClass();        
-            
-        foreach($receiver as $name => $value){
+        $notice = new stdClass();
+
+        foreach ($receiver as $name => $value) {
           $data[$name] = $value;
         }
 
         $notice = new stdClass();
         $notice->uid = $uid;
         $notice->provider = 'notices_node';
-        $notice->subject = token_replace($node->title, array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->message = token_replace($node->body['und'][0]['value'], array('user' => $account, 'node' => $node, 'notices_node' => $data));
-        $notice->format = $node->body['und'][0]['format'];
+        $notice->subject = token_replace($node->title, array(
+          'user' => $account,
+          'node' => $node,
+          'notices_node' => $data,
+        ));
+        $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array(
+          'user' => $account,
+          'node' => $node,
+          'notices_node' => $data,
+        ));
+        $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
 
       }
-      
+
     }
   }
 }
@@ -99,7 +115,7 @@ function notices_node_node_update($node) {
  * Implements hook_node_delete().
  */
 function notices_node_node_delete($node) {
-  if($node->type == 'notices_node'){
+  if ($node->type == 'notices_node') {
     db_delete('notices_node_newsletters')
       ->condition('nid', $node->nid)
       ->execute();
@@ -111,34 +127,41 @@ function notices_node_node_delete($node) {
  */
 function notices_node_node_load($nodes, $types) {
   global $user;
-  foreach($nodes as $nid => $node){
-    if($node->type == 'notices_node'){
-      $result = db_query("SELECT * FROM {notices_node_newsletters}
-                          WHERE nid = :nid AND vid = :vid", array(':nid' => $node->nid, ':vid' => $node->vid))->fetchObject();
+  foreach ($nodes as $nid => $node) {
+    if ($node->type == 'notices_node') {
+      $result = db_query("SELECT * FROM {notices_node_newsletters} WHERE nid = :nid AND vid = :vid", array(
+        ':nid' => $node->nid,
+        ':vid' => $node->vid,
+      ))->fetchObject();
+
       $status = NOTICES_NODE_STATUS_NOT_SEND;
-      if(isset($result->status)){
+      if (isset($result->status)) {
         $status = $result->status;
       }
       $nodes[$nid]->notices_node = array(
         'status' => $status,
       );
       $nodes[$nid]->safe_title = $node->title;
-      if($user->uid > 0 ){
-        $data=array(
+      if ($user->uid > 0) {
+        $data = array(
           'uid' => $user->uid,
           'mail' => $user->mail,
           'username' => $user->name,
         );
       }
       else {
-        $data=array(
+        $data = array(
           'uid' => 0,
           'mail' => t('Email'),
           'username' => t('Anonymous'),
-        ); 
+        );
       }
-      $nodes[$nid]->title = token_replace($node->title, array('user' => $user, 'node' => $node, 'notices_node' => $data));
-    }  
+      $nodes[$nid]->title = token_replace($node->title, array(
+        'user' => $user,
+        'node' => $node,
+        'notices_node' => $data,
+      ));
+    }
   }
 }
 
@@ -147,7 +170,7 @@ function notices_node_node_load($nodes, $types) {
  */
 function notices_node_node_view($node, $build_mode = 'full') {
   global $user;
-  if($node->type == 'notices_node'){
+  if ($node->type == 'notices_node') {
     // Loop over all render array elements.
     foreach (element_children($node->content) as $key) {
       $element = &$node->content[$key];
@@ -161,40 +184,44 @@ function notices_node_node_view($node, $build_mode = 'full') {
         // Only fields which result in simple markup elements are supported for
         // token replacements for now.
         if (isset($item['#markup'])) {
-          if($user->uid > 0 ){
-            $data=array(
+          if ($user->uid > 0) {
+            $data = array(
               'uid' => $user->uid,
               'mail' => $user->mail,
               'username' => $user->name,
             );
           }
           else {
-            $data=array(
+            $data = array(
               'uid' => 0,
               'mail' => t('Email'),
               'username' => t('Anonymous'),
-            ); 
+            );
           }
-          $item['#markup'] = token_replace($item['#markup'], array('user' => $user, 'node' => $node, 'notices_node' => $data));
+          $item['#markup'] = token_replace($item['#markup'], array(
+            'user' => $user,
+            'node' => $node,
+            'notices_node' => $data,
+          ));
         }
       }
     }
-  }  
+  }
 }
 
 /**
  * Implemens of hook_form_alter().
  */
 function notices_node_form_alter(&$form, &$form_state, $form_id) {
-  switch($form_id) {
+  switch ($form_id) {
     case 'notices_node_node_form':
-      //get all servers
+      // Get all servers.
       $status = NOTICES_NODE_STATUS_NOT_SEND;
-      if(isset($form['#node']->notices_node['status'])){
+      if (isset($form['#node']->notices_node['status'])) {
         $status = $form['#node']->notices_node['status'];
       }
-      //fix title on form;
-      if(isset($form['#node']->safe_title)){
+      // Fix title on form.
+      if (isset($form['#node']->safe_title)) {
         $form['title']['#default_value'] = $form['#node']->safe_title;
       }
       $form['help'] = array(
@@ -209,7 +236,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
         '#theme' => 'token_tree',
         '#token_types' => array('user', 'node', 'notices_node'),
       );
-      
+
       $form['notices_node'] = array(
         '#type' => 'fieldset',
         '#title' => t('Notice node settings'),
@@ -219,7 +246,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
       );
       if ($status == NOTICES_NODE_STATUS_SENT) {
         $form['notices_node']['message_status'] = array(
-          '#markup' => 'Notice is already sent', 
+          '#markup' => 'Notice is already sent',
         );
       }
       else {
@@ -229,18 +256,18 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
           '#default_value' => $status,
           '#disabled' => $status,
         );
-      }      
+      }
       break;
   }
 }
 
-/*
- * Get users uid
+/**
+ * Get users uid.
  */
 function notices_node_getUsers() {
   $queue = array();
   $users = db_query("SELECT uid, mail, name AS username FROM {users} WHERE uid != 0")->fetchAll();
-  foreach($users as $data){
+  foreach ($users as $data) {
     $queue[$data->uid] = array(
       'uid' => $data->uid,
       'mail' => $data->mail,
@@ -249,5 +276,3 @@ function notices_node_getUsers() {
   }
   return $queue;
 }
-
-
