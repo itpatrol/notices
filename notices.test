@@ -203,4 +203,18 @@ class NoticesTestCase extends DrupalWebTestCase {
 
     $this->assertEqual(0, $count);
   }
+
+  /**
+   * Test page with all user notices.
+   */
+  public function testNoticesUserNotices() {
+    $node1 = $this->createNotice();
+    $node2 = $this->createNotice(1);
+    $node3 = $this->createNotice();
+
+    $this->drupalGet('user/' . $this->web_user->uid . '/notices');
+    $this->assertText($node1->message);
+    $this->assertNoText($node2->message);
+    $this->assertText($node3->message);
+  }
 }
