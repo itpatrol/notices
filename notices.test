@@ -217,4 +217,23 @@ class NoticesTestCase extends DrupalWebTestCase {
     $this->assertNoText($node2->message);
     $this->assertText($node3->message);
   }
+
+  /**
+   * Create notice programmatically.
+   */
+  protected function createNotice($uid = FALSE) {
+    if (!$uid) {
+      $uid = $this->web_user->uid;
+    }
+
+    $notice = new stdClass();
+    $notice->uid = $uid;
+    $notice->provider = $this->randomName();
+    $notice->subject = $this->randomName();
+    $notice->message = $this->randomName();
+    $notice->format = filter_default_format();
+    notices_save($notice);
+
+    return $notice;
+  }
 }
