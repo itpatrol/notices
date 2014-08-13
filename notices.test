@@ -112,4 +112,26 @@ class NoticesTestCase extends DrupalWebTestCase {
     $this->web_user = $this->drupalCreateUser(array('read notices', 'delete notices', 'read all notices', 'administer notice settings'));
     $this->drupalLogin($this->web_user);
   }
+
+  /**
+   * Test add notice.
+   */
+  public function testNoticesAdd() {
+    $edit = array(
+      'uid' => $this->web_user->uid,
+      'provider' => $this->randomName(),
+      'message[value]' => $this->randomName(),
+      'message[format]' => filter_default_format(),
+    );
+
+    $this->drupalPost('admin/config/notices/add', $edit, t('Update status of payment gateways'));
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+  }
 }
