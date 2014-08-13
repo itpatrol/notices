@@ -134,4 +134,20 @@ class NoticesTestCase extends DrupalWebTestCase {
 
     $this->assertEqual(1, $count);
   }
+
+  /**
+   * Test view notice.
+   */
+  public function testNoticesView() {
+    $this->createNotice();
+
+    $notice = db_select('notices', 'n')
+      ->fields('n', array('message'))
+      ->condition('n.noticeid', 1)
+      ->execute()
+      ->fetchObject();
+
+    $this->drupalGet('notices/view/1');
+    $this->assertText($notice->message);
+  }
 }
