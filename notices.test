@@ -86,3 +86,30 @@ class NoticesAccessTestCase extends DrupalWebTestCase {
   }
 }
 
+/**
+ * Testing main functions of the module.
+ */
+class NoticesTestCase extends DrupalWebTestCase {
+
+  /**
+   * A user with permission the access to page module.
+   *
+   * @var object
+   */
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Testing main functions',
+      'description' => 'Testing main functions of the module.',
+      'group' => 'Notices',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('notices'));
+
+    $this->web_user = $this->drupalCreateUser(array('read notices', 'delete notices', 'read all notices', 'administer notice settings'));
+    $this->drupalLogin($this->web_user);
+  }
+}
