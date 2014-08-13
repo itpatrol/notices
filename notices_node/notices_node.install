@@ -1,36 +1,38 @@
 <?php
 
 /**
- * Implements hook_install.
+ * Implements hook_install().
  */
 function notices_node_install() {
+  // Ensure translations don't break during installation.
+  $t = get_t();
 
   // Create a newsletter type if needed.
   $type = node_type_get_type('notices_node');
   if (!$type) {
     $type = node_type_set_defaults(array(
       'type' => 'notices_node',
-      'name' => t('Notices node'),
+      'name' => $t('Notices node'),
       'base' => 'node_content',
-      'description' => t('Create a custom notice to send to all users.'),
+      'description' => $t('Create a custom notice to send to all users.'),
       'locked' => 0,
       'custom' => 1,
       'modified' => 1,
-      ));
+    ));
     node_type_save($type);
     node_add_body_field($type);
   }
 }
 
 /**
- * Implements hook_uninstall.
+ * Implements hook_uninstall().
  */
 function notices_node_uninstall() {
   node_type_delete('notices_node');
 }
 
 /**
- * Implements hook_schema.
+ * Implements hook_schema().
  */
 function notices_node_schema() {
   $schema['notices_node_newsletters'] = array(
@@ -40,7 +42,7 @@ function notices_node_schema() {
         'description' => 'The primary identifier for a node.',
         'type' => 'int',
         'unsigned' => TRUE,
-        'not null' => TRUE
+        'not null' => TRUE,
       ),
       'vid' => array(
         'description' => 'The current {node_revisions}.vid version identifier.',
@@ -57,7 +59,7 @@ function notices_node_schema() {
         'size' => 'tiny',
       ),
     ),
-    'unique keys' => array('vid'=> array('vid')),
+    'unique keys' => array('vid' => array('vid')),
     'primary key' => array('nid'),
   );
   return $schema;

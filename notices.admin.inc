@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Admin page settings module.
+ */
 
 /**
  * Menu callback to list sub-items.
@@ -16,7 +20,7 @@ function notices_admin_menu_block_page() {
 }
 
 
-function notices_admin_settings($form,&$form_state) {
+function notices_admin_settings($form, &$form_state) {
   $form = array();
   return system_settings_form($form);
 }
@@ -29,7 +33,7 @@ function notices_settings_add($form, &$form_state) {
     '#size'               => 50,
     '#maxlength'          => 255,
   );
-  
+
   $form['provider'] = array(
     '#type'               => 'textfield',
     '#title'              => t('provider'),
@@ -63,4 +67,3 @@ function notices_settings_add_submit($form, &$form_state) {
   $notice->format = $form_state['values']['message']['format'];
   notices_save($notice);
 }
-

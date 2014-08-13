@@ -9,7 +9,7 @@ div.notice-new {
 
 div.notice div.date {
   float: right;
-  color:#268efd;
+  color: #268efd;
   padding: 0px 0px 0px 5px;
 }
 
@@ -44,7 +44,7 @@ ul.notice-links li a {
   padding-bottom: 3px;
 }
 
-ul.notices-links li{
+ul.notices-links li {
   display: inline;
 }
 
@@ -55,15 +55,15 @@ div.notice ul.notices_status {
   margin: 0px;
 }
 ul.notices_status li {
-  display: inline;  
+  display: inline;
 }
 
 div.notice div.picture {
-  float:left;
+  float: left;
   padding: 10px 15px 0px 5px;
 }
 
-div.notice div.picture img{
+div.notice div.picture img {
   height: 48px;
   width: 48px;
 }
@@ -76,7 +76,7 @@ div.notice span.new {
   background-color: red;
   color: white;
   float: left;
-  font-size:x-small;
+  font-size: x-small;
 }
 
 div.notice div.message {
