@@ -186,4 +186,21 @@ class NoticesTestCase extends DrupalWebTestCase {
 
     $this->assertEqual(0, $count);
   }
+
+  /**
+   * Test delete notice.
+   */
+  public function testNoticesDelete() {
+    $this->createNotice();
+
+    $this->drupalPost('notices/delete/1', array(), t('Delete'));
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
 }
