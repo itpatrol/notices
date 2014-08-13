@@ -150,4 +150,22 @@ class NoticesTestCase extends DrupalWebTestCase {
     $this->drupalGet('notices/view/1');
     $this->assertText($notice->message);
   }
+
+  /**
+   * Test mark all notices as read, no ajax.
+   */
+  public function testNoticesMarkAsReadAll() {
+    $this->createNotice();
+
+    $this->drupalGet('notices/mark-as-read');
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->condition('n.new', 1)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
 }
