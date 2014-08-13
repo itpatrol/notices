@@ -10,7 +10,7 @@
 class NoticesAccessTestCase extends DrupalWebTestCase {
 
   /**
-   * A user with permission the access example page.
+   * A user with permission the access to page module.
    *
    * @var object
    */
@@ -26,5 +26,42 @@ class NoticesAccessTestCase extends DrupalWebTestCase {
 
   public function setUp() {
     parent::setUp(array('notices'));
+
+    $this->web_user = $this->drupalCreateUser(array('read notices', 'delete notices'));
+    $this->drupalLogin($this->web_user);
+
+    // Create one notice for tests without running the hooks module.
+    $this->notice = new stdClass();
+    $this->notice->uid = $this->web_user->uid;
+    // Defunct provider.
+    $this->notice->provider = 'test';
+    $this->notice->subject = t('Test');
+    $this->notice->message = t('Test');
+    $this->notice->format = filter_default_format();
+    notices_save($this->notice);
+  }
+
+  /**
+   * Test access to page list notices.
+   */
+  public function testNoticesListAccess() {
+    $this->drupalGet('notices/list');
+    $this->assertText(t('Test'));
+  }
+
+  /**
+   * Test access to page view one notice.
+   */
+  public function testNoticesViewAccess() {
+    $this->drupalGet('notices/view/1');
+    $this->assertText(t('Test'));
+  }
+
+  /**
+   * Test access to delete notice.
+   */
+  public function testNoticesDeleteAccess() {
+    $this->drupalGet('notices/delete/1');
+    $this->assertText(t('Do you want to delete this message?'));
   }
 }
