@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Tests for notices_node module.
+ */
+
+/**
+ * Testing main functions of the module.
+ */
+class NoticesNodeTestCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Testing main functions',
+      'description' => 'Testing main functions of the module.',
+      'group' => 'Notices Node',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('notices', 'notices_node'));
+  }
+}
