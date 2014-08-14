@@ -266,13 +266,20 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
  */
 function notices_node_getUsers() {
   $queue = array();
-  $users = db_query("SELECT uid, mail, name AS username FROM {users} WHERE uid != 0")->fetchAll();
-  foreach ($users as $data) {
-    $queue[$data->uid] = array(
-      'uid' => $data->uid,
-      'mail' => $data->mail,
-      'username' => $data->username,
+
+  $users = db_select('users', 'u')
+    ->fields('u', array('uid', 'mail', 'name'))
+    ->condition('uid', '0', '!=')
+    ->execute()
+    ->fetchAll();
+
+  foreach ($users as $user) {
+    $queue[$user->uid] = array(
+      'uid' => $user->uid,
+      'mail' => $user->mail,
+      'username' => $user->name,
     );
   }
+
   return $queue;
 }
