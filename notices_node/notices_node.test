@@ -62,4 +62,32 @@ class NoticesNodeTestCase extends DrupalWebTestCase {
 
     $this->assertEqual(1, $count);
   }
+
+  /**
+   * Testing delete data module.
+   */
+  public function testNoticesNodeDelete() {
+    $node = $this->drupalCreateNode(array(
+      'type' => 'notices_node',
+      'notices_node[status]' => '0',
+    ));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', $node->nid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+
+    node_delete($node->nid);
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', $node->nid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
 }
