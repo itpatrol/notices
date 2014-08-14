@@ -19,5 +19,47 @@ class NoticesNodeTestCase extends DrupalWebTestCase {
 
   public function setUp() {
     parent::setUp(array('notices', 'notices_node'));
+
+    $this->web_user = $this->drupalCreateUser(array('bypass node access'));
+    $this->drupalLogin($this->web_user);
+  }
+
+  /**
+   * Testing processing module of the new node.
+   */
+  public function testNoticesNodeInsert() {
+    $edit = array();
+    $edit['title'] = $this->randomString();
+    $edit['body[und][0][value]'] = $this->randomString();
+    $edit['body[und][0][format]'] = filter_default_format();
+
+    $this->drupalPost('node/add/notices-node', $edit, t('Save'));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', 1)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+
+    $edit['notices_node[status]'] = '1';
+    $this->drupalPost('node/add/notices-node', $edit, t('Save'));
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
   }
 }
