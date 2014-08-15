@@ -9,6 +9,13 @@
  */
 class NoticesEmailTestCase extends DrupalWebTestCase {
 
+  /**
+   * A user with permission the access to page module.
+   *
+   * @var object
+   */
+  protected $web_user;
+
   public static function getInfo() {
     return array(
       'name' => 'Module Notices Email',
@@ -19,5 +26,36 @@ class NoticesEmailTestCase extends DrupalWebTestCase {
 
   public function setUp() {
     parent::setUp(array('notices', 'notices_node', 'notices_email'));
+
+    $this->web_user = $this->drupalCreateUser(array('read notices', 'delete notices', 'administer notice settings'));
+    $this->drupalLogin($this->web_user);
+  }
+
+  /**
+   * Settings notices.
+   */
+  public function testNoticesEmailSettings() {
+    $this->drupalGet('notices/settings');
+    $elements = $this->xpath('//form[@id=:id]//input[@name=:name]', array(
+      ':id' => 'notices-settings',
+      ':name' => 'providers[notices_node][notices_email][values][mail]',
+    ));
+    $this->assertEqual(1, count($elements));
+
+    $elements = $this->xpath('//form[@id=:id]//input[@name=:name]', array(
+      ':id' => 'notices-settings',
+      ':name' => 'providers[notices_node][notices_email][active]',
+    ));
+
+    $status = $elements[0]->attributes();
+
+    $this->assertEqual('checked', (string) $status->checked);
+
+    $edit = array();
+    $edit['providers[notices_node][notices_email][active]'] = FALSE;
+    $this->drupalPost('notices/settings', $edit, t('Save changes'));
+
+    $settings = notices_load_settings($this->web_user->uid);
+    $this->assertEqual(0, $settings->settings['notices_node']['notices_email']['active']);
   }
 }
