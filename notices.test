@@ -18,7 +18,7 @@ class NoticesAccessTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Testing access notices',
+      'name' => 'Access notices',
       'description' => 'Testing accesses to the notifications.',
       'group' => 'Notices',
     );
@@ -100,7 +100,7 @@ class NoticesTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Testing main functions',
+      'name' => 'Module Notices',
       'description' => 'Testing main functions of the module.',
       'group' => 'Notices',
     );

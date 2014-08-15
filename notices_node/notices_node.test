@@ -18,9 +18,9 @@ class NoticesNodeTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Testing main functions',
+      'name' => 'Module Notices Node',
       'description' => 'Testing main functions of the module.',
-      'group' => 'Notices Node',
+      'group' => 'Notices',
     );
   }
 
