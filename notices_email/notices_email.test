@@ -80,4 +80,33 @@ class NoticesEmailTestCase extends DrupalWebTestCase {
 
     $this->assertEqual(1, $count);
   }
+
+  /**
+   * Status send notice.
+   */
+  public function testNoticesEmailStatus() {
+    $edit = array(
+      'uid' => $this->web_user->uid,
+      'provider' => 'notices_node',
+      'message[value]' => $this->randomString(),
+      'message[format]' => filter_default_format(),
+    );
+
+    $this->drupalPost('admin/config/notices/add', $edit, t('Update status of payment gateways'));
+
+    $notice = noticeid_load(1);
+    $status = notices_getSendStatus($notice);
+    $this->assertEqual('Sending', $status['notices_email']['status']);
+
+    variable_set('notices_email_cron', TRUE);
+
+    $this->cronRun();
+
+    $notice = db_select('notices_email_status', 'n')
+      ->fields('n', array('status'))
+      ->execute()
+      ->fetchObject();
+
+    $this->assertEqual(NOTICES_EMAIL_STATUS_SEND_SENT, $notice->status);
+  }
 }
