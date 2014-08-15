@@ -9,6 +9,13 @@
  */
 class NoticesNodeTestCase extends DrupalWebTestCase {
 
+  /**
+   * A user with permission the access to create node.
+   *
+   * @var object
+   */
+  protected $web_user;
+
   public static function getInfo() {
     return array(
       'name' => 'Testing main functions',
@@ -89,5 +96,23 @@ class NoticesNodeTestCase extends DrupalWebTestCase {
       ->fetchField();
 
     $this->assertEqual(0, $count);
+  }
+
+  /**
+   * Test load node with replace title.
+   */
+  public function testNoticesNodeLoad() {
+    global $user;
+
+    $edit = array();
+    $edit['title'] = '[notices_node:uid]';
+    $edit['body[und][0][value]'] = $this->randomString();
+    $edit['body[und][0][format]'] = filter_default_format();
+
+    $this->drupalPost('node/add/notices-node', $edit, t('Save'));
+
+    $node = node_load(1);
+
+    $this->assertEqual($node->title, $user->uid);
   }
 }
