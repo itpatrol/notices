@@ -109,4 +109,29 @@ class NoticesEmailTestCase extends DrupalWebTestCase {
 
     $this->assertEqual(NOTICES_EMAIL_STATUS_SEND_SENT, $notice->status);
   }
+
+  /**
+   * Delete notice and status send.
+   */
+  public function testNoticesEmailDelete() {
+    $edit = array(
+      'uid' => $this->web_user->uid,
+      'provider' => 'notices_node',
+      'message[value]' => $this->randomString(),
+      'message[format]' => filter_default_format(),
+    );
+
+    $this->drupalPost('admin/config/notices/add', $edit, t('Update status of payment gateways'));
+    $this->drupalPost('notices/delete/1', array(), t('Delete'));
+
+    $count = db_select('notices_email_status', 'n')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+
+    $notice = noticeid_load(1);
+    $this->assertFalse($notice);
+  }
 }
