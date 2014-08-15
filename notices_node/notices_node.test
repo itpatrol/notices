@@ -128,4 +128,37 @@ class NoticesNodeTestCase extends DrupalWebTestCase {
     $this->drupalGet('node/' . $node->nid);
     $this->assertText('title-' . $this->web_user->uid);
   }
+
+  /**
+   * Test update node data, and change status for node newsletter.
+   */
+  public function testNoticesNodeUpdate() {
+    $node = $this->drupalCreateNode(array(
+      'title' => 'title-[notices_node:uid]',
+      'type' => 'notices_node',
+    ));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', 1)
+      ->condition('n.status', '0')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+
+    $edit = array(
+      'notices_node[status]' => '1',
+    );
+    $this->drupalPost('node/1/edit', $edit, t('Save'));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', 1)
+      ->condition('n.status', '1')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+  }
 }
