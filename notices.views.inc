@@ -79,6 +79,9 @@ function notices_views_data() {
       'filter' => array(
         'handler' => 'views_handler_filter_numeric',
       ),
+      'sort' => array(
+        'handler' => 'views_handler_sort',
+      ),
     ),
     'format' => array(
       'title' => 'Format',
