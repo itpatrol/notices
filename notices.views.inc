@@ -49,6 +49,9 @@ function notices_views_data() {
         'title' => t('Recipient'),
         'help' => t('Relate notice to the user who will receive the notice.'),
       ),
+      'argument' => array(
+        'handler' => 'views_handler_argument_numeric',
+      ),
     ),
     'provider' => array(
       'title' => 'Provider',
