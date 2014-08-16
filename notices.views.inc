@@ -30,6 +30,9 @@ function notices_views_data() {
         'handler' => 'views_handler_field_numeric',
         'click sortable' => FALSE,
       ),
+      'sort' => array(
+        'handler' => 'views_handler_sort',
+      ),
     ),
     'uid' => array(
       'title' => 'Uid',
