@@ -41,6 +41,14 @@ function notices_views_data() {
         'handler' => 'views_handler_field_numeric',
         'click sortable' => FALSE,
       ),
+      'relationship' => array(
+        'base' => 'users',
+        'base field' => 'uid',
+        'handler' => 'views_handler_relationship',
+        'label' => t('recipient'),
+        'title' => t('Recipient'),
+        'help' => t('Relate notice to the user who will receive the notice.'),
+      ),
     ),
     'provider' => array(
       'title' => 'Provider',
