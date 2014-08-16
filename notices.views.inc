@@ -98,6 +98,9 @@ function notices_views_data() {
         'handler' => 'views_handler_field_date',
         'click sortable' => TRUE,
       ),
+      'sort' => array(
+        'handler' => 'views_handler_sort_date',
+      ),
     ),
   );
 
