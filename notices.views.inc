@@ -12,7 +12,7 @@ function notices_views_data() {
     'table' => array(
       'base' => array(
         'field' => 'noticeid',
-        'title' => 'Notices',
+        'title' => t('Notices'),
         'help' => 'notices holds the message information',
       ),
       'group' => 'Notices',
@@ -25,7 +25,7 @@ function notices_views_data() {
     ),
     'noticeid' => array(
       'title' => 'Noticeid',
-      'help' => 'Primary Key: Unique notice ID.',
+      'help' => t('Primary Key: Unique notice ID.'),
       'field' => array(
         'handler' => 'views_handler_field_numeric',
         'click sortable' => FALSE,
@@ -35,8 +35,8 @@ function notices_views_data() {
       ),
     ),
     'uid' => array(
-      'title' => 'Uid',
-      'help' => 'The users.uid of the user who will receive the notice.',
+      'title' => t('Uid'),
+      'help' => t('The users.uid of the user who will receive the notice.'),
       'field' => array(
         'handler' => 'views_handler_field_numeric',
         'click sortable' => FALSE,
@@ -54,24 +54,24 @@ function notices_views_data() {
       ),
     ),
     'provider' => array(
-      'title' => 'Provider',
-      'help' => 'Module system name that triggered this notification',
+      'title' => t('Provider'),
+      'help' => t('Module system name that triggered this notification'),
       'field' => array(
         'handler' => 'views_handler_field',
         'click sortable' => FALSE,
       ),
     ),
     'message' => array(
-      'title' => 'Message',
-      'help' => 'Text of notice.',
+      'title' => t('Message'),
+      'help' => t('Text of notice.'),
       'field' => array(
         'handler' => 'views_handler_field',
         'click sortable' => FALSE,
       ),
     ),
     'new' => array(
-      'title' => 'New',
-      'help' => 'The flag for unread notice.',
+      'title' => t('New'),
+      'help' => t('The flag for unread notice.'),
       'field' => array(
         'handler' => 'views_handler_field_numeric',
         'click sortable' => FALSE,
@@ -84,16 +84,16 @@ function notices_views_data() {
       ),
     ),
     'format' => array(
-      'title' => 'Format',
-      'help' => 'The filter_format.format of the signature.',
+      'title' => t('Format'),
+      'help' => t('The filter_format.format of the signature.'),
       'field' => array(
         'handler' => 'views_handler_field',
         'click sortable' => FALSE,
       ),
     ),
     'timestamp' => array(
-      'title' => 'Timestamp',
-      'help' => 'Unix timestamp of when notice created.',
+      'title' => t('Timestamp'),
+      'help' => t('Unix timestamp of when notice created.'),
       'field' => array(
         'handler' => 'views_handler_field_date',
         'click sortable' => TRUE,
