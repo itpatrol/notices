@@ -74,6 +74,15 @@ function notices_formfilterapi($op, $session_name, &$a1 = NULL) {
 }
 
 /**
+ * Implements of hook_views_api().
+ */
+function notices_views_api() {
+  return array(
+    'api' => 2,
+  );
+}
+
+/**
  * Returns status from all Providers.
  *
  * @param array $notice
