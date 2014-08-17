@@ -15,7 +15,7 @@ function notices_views_data() {
         'title' => t('Notices'),
         'help' => 'notices holds the message information',
       ),
-      'group' => 'Notices',
+      'group' => t('Notices'),
       'join' => array(
         'node' => array(
           'left_field' => 'nid',
