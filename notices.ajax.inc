@@ -44,9 +44,9 @@ function notices_remove_ajax($noticeid, $count) {
   exit();
 }
 
-function notices_mark_read_ajax($noticeid = NULL) {
+function notices_mark_read_ajax($notice = NULL) {
   global $user;
-  if ($noticeid == 'all') {
+  if ($notice == 'all') {
     db_update('notices')
       ->fields(array(
         'new' => 0,
@@ -60,7 +60,7 @@ function notices_mark_read_ajax($noticeid = NULL) {
         'new' => 0,
       ))
       ->condition('uid', $user->uid, '=')
-      ->condition('noticeid', $noticeid, '=')
+      ->condition('noticeid', $notice->noticeid, '=')
       ->execute();
   }
   return NULL;

@@ -259,7 +259,7 @@ function notices_menu() {
     'file' => 'notices.ajax.inc',
   );
 
-  $items['ajax/notices/notices-mark-as-read/%'] = array(
+  $items['ajax/notices/notices-mark-as-read/%noticeid'] = array(
     'title' => 'Ajax mark notice as read',
     'page callback' => 'notices_mark_read_ajax',
     'page arguments' => array(3),
@@ -317,7 +317,7 @@ function notices_view_access($notice) {
       return TRUE;
     }
   }
-  elseif (notices_user_access('read notices') && arg(1) == 'view') {
+  elseif (notices_user_access('read notices') && (arg(1) == 'view' || arg(2) == 'notices-mark-as-read')) {
     return TRUE;
   }
 
