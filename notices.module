@@ -378,11 +378,28 @@ function notices_load_settings($uid) {
     ':uid' => $uid,
   ))->fetchObject();
 
+  $account = user_load($uid);
+
   if (!empty($settings)) {
     $settings->settings = unserialize($settings->settings);
+    foreach (module_implements('provideNotice') as $name) {
+      module_invoke($name, 'provideNotice', 'settings');
+
+      if (module_exists('notices_email')) {
+        if(!isset($settings->settings[$name])) {
+          $settings->settings[$name] = array(
+            'notices_email' => array(
+              'active' => 1,
+              'values' => $account->mail,
+            ),
+          );
+        }
+      }
+
+      $settings->is_empty = TRUE;
+    }
   }
   else {
-    $account = user_load($uid);
 
     $settings = new stdClass();
     $settings->uid = $account->uid;
