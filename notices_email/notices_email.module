@@ -7,6 +7,28 @@ define('NOTICES_EMAIL_STATUS_SEND_PENDING', 0);
 define('NOTICES_EMAIL_STATUS_SEND_SENT', 1);
 define('NOTICES_EMAIL_STATUS_SEND_ERROR', 2);
 
+/**
+ * Implements hook_views_api().
+ */
+function notices_email_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'notices_email') . '/includes/views',
+  );
+}
+
+/**
+ * Implements hook_views_handlers().
+ */
+function notices_email_views_handlers() {
+  return array(
+    'handlers' => array(
+      'notices_email_handler_status' => array(
+        'parent' => 'views_handler_field_numeric',
+      ),
+    ),
+  );
+}
 
 /**
  * Implements hook_SendNotice().
