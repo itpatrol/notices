@@ -4,3 +4,5 @@ package = "Notification"
 dependencies[] = notices
 dependencies[] = token
 core = "7.x"
+
+files[] = includes/views/notices_email_handler_status.inc
