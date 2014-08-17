@@ -5,7 +5,7 @@
  *
  * @ingroup views_field_handlers
  */
-class notices_handler_status extends views_handler_field_numeric {
+class notices_handler_status extends views_handler_field {
   function render($values) {
     $status_output = array();
     $status = notices_getSendStatus($values);

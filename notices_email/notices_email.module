@@ -24,7 +24,7 @@ function notices_email_views_handlers() {
   return array(
     'handlers' => array(
       'notices_email_handler_status' => array(
-        'parent' => 'views_handler_field_numeric',
+        'parent' => 'views_handler_field',
       ),
     ),
   );
