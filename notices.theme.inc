@@ -71,7 +71,6 @@ function template_preprocess_notices_view_teaser(&$vars) {
     for ($i = 0; $i <= $count_items; ++$i) {
       $notice->message .= $res[$i] . "\n";
     }
-//    $notice->message = $res = $res[0] . "\n" . $res[1] . "\n" . $res[2] . "\n" . $res[3] . "\n" . $res[4] . "\n";
   }
 
   $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
