@@ -1,0 +1,164 @@
+<?php
+/**
+ * @file
+ * Tests for notices_node module.
+ */
+
+/**
+ * Testing main functions of the module.
+ */
+class NoticesNodeTestCase extends DrupalWebTestCase {
+
+  /**
+   * A user with permission the access to create node.
+   *
+   * @var object
+   */
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Module Notices Node',
+      'description' => 'Testing main functions of the module.',
+      'group' => 'Notices',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('notices', 'notices_node'));
+
+    $this->web_user = $this->drupalCreateUser(array('bypass node access'));
+    $this->drupalLogin($this->web_user);
+  }
+
+  /**
+   * Testing processing module of the new node.
+   */
+  public function testNoticesNodeInsert() {
+    $edit = array();
+    $edit['title'] = $this->randomString();
+    $edit['body[und][0][value]'] = $this->randomString();
+    $edit['body[und][0][format]'] = filter_default_format();
+
+    $this->drupalPost('node/add/notices-node', $edit, t('Save'));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', 1)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+
+    $edit['notices_node[status]'] = '1';
+    $this->drupalPost('node/add/notices-node', $edit, t('Save'));
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+  }
+
+  /**
+   * Testing delete data module.
+   */
+  public function testNoticesNodeDelete() {
+    $node = $this->drupalCreateNode(array(
+      'type' => 'notices_node',
+      'notices_node[status]' => '0',
+    ));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', $node->nid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+
+    node_delete($node->nid);
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', $node->nid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
+
+  /**
+   * Test load node with replace title.
+   */
+  public function testNoticesNodeLoad() {
+    global $user;
+
+    $edit = array();
+    $edit['title'] = '[notices_node:uid]';
+    $edit['body[und][0][value]'] = $this->randomString();
+    $edit['body[und][0][format]'] = filter_default_format();
+
+    $this->drupalPost('node/add/notices-node', $edit, t('Save'));
+
+    $node = node_load(1);
+
+    $this->assertEqual($node->title, $user->uid);
+  }
+
+  /**
+   * Test view node with replace title.
+   */
+  public function testNoticesNodeView() {
+    $node = $this->drupalCreateNode(array(
+      'title' => 'title-[notices_node:uid]',
+      'type' => 'notices_node',
+    ));
+
+    $this->drupalGet('node/' . $node->nid);
+    $this->assertText('title-' . $this->web_user->uid);
+  }
+
+  /**
+   * Test update node data, and change status for node newsletter.
+   */
+  public function testNoticesNodeUpdate() {
+    $node = $this->drupalCreateNode(array(
+      'title' => 'title-[notices_node:uid]',
+      'type' => 'notices_node',
+    ));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', 1)
+      ->condition('n.status', '0')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+
+    $edit = array(
+      'notices_node[status]' => '1',
+    );
+    $this->drupalPost('node/1/edit', $edit, t('Save'));
+
+    $count = db_select('notices_node_newsletters', 'n')
+      ->condition('n.nid', 1)
+      ->condition('n.status', '1')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+  }
+}

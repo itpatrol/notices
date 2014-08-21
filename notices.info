@@ -4,3 +4,5 @@ package = "Notification"
 dependencies[] = altpager
 dependencies[] = formfilterapi
 core = "7.x"
+
+files[] = notices.test

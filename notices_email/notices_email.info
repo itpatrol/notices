@@ -4,3 +4,5 @@ package = "Notification"
 dependencies[] = notices
 dependencies[] = token
 core = "7.x"
+
+files[] = notices_email.test

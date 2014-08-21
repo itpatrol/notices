@@ -26,11 +26,11 @@ function notices_node_node_insert($node) {
       ->fields(array(
         'nid' => $node->nid,
         'vid' => $node->vid,
-        'status' => $node->notices_node['status'],
+        'status' => isset($node->notices_node['status']) ? (int) $node->notices_node['status'] : 0,
       ))
       ->execute();
 
-    if ($node->notices_node['status']) {
+    if (isset($node->notices_node['status']) && (int) $node->notices_node['status'] == 1) {
       // Process sending.
       $queue = notices_node_getUsers();
 

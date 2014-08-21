@@ -1,0 +1,239 @@
+<?php
+/**
+ * @file
+ * Tests for notices module.
+ */
+
+/**
+ * Testing accesses to the notifications.
+ */
+class NoticesAccessTestCase extends DrupalWebTestCase {
+
+  /**
+   * A user with permission the access to page module.
+   *
+   * @var object
+   */
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Access notices',
+      'description' => 'Testing accesses to the notifications.',
+      'group' => 'Notices',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('notices'));
+
+    $this->web_user = $this->drupalCreateUser(array('read notices', 'delete notices'));
+    $this->drupalLogin($this->web_user);
+
+    $this->noticeMessage = $this->randomName();
+
+    // Create one notice for tests without running the hooks module.
+    $notice = new stdClass();
+    $notice->uid = $this->web_user->uid;
+    // Defunct provider.
+    $notice->provider = $this->randomName();
+    $notice->subject = $this->randomName();
+    $notice->message = $this->noticeMessage;
+    $notice->format = filter_default_format();
+    notices_save($notice);
+
+    $this->noticeId = $this->noticeId();
+  }
+
+  /**
+   * Test access to page list notices.
+   */
+  public function testNoticesListAccess() {
+    $this->drupalGet('notices/list');
+    $this->assertText($this->noticeMessage);
+  }
+
+  /**
+   * Test access to page view one notice.
+   */
+  public function testNoticesViewAccess() {
+    $this->drupalGet('notices/view/' . $this->noticeId);
+    $this->assertText($this->noticeMessage);
+  }
+
+  /**
+   * Test access to delete notice.
+   */
+  public function testNoticesDeleteAccess() {
+    $this->drupalGet('notices/delete/' . $this->noticeId);
+    $this->assertText(t('Do you want to delete this message?'));
+  }
+
+  /**
+   * ID last notice for user.
+   */
+  protected function noticeId() {
+    $notice = db_select('notices', 'n')
+      ->fields('n', array('noticeid'))
+      ->range(0, 1)
+      ->orderBy('noticeid', 'DESC')
+      ->execute()
+      ->fetchObject();
+
+    if ($notice) {
+      return $notice->noticeid;
+    }
+  }
+}
+
+/**
+ * Testing main functions of the module.
+ */
+class NoticesTestCase extends DrupalWebTestCase {
+
+  /**
+   * A user with permission the access to page module.
+   *
+   * @var object
+   */
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Module Notices',
+      'description' => 'Testing main functions of the module.',
+      'group' => 'Notices',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('notices'));
+
+    $this->web_user = $this->drupalCreateUser(array('read notices', 'delete notices', 'read all notices', 'administer notice settings'));
+    $this->drupalLogin($this->web_user);
+  }
+
+  /**
+   * Test add notice.
+   */
+  public function testNoticesAdd() {
+    $edit = array(
+      'uid' => $this->web_user->uid,
+      'provider' => $this->randomName(),
+      'message[value]' => $this->randomName(),
+      'message[format]' => filter_default_format(),
+    );
+
+    $this->drupalPost('admin/config/notices/add', $edit, t('Update status of payment gateways'));
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(1, $count);
+  }
+
+  /**
+   * Test view notice.
+   */
+  public function testNoticesView() {
+    $this->createNotice();
+
+    $notice = db_select('notices', 'n')
+      ->fields('n', array('message'))
+      ->condition('n.noticeid', 1)
+      ->execute()
+      ->fetchObject();
+
+    $this->drupalGet('notices/view/1');
+    $this->assertText($notice->message);
+  }
+
+  /**
+   * Test mark all notices as read, no ajax.
+   */
+  public function testNoticesMarkAsReadAll() {
+    $this->createNotice();
+
+    $this->drupalGet('notices/mark-as-read');
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->condition('n.new', 1)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
+
+  /**
+   * Test mark all notices as read, use ajax.
+   */
+  public function testNoticesMarkAsReadAllAjax() {
+    $this->createNotice();
+
+    $this->drupalGet('ajax/notices/notices-mark-as-read');
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->condition('n.new', 1)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
+
+  /**
+   * Test delete notice.
+   */
+  public function testNoticesDelete() {
+    $this->createNotice();
+
+    $this->drupalPost('notices/delete/1', array(), t('Delete'));
+
+    $count = db_select('notices', 'n')
+      ->condition('n.uid', $this->web_user->uid)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->assertEqual(0, $count);
+  }
+
+  /**
+   * Test page with all user notices.
+   */
+  public function testNoticesUserNotices() {
+    $node1 = $this->createNotice();
+    $node2 = $this->createNotice(1);
+    $node3 = $this->createNotice();
+
+    $this->drupalGet('user/' . $this->web_user->uid . '/notices');
+    $this->assertText($node1->message);
+    $this->assertNoText($node2->message);
+    $this->assertText($node3->message);
+  }
+
+  /**
+   * Create notice programmatically.
+   */
+  protected function createNotice($uid = FALSE) {
+    if (!$uid) {
+      $uid = $this->web_user->uid;
+    }
+
+    $notice = new stdClass();
+    $notice->uid = $uid;
+    $notice->provider = $this->randomName();
+    $notice->subject = $this->randomName();
+    $notice->message = $this->randomName();
+    $notice->format = filter_default_format();
+    notices_save($notice);
+
+    return $notice;
+  }
+}
