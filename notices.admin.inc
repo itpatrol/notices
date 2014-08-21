@@ -21,7 +21,17 @@ function notices_admin_menu_block_page() {
 
 
 function notices_admin_settings($form, &$form_state) {
-  $form = array();
+  $form['notices_lines_show_in_teaser'] = array(
+    '#type' => 'select',
+    '#title' => t('How many lines show in teaser'),
+    '#options' => array(
+      5 => 5,
+      10 => 10,
+      15 => 15,
+    ),
+    '#default_value' => variable_get('notices_lines_show_in_teaser', 5),
+  );
+
   return system_settings_form($form);
 }
 

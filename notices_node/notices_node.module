@@ -26,11 +26,11 @@ function notices_node_node_insert($node) {
       ->fields(array(
         'nid' => $node->nid,
         'vid' => $node->vid,
-        'status' => $node->notices_node['status'],
+        'status' => isset($node->notices_node['status']) ? (int) $node->notices_node['status'] : 0,
       ))
       ->execute();
 
-    if ($node->notices_node['status']) {
+    if (isset($node->notices_node['status']) && (int) $node->notices_node['status'] == 1) {
       // Process sending.
       $queue = notices_node_getUsers();
 
@@ -257,6 +257,8 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
           '#disabled' => $status,
         );
       }
+
+      $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
       break;
   }
 }
@@ -266,13 +268,20 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
  */
 function notices_node_getUsers() {
   $queue = array();
-  $users = db_query("SELECT uid, mail, name AS username FROM {users} WHERE uid != 0")->fetchAll();
-  foreach ($users as $data) {
-    $queue[$data->uid] = array(
-      'uid' => $data->uid,
-      'mail' => $data->mail,
-      'username' => $data->username,
+
+  $users = db_select('users', 'u')
+    ->fields('u', array('uid', 'mail', 'name'))
+    ->condition('uid', '0', '!=')
+    ->execute()
+    ->fetchAll();
+
+  foreach ($users as $user) {
+    $queue[$user->uid] = array(
+      'uid' => $user->uid,
+      'mail' => $user->mail,
+      'username' => $user->name,
     );
   }
+
   return $queue;
 }

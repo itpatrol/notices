@@ -98,9 +98,7 @@ function notices_getSendStatus($notice) {
   $notice = (object) $notice;
 
   foreach (module_implements('sendNotice') as $name) {
-    $function = $name . '_sendNotice';
-    $op = 'status';
-    $statuses[$name] = $function($op, $notice);
+    $statuses[$name] = module_invoke($name, 'sendNotice', 'status', $notice);
   }
 
   return $statuses;
@@ -118,10 +116,10 @@ function notices_getProviders() {
   $res = array();
 
   foreach (module_implements('provideNotice') as $name) {
-    $function = $name . '_provideNotice';
-    $op = "settings";
-    $result = $function($op);
-    $res[$name] = $result['title'];
+    $provider = module_invoke($name, 'provideNotice', 'settings');
+    if (isset($provider['title'])) {
+      $res[$name] = $provider['title'];
+    }
   }
 
   return $res;
@@ -389,9 +387,7 @@ function notices_load_settings($uid) {
     $settings = new stdClass();
     $settings->uid = $account->uid;
     foreach (module_implements('provideNotice') as $name) {
-      $function = $name . '_provideNotice';
-      $op = "settings";
-      $function($op);
+      module_invoke($name, 'provideNotice', 'settings');
 
       if (module_exists('notices_email')) {
         $settings->settings[$name] = array(
@@ -473,9 +469,7 @@ function notices_delete($noticeid) {
 
     if (is_array($send_options)) {
       foreach ($send_options as $name => $status) {
-        $function = $name . '_sendNotice';
-        $op = "delete";
-        $function($op, $notice);
+        module_invoke($name, 'sendNotice', 'delete', $notice);
       }
     }
   }
@@ -516,11 +510,7 @@ function notices_save(&$notice) {
       if (is_array($send_options)) {
         foreach ($send_options as $name => $status) {
           if ($status['active'] == 1) {
-            $function = $name . '_sendNotice';
-            $op = "send";
-            if (function_exists($function)) {
-              $function($op, $notice, $status['values']);
-            }
+            module_invoke($name, 'sendNotice', 'send', $notice, $status['values']);
           }
         }
         //foreach
