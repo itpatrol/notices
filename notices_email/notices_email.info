@@ -6,3 +6,4 @@ dependencies[] = token
 core = "7.x"
 
 files[] = notices_email.test
+files[] = includes/views/notices_email_handler_status.inc
