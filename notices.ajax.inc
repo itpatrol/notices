@@ -26,22 +26,31 @@ function notices_remove_ajax($noticeid, $count) {
       $noticeadmin->callback = 'notice';
       notices_save($noticeadmin);
     }
-    print drupal_to_js(array(
+    print drupal_json_encode(array(
       'status' => TRUE,
       'data' => t('You are trying to hack our system. We sent notification about this action to system administrator.')
     ));
-    exit();
+    drupal_exit();
   }
   $output = '';
 
-  if ($notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d', $user->uid, 1, $count))) {
+  $notice = db_select('notices', 'n')
+    ->fields('n')
+    ->condition('n.uid', $user->uid)
+    ->orderBy('new', 'DESC')
+    ->orderBy('timestamp', 'DESC')
+    ->range(1, $count)
+    ->execute()
+    ->fetch();
+
+  if ($notice) {
     $output .= '<div id="notices">';
     $output .= theme('notices_view_teaser', $notice);
     $output .= "</div>";
   }
 
-  print drupal_to_js(array('status' => TRUE, 'data' => $output));
-  exit();
+  print drupal_json_encode(array('status' => TRUE, 'data' => $output));
+  drupal_exit();
 }
 
 function notices_mark_read_ajax($noticeid = NULL) {
@@ -70,12 +79,19 @@ function notices_load_ajax() {
   global $user;
   $output = '';
 
-  $notice = db_fetch_object(db_query('SELECT * FROM {notices} WHERE uid=%d ORDER BY new DESC,timestamp DESC LIMIT %d OFFSET %d', $user->uid, 1, 2));
+  $notice = db_select('notices', 'n')
+    ->fields('n')
+    ->condition('n.uid', $user->uid)
+    ->orderBy('new', 'DESC')
+    ->orderBy('timestamp', 'DESC')
+    ->range(1, 2)
+    ->execute()
+    ->fetch();
 
   $output .= '<div id="notices">';
   $output .= theme('notices_view_teaser', $notice);
   $output .= '</div>';
 
-  print drupal_to_js(array('status' => TRUE, 'data' => $output));
-  exit();
+  print drupal_json_encode(array('status' => TRUE, 'data' => $output));
+  drupal_exit();
 }
