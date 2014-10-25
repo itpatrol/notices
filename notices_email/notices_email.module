@@ -89,13 +89,6 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
         'noticeid' => $notice->noticeid,
       );
       db_insert('notices_email_status')->fields($status)->execute();
-
-      $notices_email_cron = (bool) variable_get('notices_email_cron', FALSE);
-
-      // Send notice now if send if cron is disabled.
-      if (!$notices_email_cron) {
-        notices_email_spool();
-      }
       break;
 
     case 'status':
