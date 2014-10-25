@@ -37,25 +37,25 @@ function notices_admin_settings($form, &$form_state) {
 function notices_settings_add($form, &$form_state) {
   $form = array();
   $form['uid'] = array(
-    '#type'               => 'textfield',
-    '#title'              => t('UID'),
-    '#size'               => 50,
-    '#maxlength'          => 255,
+    '#type' => 'textfield',
+    '#title' => t('UID'),
+    '#size' => 50,
+    '#maxlength' => 255,
     '#required' => TRUE,
   );
 
   $form['provider'] = array(
-    '#type'               => 'textfield',
-    '#title'              => t('Provider'),
-    '#size'               => 50,
-    '#maxlength'          => 255,
+    '#type' => 'textfield',
+    '#title' => t('Provider'),
+    '#size' => 50,
+    '#maxlength' => 255,
   );
 
   $form['message'] = array(
-    '#type'               => 'text_format',
-    '#title'              => t('Notice'),
-    '#rows'               => 6,
-    '#resizable'          => TRUE,
+    '#type' => 'text_format',
+    '#title' => t('Notice'),
+    '#rows' => 6,
+    '#resizable' => TRUE,
     '#format' => NULL,
   );
 
