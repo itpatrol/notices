@@ -73,21 +73,29 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
           'notices_node' => $data
         ));
       }
+
       $email = array(
         'mail' => $mail,
         'subject' => $notice->subject,
         'body' => check_markup($notice->message, $notice->format, FALSE),
         'noticeid' => $notice->noticeid,
       );
+      db_insert('notices_email_spool')->fields($email)->execute();
 
-      drupal_write_record('notices_email_spool', $email);
       $status = array(
-        'status' => 0,
+        'status' => NOTICES_EMAIL_STATUS_SEND_PENDING,
         'error' => '',
         'timestamp' => REQUEST_TIME,
         'noticeid' => $notice->noticeid,
       );
-      drupal_write_record('notices_email_status', $status);
+      db_insert('notices_email_status')->fields($status)->execute();
+
+      $notices_email_cron = (bool) variable_get('notices_email_cron', FALSE);
+
+      // Send notice now if send if cron is disabled.
+      if (!$notices_email_cron) {
+        notices_email_spool();
+      }
       break;
 
     case 'status':
@@ -124,7 +132,7 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
  * Implements hook_cron().
  */
 function notices_email_cron() {
-  if (variable_get('notices_email_cron', '')) {
+  if ((bool) variable_get('notices_email_cron', FALSE)) {
     notices_email_spool();
   }
 }
@@ -141,6 +149,7 @@ function notices_email_menu() {
     'access arguments' => array('administer site configuration'),
     'file' => 'notices_email.admin.inc',
   );
+
   return $items;
 }
 
@@ -190,22 +199,25 @@ function notices_email_spool() {
   foreach ($res as $data) {
     $grouped[$data->mail][] = $data;
   }
+
   foreach ($grouped as $mail => $group) {
     $body = array();
     $notice_ids = array();
     $qids = array();
+
     foreach ($group as $message) {
       $notice_ids[] = $message->noticeid;
       $qids[] = $message->qid;
+
       if (module_exists('mimemail')) {
         $notice = noticeid_load($message->noticeid);
         $body[] = theme('notices_email_view', array('notice' => $notice));
       }
       else {
         $body[] = isset($data->body) ? $data->body : '';
-        $body[] = 'Read: ' . url('notices/view/' . $message->noticeid, array('absolute' => TRUE));
-        $body[] = 'Delete: ' . url('notices/delete/' . $message->noticeid, array('absolute' => TRUE));
-        $body[] = 'Mark as read: ' . url('notices/read/' . $message->noticeid, array('absolute' => TRUE));
+        $body[] = t('Read:') . ' ' . url('notices/view/' . $message->noticeid, array('absolute' => TRUE));
+        $body[] = t('Delete:') . ' ' . url('notices/delete/' . $message->noticeid, array('absolute' => TRUE));
+        $body[] = t('Mark as read:') . ' ' . url('notices/read/' . $message->noticeid, array('absolute' => TRUE));
         $body[] = '----------------------------------------------------';
       }
 
@@ -237,12 +249,14 @@ function notices_email_spool() {
     }
     else {
       $result = drupal_mail('notices_email', 'notification', $mail, language_default(), $params);
+
       if ($result['result']) {
         $status = NOTICES_EMAIL_STATUS_SEND_SENT;
       }
       else {
         $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
       }
+
       foreach ($notice_ids as $notice_id) {
         $status = array(
           'status' => $status,
