@@ -13,14 +13,14 @@ function notices_email_admin_settings() {
     '#type' => 'select',
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#description' => t("Debug mode, don't send email, write to watchdog instead"),
-    '#default_value' => variable_get('notices_email_debug', ''),
+    '#default_value' => variable_get('notices_email_debug', 0),
   );
   $form['notices_email_cron'] = array(
     '#title' => t('Cron'),
     '#type' => 'select',
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#description' => t('Select yes to process queue by cron'),
-    '#default_value' => variable_get('notices_email_cron', ''),
+    '#default_value' => variable_get('notices_email_cron', 0),
   );
   $form['notices_email_letters_by_cron'] = array(
     '#title' => t('Amount of letter send by one cron run'),
