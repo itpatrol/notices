@@ -193,6 +193,11 @@ function notices_email_spool() {
     $grouped[$data->mail][] = $data;
   }
 
+  $count_mail_send = array(
+    'success' => 0,
+    'error' => 0,
+  );
+
   foreach ($grouped as $mail => $group) {
     $body = array();
     $notice_ids = array();
@@ -245,9 +250,11 @@ function notices_email_spool() {
 
       if ($result['result']) {
         $status = NOTICES_EMAIL_STATUS_SEND_SENT;
+        ++$count_mail_send['success'];
       }
       else {
         $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
+        ++$count_mail_send['error'];
       }
 
       foreach ($notice_ids as $notice_id) {
@@ -259,12 +266,14 @@ function notices_email_spool() {
         );
         drupal_write_record('notices_email_status', $status, 'noticeid');
       }
-
     }
+
     foreach ($qids as $qid) {
       db_delete('notices_email_spool')
         ->condition('qid', $qid, '=')
         ->execute();
     }
   }
+
+  return $count_mail_send;
 }
