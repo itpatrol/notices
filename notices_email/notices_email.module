@@ -80,7 +80,7 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
         'body' => check_markup($notice->message, $notice->format, FALSE),
         'noticeid' => $notice->noticeid,
       );
-      drupal_write_record('notices_email_spool', $email);
+      db_insert('notices_email_spool')->fields($email)->execute();
 
       $status = array(
         'status' => NOTICES_EMAIL_STATUS_SEND_PENDING,
@@ -88,7 +88,7 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
         'timestamp' => REQUEST_TIME,
         'noticeid' => $notice->noticeid,
       );
-      drupal_write_record('notices_email_status', $status);
+      db_insert('notices_email_status')->fields($status)->execute();
 
       $notices_email_cron = (bool) variable_get('notices_email_cron', FALSE);
 
