@@ -132,7 +132,7 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
  * Implements hook_cron().
  */
 function notices_email_cron() {
-  if (variable_get('notices_email_cron', '')) {
+  if ((bool) variable_get('notices_email_cron', FALSE)) {
     notices_email_spool();
   }
 }
@@ -149,6 +149,7 @@ function notices_email_menu() {
     'access arguments' => array('administer site configuration'),
     'file' => 'notices_email.admin.inc',
   );
+
   return $items;
 }
 
@@ -198,13 +199,16 @@ function notices_email_spool() {
   foreach ($res as $data) {
     $grouped[$data->mail][] = $data;
   }
+
   foreach ($grouped as $mail => $group) {
     $body = array();
     $notice_ids = array();
     $qids = array();
+
     foreach ($group as $message) {
       $notice_ids[] = $message->noticeid;
       $qids[] = $message->qid;
+
       if (module_exists('mimemail')) {
         $notice = noticeid_load($message->noticeid);
         $body[] = theme('notices_email_view', array('notice' => $notice));
@@ -245,12 +249,14 @@ function notices_email_spool() {
     }
     else {
       $result = drupal_mail('notices_email', 'notification', $mail, language_default(), $params);
+
       if ($result['result']) {
         $status = NOTICES_EMAIL_STATUS_SEND_SENT;
       }
       else {
         $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
       }
+
       foreach ($notice_ids as $notice_id) {
         $status = array(
           'status' => $status,
