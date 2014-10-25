@@ -63,7 +63,7 @@ function notices_settings_add($form, &$form_state) {
   $form['actions'] = array('#type' => 'actions');
   $form['actions']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Update status of payment gateways'),
+    '#value' => t('Send'),
   );
 
   return $form;
