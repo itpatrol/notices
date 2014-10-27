@@ -145,7 +145,7 @@ function notices_settings($form, &$form_state) {
       );
       $form['providers'][$provider['name']][$name]['values'] = $send_options_settings[$name]['values'];
       foreach ($send_options_settings[$name]['values'] as $send_name => $value) {
-        if (!empty($settings->settings[$provider['name']][$name]['values'][$send_name])) {
+        if (!empty($settings->settings[$provider['name']][$name]['values'])) {
           $form['providers'][$provider['name']][$name]['values'][$send_name]['#default_value'] = $settings->settings[$provider['name']][$name]['values'];
         }
       }
