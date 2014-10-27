@@ -89,13 +89,6 @@ function notices_email_SendNotice($op, $notice = NULL, $settings = NULL) {
         'noticeid' => $notice->noticeid,
       );
       db_insert('notices_email_status')->fields($status)->execute();
-
-      $notices_email_cron = (bool) variable_get('notices_email_cron', FALSE);
-
-      // Send notice now if send if cron is disabled.
-      if (!$notices_email_cron) {
-        notices_email_spool();
-      }
       break;
 
     case 'status':
@@ -186,6 +179,9 @@ function notices_email_mail($key, &$message, $params) {
 
 /**
  * Send mail spool for current cron run.
+ *
+ * @return array
+ *   Count mail sent and not sent.
  */
 function notices_email_spool() {
   drupal_add_css(drupal_get_path('module', 'notices_email') . '/notices_email.css', array('group' => CSS_THEME));
@@ -199,6 +195,11 @@ function notices_email_spool() {
   foreach ($res as $data) {
     $grouped[$data->mail][] = $data;
   }
+
+  $count_mail_send = array(
+    'success' => 0,
+    'error' => 0,
+  );
 
   foreach ($grouped as $mail => $group) {
     $body = array();
@@ -252,9 +253,11 @@ function notices_email_spool() {
 
       if ($result['result']) {
         $status = NOTICES_EMAIL_STATUS_SEND_SENT;
+        ++$count_mail_send['success'];
       }
       else {
         $status = NOTICES_EMAIL_STATUS_SEND_ERROR;
+        ++$count_mail_send['error'];
       }
 
       foreach ($notice_ids as $notice_id) {
@@ -266,12 +269,14 @@ function notices_email_spool() {
         );
         drupal_write_record('notices_email_status', $status, 'noticeid');
       }
-
     }
+
     foreach ($qids as $qid) {
       db_delete('notices_email_spool')
         ->condition('qid', $qid, '=')
         ->execute();
     }
   }
+
+  return $count_mail_send;
 }
