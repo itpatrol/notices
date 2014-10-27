@@ -396,7 +396,7 @@ function notices_load_settings($uid) {
         }
       }
 
-      $settings->is_empty = TRUE;
+      $settings->is_empty = FALSE;
     }
   }
   else {
