@@ -240,7 +240,7 @@ function notices_menu() {
     'file' => 'notices.admin.inc',
   );
   $items['user/%user/notices'] = array(
-    'title' => 'notices',
+    'title' => 'Notices',
     'page callback' => 'notices_list',
     'page arguments' => array(1),
     'access callback' => 'notices_user_access',
