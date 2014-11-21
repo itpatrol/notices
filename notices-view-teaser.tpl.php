@@ -1,7 +1,7 @@
 <div class="notice <?php print $zebra; ?><?php if ($notice->new): ?> <?php print " notice-new"; ?><?php endif; ?>" id="notice-<?php print $notice->noticeid; ?>">
     <div class="picture"><img src="/<?php print $picture?>"> </div>
     <div class="date">
-      <?php print $timeago; ?>
+      <a title="<?php print $time; ?>"><?php print $timeago; ?></a>
     </div>
     <div class="message">
       <?php if ($notice->new): ?>
