@@ -9,11 +9,11 @@
 /**
  * Status constant for read notices.
  */
-define('NOTICE_READ', 0);
+define('NOTICES_READ', 0);
 /**
  * Status constant for unread notices.
  */
-define('NOTICE_UNREAD', 1);
+define('NOTICES_UNREAD', 1);
 /**
  * Name form with filters.
  */
@@ -451,7 +451,7 @@ function notices_unread_count($account = NULL) {
 
   $count = db_query('SELECT count(*) as notices FROM {notices} WHERE uid=:uid AND new =:new', array(
     ':uid' => $account->uid,
-    ':new' => NOTICE_UNREAD,
+    ':new' => NOTICES_UNREAD,
   ))->fetchObject();
 
   return $count->notices;
@@ -469,7 +469,7 @@ function notices_unread_count($account = NULL) {
  * @ingroup api
  */
 function notices_mark_read($notice) {
-  $notice->new = NOTICE_READ;
+  $notice->new = NOTICES_READ;
   notices_save($notice);
 }
 
@@ -518,7 +518,7 @@ function notices_save(&$notice) {
       $notice->format = variable_get('filter_default_format', 1);
     }
 
-    $notice->new = NOTICE_UNREAD;
+    $notice->new = NOTICES_UNREAD;
     $notice->timestamp = REQUEST_TIME;
 
     $new_notice = drupal_write_record('notices', $notice);
