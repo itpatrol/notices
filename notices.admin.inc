@@ -10,12 +10,14 @@
 function notices_admin_menu_block_page() {
   $item = menu_get_item();
   module_load_include('inc', 'system', 'system.admin');
+
   if ($content = system_admin_menu_block($item)) {
     $output = theme('admin_block_content', array('content' => $content));
   }
   else {
     $output = t('You do not have any administrative items.');
   }
+
   return $output;
 }
 
@@ -35,20 +37,38 @@ function notices_admin_settings($form, &$form_state) {
 }
 
 function notices_settings_add($form, &$form_state) {
-  $form = array();
+  $user_roles = array(
+    0 => t('- Select -'),
+  );
+
+  $user_roles = array_merge($user_roles, user_roles(TRUE));
+
   $form['uid'] = array(
     '#type' => 'textfield',
     '#title' => t('UID'),
     '#size' => 50,
     '#maxlength' => 255,
-    '#required' => TRUE,
   );
+
+  $form['user_role'] = array(
+    '#type' => 'select',
+    '#title' => t('User roles'),
+    '#options' => $user_roles,
+    '#default_value' => 0,
+  );
+
+  $default_provider = FALSE;
+
+  if (module_exists('notices_node')) {
+    $default_provider = 'notices_node';
+  }
 
   $form['provider'] = array(
     '#type' => 'textfield',
     '#title' => t('Provider'),
     '#size' => 50,
     '#maxlength' => 255,
+    '#default_value' => $default_provider,
   );
 
   $form['message'] = array(
@@ -73,16 +93,25 @@ function notices_settings_add($form, &$form_state) {
  * Implements hook_FORMID_validate().
  */
 function notices_settings_add_validate($form, &$form_state) {
-  $uid = $form_state['values']['uid'];
+  $values = $form_state['values'];
 
-  $user = db_select('users', 'u')
-    ->condition('uid', $uid, '=')
-    ->countQuery()
-    ->execute()
-    ->fetchField();
+  if ($values['user_role'] == 0) {
+    $uid = $values['uid'];
 
-  if ($user == 0) {
-    form_error($form['uid'], t('User not found.'));
+    $user = db_select('users', 'u')
+      ->condition('uid', $uid, '=')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    if ($user == 0) {
+      form_error($form['uid'], t('User not found.'));
+    }
+  }
+  else {
+    if (!user_role_load($values['user_role'])) {
+      form_error($form['user_role'], t('Selected user role not found.'));
+    }
   }
 }
 
@@ -90,13 +119,56 @@ function notices_settings_add_validate($form, &$form_state) {
  * Implements hook_FORMID_submit().
  */
 function notices_settings_add_submit($form, &$form_state) {
-  $notice = new stdClass();
-  $notice->uid = $form_state['values']['uid'];
-  $notice->provider = $form_state['values']['provider'];
-  $notice->message = $form_state['values']['message']['value'];
-  $notice->format = $form_state['values']['message']['format'];
+  $values = $form_state['values'];
 
-  if (notices_save($notice)) {
-    drupal_set_message(t('Notification has been sent!'));
+  $notice = new stdClass();
+  $notice->provider = $values['provider'];
+  $notice->message = $values['message']['value'];
+  $notice->format = $values['message']['format'];
+
+  if ($values['user_role'] == 0) {
+    $notice->uid = $values['uid'];
+
+    if (notices_save($notice)) {
+      drupal_set_message(t('Notification has been sent!'));
+    }
+  }
+  else {
+    $role = user_role_load($values['user_role']);
+
+    if ($role) {
+      // All users on site.
+      if ($values['user_role'] == 1) {
+        $users = db_select('users', 'u')
+          ->fields('u', array('uid'))
+          ->condition('uid', 0, '!=')
+          ->execute()
+          ->fetchAll();
+      }
+      else {
+        // Send notice to all users who role is $values['role_name'].
+        $users = db_select('users_roles', 'r')
+          ->fields('r', array('uid'))
+          ->condition('rid', $role->rid)
+          ->execute()
+          ->fetchAll();
+      }
+
+      if (!empty($users)) {
+        $success_count_send = 0;
+
+        foreach ($users as $user) {
+          $notice->uid = $user->uid;
+
+          if (notices_save($notice)) {
+            $success_count_send++;
+          }
+        }
+
+        drupal_set_message(t('Notification has been success sent to @count users.', array(
+          '@count' => $success_count_send,
+        )));
+      }
+    }
   }
 }

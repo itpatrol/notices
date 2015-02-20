@@ -21,21 +21,22 @@ function notices_node_provideNotice($op) {
  */
 function notices_node_node_insert($node) {
   if ($node->type == 'notices_node') {
+    $role = user_role_load_by_name($node->notices_node['role_name']);
 
     db_insert('notices_node_newsletters')
       ->fields(array(
         'nid' => $node->nid,
         'vid' => $node->vid,
+        'rid' => $role ? (int) $role->rid : 0,
         'status' => isset($node->notices_node['status']) ? (int) $node->notices_node['status'] : 0,
       ))
       ->execute();
 
     if (isset($node->notices_node['status']) && (int) $node->notices_node['status'] == 1) {
       // Process sending.
-      $queue = notices_node_getUsers();
+      $queue = notices_node_get_users($role);
 
       foreach ($queue as $uid => $receiver) {
-
         $account = user_load($uid);
 
         foreach ($receiver as $name => $value) {
@@ -50,11 +51,13 @@ function notices_node_node_insert($node) {
           'node' => $node,
           'notices_node' => $data,
         ));
+
         $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array(
           'user' => $account,
           'node' => $node,
           'notices_node' => $data,
         ));
+
         $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
       }
@@ -68,9 +71,12 @@ function notices_node_node_insert($node) {
 function notices_node_node_update($node) {
   if ($node->type == 'notices_node') {
     if (array_key_exists('status', $node->notices_node) && $node->notices_node['status']) {
+      $role = user_role_load($node->notices_node['role_id']);
+
       // Process sending.
       db_update('notices_node_newsletters')
         ->fields(array(
+          'rid' => $role ? $role->rid : 0,
           'status' => $node->notices_node['status'],
         ))
         ->condition('nid', $node->nid, '=')
@@ -78,12 +84,10 @@ function notices_node_node_update($node) {
         ->execute();
 
       // Process sending.
-      $queue = notices_node_getUsers();
+      $queue = notices_node_get_users($role);
 
       foreach ($queue as $uid => $receiver) {
-
         $account = user_load($uid);
-        $notice = new stdClass();
 
         foreach ($receiver as $name => $value) {
           $data[$name] = $value;
@@ -97,16 +101,16 @@ function notices_node_node_update($node) {
           'node' => $node,
           'notices_node' => $data,
         ));
+
         $notice->message = token_replace($node->body[LANGUAGE_NONE][0]['value'], array(
           'user' => $account,
           'node' => $node,
           'notices_node' => $data,
         ));
+
         $notice->format = $node->body[LANGUAGE_NONE][0]['format'];
         notices_save($notice);
-
       }
-
     }
   }
 }
@@ -127,6 +131,7 @@ function notices_node_node_delete($node) {
  */
 function notices_node_node_load($nodes, $types) {
   global $user;
+
   foreach ($nodes as $nid => $node) {
     if ($node->type == 'notices_node') {
       $result = db_query("SELECT * FROM {notices_node_newsletters} WHERE nid = :nid AND vid = :vid", array(
@@ -138,9 +143,17 @@ function notices_node_node_load($nodes, $types) {
       if (isset($result->status)) {
         $status = $result->status;
       }
+
+      $role_id = 0;
+      if (isset($result->rid)) {
+        $role_id = $result->rid;
+      }
+
       $nodes[$nid]->notices_node = array(
         'status' => $status,
+        'role_id' => $role_id,
       );
+
       $nodes[$nid]->safe_title = $node->title;
       if ($user->uid > 0) {
         $data = array(
@@ -220,10 +233,18 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
       if (isset($form['#node']->notices_node['status'])) {
         $status = $form['#node']->notices_node['status'];
       }
+
+      $user_all_roles = notices_node_get_users_roles();
+      $role = FALSE;
+      if (isset($form['#node']->notices_node['role_id'])) {
+        $role = user_role_load($form['#node']->notices_node['role_id']);
+      }
+
       // Fix title on form.
       if (isset($form['#node']->safe_title)) {
         $form['title']['#default_value'] = $form['#node']->safe_title;
       }
+
       $form['help'] = array(
         '#type' => 'fieldset',
         '#title' => t('Replacement patterns'),
@@ -232,6 +253,7 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
         '#description' => t('These tokens can be used in all text fields except subject and will be replaced on-screen and in the email.'),
         '#group' => 'additional_settings',
       );
+
       $form['help']['tokens'] = array(
         '#theme' => 'token_tree',
         '#token_types' => array('user', 'node', 'notices_node'),
@@ -244,12 +266,34 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
         '#tree' => TRUE,
         '#group' => 'additional_settings',
       );
+
       if ($status == NOTICES_NODE_STATUS_SENT) {
         $form['notices_node']['message_status'] = array(
-          '#markup' => 'Notice is already sent',
+          '#markup' => '<p>' . t('Notice is already sent.') . '</p>',
+        );
+
+        $role_name = $role ? $role->name : t('All users');
+
+        $form['notices_node']['message_role'] = array(
+          '#markup' => '<p>' . t('Message will be sent to all users with a role: @role.', array(
+            '@role' => t($role_name),
+          )) . '</p>',
         );
       }
       else {
+        $user_roles = array(
+          0 => t('- Select -'),
+        );
+
+        $user_roles = array_merge($user_roles, $user_all_roles);
+
+        $form['notices_node']['role_name'] = array(
+          '#type' => 'select',
+          '#title' => t('User roles'),
+          '#options' => $user_roles,
+          '#default_value' => 0,
+        );
+
         $form['notices_node']['status'] = array(
           '#type' => 'checkbox',
           '#title' => t('Send notice'),
@@ -265,15 +309,33 @@ function notices_node_form_alter(&$form, &$form_state, $form_id) {
 
 /**
  * Get users uid.
+ *
+ * @param array|bool $role
+ *   User role object.
+ *
+ * @return array
+ *   Users with the selected role.
  */
-function notices_node_getUsers() {
+function notices_node_get_users($role = FALSE) {
   $queue = array();
 
-  $users = db_select('users', 'u')
-    ->fields('u', array('uid', 'mail', 'name'))
-    ->condition('uid', '0', '!=')
-    ->execute()
-    ->fetchAll();
+  if ($role) {
+    $users = db_select('users_roles', 'r');
+    $users->join('users', 'u', 'u.uid = r.uid');
+
+    $users = $users->fields('u', array('uid', 'mail', 'name'))
+      ->condition('r.rid', $role->rid)
+      ->condition('r.uid', '0', '!=')
+      ->execute()
+      ->fetchAll();
+  }
+  else {
+    $users = db_select('users', 'u')
+      ->fields('u', array('uid', 'mail', 'name'))
+      ->condition('uid', '0', '!=')
+      ->execute()
+      ->fetchAll();
+  }
 
   foreach ($users as $user) {
     $queue[$user->uid] = array(
@@ -284,4 +346,26 @@ function notices_node_getUsers() {
   }
 
   return $queue;
+}
+
+/**
+ * Get users roles without roles for anonymous and authenticated roles.
+ *
+ * @return array
+ */
+function notices_node_get_users_roles() {
+  $roles = array();
+  $user_roles = db_select('role', 'r')
+    ->fields('r', array('rid', 'name'))
+    // Remove from result role for anonymous and authenticated users.
+    ->condition('rid', 1, '!=')
+    ->condition('rid', 2, '!=')
+    ->execute()
+    ->fetchAll();
+
+  foreach ($user_roles as $role) {
+    $roles[$role->name] = $role->name;
+  }
+
+  return $roles;
 }

@@ -50,6 +50,12 @@ function notices_node_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
+      'rid' => array(
+        'description' => '{users} role identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
       'status' => array(
         'description' => 'The sent status of the email (0 = hold, 1 = sent).',
         'type' => 'int',
