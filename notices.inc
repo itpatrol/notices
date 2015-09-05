@@ -33,7 +33,7 @@ function notices_list($account = null){
   if(empty($output_notices)){
     $output_notices =  t('No notifications.');
   }
-  $output .= formfilterapi_getForm('notices_list');
+  $output .= formfilterapi_get_form('notices_list');
   $output .= $pagerCountShow;
   $output .= '<div id="notices" rel="'.($count-1).'">';
   $output .=  $output_notices;
