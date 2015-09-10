@@ -40,6 +40,8 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
             
             $subject = t(variable_get('notices_email_mail_subject','Notification from [site_name]'));
             $data = array(
+              'username' => $account->name,
+              'mail' => $mail,
               'site_name' => variable_get('site_name',''),
             ); 
             $subject = token_replace($subject,'notices_email',$data);
@@ -47,7 +49,7 @@ function notices_email_SendNotice($op,$notice = null,$settings = null){
             $email=array(
               'mail'      => $mail,
               'subject'   => $subject,
-              'body'      => check_markup($notice->body, $notice->format, FALSE),
+              'body'      => check_markup($notice->message, $notice->format, FALSE),
               'noticeid'  => $notice->noticeid,
             );  
             drupal_write_record('notices_email_spool',$email);
@@ -114,7 +116,7 @@ function template_preprocess_notices_email_view(&$vars) {
   $links[] = array('title' => t('Delete'), 'href' => 'notices/delete/' .  $notice->noticeid);
 
   $vars['time'] = format_date($notice->timestamp, 'medium');
-  $vars['content'] = check_markup($notice->body, $notice->format, FALSE);
+  $vars['content'] = check_markup($notice->message, $notice->format, FALSE);
   $vars['links'] = theme('links', $links);
   
   $file = drupal_get_path('module', 'notice').'/icons/'.$notice->callback.'.png';
@@ -123,6 +125,33 @@ function template_preprocess_notices_email_view(&$vars) {
   }
   $vars['picture'] = $file;
 }
+
+/**
+ * Implementation of hook_token_values().
+ */
+function notices_email_token_values($type, $object = NULL, $options = array()) {
+  if ($type == 'notices_email') {
+    $tokens['mail'] = $object['mail'];
+    $tokens['username'] = $object['username'];
+    $tokens['site_name'] = $object['site_name'];
+    return $tokens;
+  }
+}
+
+
+/**
+ * Implementation of hook_token_list().
+ */
+function notices_email_token_list($type = 'all') {
+  if (in_array($type, array('notices_email', 'all'))) {
+    $tokens['notices_email']['mail'] = t("User's e-mail");
+    $tokens['notices_email']['username'] = t("User's name");
+    $tokens['notices_email']['site_name'] = t("This website name");
+
+    return $tokens;
+  }
+}
+
 
 /**
  * Implements hook_theme().
@@ -151,7 +180,7 @@ function notices_email_mail($key, &$message, $params) {
   if(module_exists('mimemail')) {
     $message['body'] = theme('notices_email_view',$notice);
   }else{
-    $message['body'] = check_plain($notice->body);
+    $message['body'] = check_plain($notice->message);
     $message['body'] .= "\n\n";
     $message['body'] .= 'Read: '.url('notices/view/' .  $notice->noticeid,array('absolute' => true))."\n";
     $message['body'] .= 'Delete: '.url('notices/delete/' .  $notice->noticeid,array('absolute' => true))."\n";
